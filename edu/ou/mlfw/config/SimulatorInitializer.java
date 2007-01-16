@@ -9,12 +9,27 @@ import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.Controllable;
 import edu.ou.mlfw.Simulator;
+import edu.ou.mlfw.SimulatorState;
 
-public class SimulatorConfiguration {
-	private Class<? extends Simulator> simulatorClass;
-	private File configuration;
+/**
+ * A SimulatorInitializer is the means by which a world finds, loads, and
+ * initializes a Simulator.  A pointer to the location of this xml file is
+ * kept in a WorldConfiguration. 
+ * 
+ * This stores the simulator class and a pointer to a general configuration 
+ * file that can be loaded by the Simulator at initialization.  The class 
+ * specified must implement the Simulator interface, and must be available on 
+ * the classpath.  The files pointed to for configuration may be in any format.
+ *  
+ * This class is intended to be serialized to xml that can be hand edited, so 
+ * future changes should take care to maintain xml readability.
+ */
+public class SimulatorInitializer {
+	private final Class<? extends Simulator> simulatorClass;
+	private final File configuration;
 	
-	public SimulatorConfiguration(Class<? extends Simulator> simulatorClass, File configuration) 
+	public SimulatorInitializer(Class<? extends Simulator> simulatorClass, 
+								File configuration) 
 	{
 		super();
 		this.simulatorClass = simulatorClass;
@@ -25,18 +40,10 @@ public class SimulatorConfiguration {
 		return configuration;
 	}
 
-	public void setConfiguration(File configuration) {
-		this.configuration = configuration;
-	}
-
 	public Class<? extends Simulator> getSimulatorClass() {
 		return simulatorClass;
 	}
 
-	public void setSimulatorClass(Class<? extends Simulator> simulatorClass) {
-		this.simulatorClass = simulatorClass;
-	}
-	
 	public static void main(String[] args) {
 		Class<? extends Simulator> klass = new Simulator() {
 			public Collection<Controllable> getControllables() {
@@ -51,6 +58,11 @@ public class SimulatorConfiguration {
 			public void shutdown(OutputStream config) {
 				System.out.println("shutdown called!");
 			}
+
+			public SimulatorState getState() {
+				// TODO Auto-generated method stub
+				return null;
+			}
 		}.getClass();
 		File file = new File("./foo.xml");
 		try {
@@ -59,9 +71,9 @@ public class SimulatorConfiguration {
 			e.printStackTrace();
 		}
 		
-		SimulatorConfiguration simconf = new SimulatorConfiguration(klass, file);
+		SimulatorInitializer simconf = new SimulatorInitializer(klass, file);
 		XStream xstream = new XStream();
-		xstream.alias("SimulatorConfiguration", SimulatorConfiguration.class);
+		xstream.alias("SimulatorConfiguration", SimulatorInitializer.class);
 		System.out.println(xstream.toXML(simconf));
 		
 		try {

@@ -1,6 +1,8 @@
 package edu.ou.mlfw;
 
-import java.util.Random;
+import java.util.Set;
+
+import edu.ou.utils.Initializable;
 
 /**
  * Agent defines the methods that are needed for a generic agent.  The agent is
@@ -9,9 +11,9 @@ import java.util.Random;
  * agent is controlling.  For example, the environment could be a workbench and
  * a robot arm that is manipulating items according to the controller, or agent.
  *
- * @author Josh Beitelspacher
  */
-public interface Agent
+public interface Agent extends Initializable 
 {
-
+	AgentAction startAction(AgentState state, Set<AgentAction> actions);
+	void endAction(AgentState state);
 }

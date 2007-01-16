@@ -3,12 +3,14 @@ package edu.ou.mlfw;
 import jargs.gnu.CmdLineParser;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.*;
 
 import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.config.*;
+import edu.ou.mlfw.exceptions.NameCollisionException;
+import edu.ou.mlfw.exceptions.UnboundAgentException;
+import edu.ou.mlfw.exceptions.UnboundControllableException;
 
 public class World 
 {
@@ -17,98 +19,120 @@ public class World
 	//format of an XStream-serialized WorldConfiguration object.
 	public static final String DEFAULT_CONFIG = "worldconfig.xml";
 	
+	public static class Client {  //TODO: Refactor this out to package?
+		final Environment env; final Agent agent;
+		
+		public Client(Environment e, Agent a) {
+			this.env = e; this.agent = a;
+		}
+	}
+	
 	private final Simulator simulator;
-	private final Client[] clients;
-	
-	public static World makeInstance(WorldConfiguration worldconfig) 
-	{
-		SimulatorConfiguration simconfig = findConfiguration(
-				worldconfig.getSimulatorConfigurationLocation(),
-				SimulatorConfiguration.class );
-	
-		ClientConfiguration[] clientconfigs = findConfigurations(
-				worldconfig.getClientConfigurationLocations(),
-				ClientConfiguration.class);
-		
-		return new World(simconfig, clientconfigs);	
-	}
-	
-	/**
-	 * Generate a World from an SimulatorConfiguration object and a set of 
-	 * ClientConfiguration objects
-	 * @param simconfig
-	 * @param clientconfigs
-	 */
-	public World(SimulatorConfiguration simconfig, 
-					ClientConfiguration[] clientconfigs)
-	{
-		try {
-			this.simulator = simconfig.getSimulatorClass().newInstance();
-			this.clients = new Client[clientconfigs.length];
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-	}
-	
-	public static class Client
-	{
-		final Environment env;
-		final Agent agent;
-		
-		
-		
-	}
+	private final Map<String, Client> mappings;
 	
 	/**
 	 * Initialize the simulator, initialize each agent, and bind each
-	 * controllable to an agent.  Throws an exception if either a controllable
-	 * is initialized without a matching agent, or an agent is initialized
+	 * controllable to its client. Throws an exception if either a controllable
+	 * is initialized without a matching client, or an agent is initialized
 	 * without a matching controllable.  If a controllable/agent pair is given 
 	 * but neither the controllable or agent are initialized, the pair entry 
 	 * will simply be ignored.
-	 * 
-	 * agent in controllableToAgentMap, and throw
+	 *
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws NameCollisionException 
+	 * @throws UnboundAgentException 
 	 * @throws UnboundControllableException
 	 * @throws UnboundAgentException
+	 * @throws UnboundControllableException 
 	 */
-	public void initialize() 
-		throws UnboundControllableException,
-		   		UnboundAgentException
+	public World(WorldConfiguration worldconfig) 
+		throws InstantiationException, IllegalAccessException, 
+			NameCollisionException, UnboundAgentException, 
+			UnboundControllableException 
 	{
-		Simulator simulator = simConfig.initialize();
-		Collection<Controllable> controllables = simulator.getControllables();
-		Collection<Agent> agents = new ArrayList<Agent>(agentConfigs.size());
-		for(Configuration<Agent> agentConfig: agentConfigs) {
-			agents.add(agentConfig.initialize());
+		SimulatorInitializer siminit = fromXML(
+				worldconfig.getSimulatorInitializerFile(),
+				SimulatorInitializer.class );
+		Simulator simulator = siminit.getSimulatorClass().newInstance();
+		simulator.initialize(siminit.getConfiguration());
+		
+		Set<String> controllables = new HashSet<String>();
+		for(Controllable c: simulator.getControllables()) {
+			if(controllables.contains(c.getName())) {
+				throw new NameCollisionException();
+			}
+			//Client will be associated later
+			controllables.add(c.getName()); 
 		}
 		
-		//bindControllablesAndAgents(controllables, agents);        
+		Map<String, Client> mappings = new HashMap<String, Client>();
+		for(ClientMappingEntry mapping : worldconfig.getMappingInformation()) {
+			if(!controllables.contains(mapping.getControllableName())) {
+				throw new UnboundAgentException();
+			}
+			
+			ClientInitializer clientinit = fromXML(
+					mapping.getClientInitializerFile(),
+					ClientInitializer.class );
+			
+			EnvironmentEntry ee = clientinit.getEnvironmentEntry();
+			Environment env = ee.getEnvironmentClass().newInstance();
+			env.initialize(ee.getConfiguration());
+			
+			AgentEntry ae = clientinit.getAgentEntry();
+			Agent agent = ae.getAgentClass().newInstance();
+			agent.initialize(ae.getConfiguration());
+			
+			mappings.put(mapping.getControllableName(), new Client(env, agent));
+		}
 		
+		if(!controllables.isEmpty()) {
+			throw new UnboundControllableException();
+		}
 		
-		 
+		this.simulator = simulator;
+		this.mappings = mappings;
 	}
 	
-//	private void bindControllablesAndAgents(Collection<Controllable> controllables,
-//											Collection<Agent> agents,
-//											ControllableAgentBinder binder) 
-//		throws UnboundControllableException, UnboundAgentException
-//	{
-//		
-//		
-//	}
-		   
+	/**
+	 * The basic run loop.  
+	 */
+	public void run() {
+		SimulatorState state = simulator.getState();
+		while(simulator.isRunning()) {
+			for(Controllable cntrl : simulator.getControllables()) {
+				Client client = mappings.get(cntrl.getName());
+				AgentState as = client.env.getAgentState(state);
+				Set<ControllableAction> cas = cntrl.getLegalActions();
+				Set<AgentAction> aas = client.env.getAgentActions(cas);
+				AgentAction aa = client.agent.startAction(as, aas);
+				ControllableAction ca = client.env.getControllableAction(aa);  
+				cntrl.setAction(ca);
+			}
+			simulator.advance();
+			state = simulator.getState();
+			for(Controllable cntrl : simulator.getControllables()) {
+				Client client = mappings.get(cntrl.getName());
+				AgentState as = client.env.getAgentState(state);
+				client.agent.endAction(as);
+			}
+		}
+	}
+	
 	public static void main(String[] args) 
 	{
 		Arguments arguments = parseArgs(args);
-		WorldConfiguration worldconfig = findConfiguration(
+		WorldConfiguration worldconfig = fromXML(
 				arguments.configLocation, WorldConfiguration.class);
 		
-		
-		
+		try {
+			World world = new World(worldconfig);
+			world.run();
+		} catch(Exception e) {
+			e.printStackTrace();
+			exit("Error instantiating World");
+		}
 	}
 	
 	/**
@@ -176,7 +200,7 @@ public class World
 	 * @param klass The target class
 	 * @return An instance of the target class from the serialized xml.
 	 */
-	private static <T> T findConfiguration(File loc, Class<T> klass)
+	private static <T> T fromXML(File loc, Class<T> klass)
 	{
 		XStream xstream = new XStream();
         xstream.alias(klass.getSimpleName(), klass);
@@ -191,26 +215,6 @@ public class World
 			exit("Error loading " + klass.getSimpleName() + " file");
 		}
 		return klass.cast(config);
-	}
-	
-	/**
-	 * Given an array of config file locations, return an array consisting of 
-	 * the corresponding instantiated configurations.  This is subject to the
-	 * same constraints as findConfiguration (as it calls it underneath).
-	 * 
-	 * @param <T> The target class
-	 * @param locs The locations of the serialized xml config files.
-	 * @param klass The target class
-	 * @return An array of target class instances from the serialized xml.
-	 */
-	@SuppressWarnings("unchecked")
-	private static <T> T[] findConfigurations(final File[] locs, final Class<T> klass)
-	{
-		final Object out = Array.newInstance(klass, locs.length);
-		for(int i = 0; i < locs.length; i++) {
-			Array.set(out, i, findConfiguration(locs[i], klass));
-		}
-		return (T[]) out;
 	}
 	
 	/**
