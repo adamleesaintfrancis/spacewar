@@ -2,6 +2,8 @@ package edu.ou.mlfw;
 
 import java.util.Set;
 
+import edu.ou.utils.Initializable;
+
 /**
  * A Controllable is an element of a simulator that can be controlled by an agent. At each 
  * timestep, a controllable must provide a non-empty set of actions that an agent can select 
@@ -18,28 +20,32 @@ import java.util.Set;
  * low-level primitive actions understood by the controllable and high-level complex actions 
  * that can be more readily understood by the agent.
  *  
- * @author Jason Fager
- *
  */
 public interface Controllable extends Initializable {
 	/**
 	 * @return A set of actions that are legal for this controllable's current state.
 	 */
-	public Set<ControllableAction> getLegalActions();
+	Set<ControllableAction> getLegalActions();
 	
 	/**
 	 * Accept an action. 
 	 * @param action
 	 */
-	public void setAction(ControllableAction action);
+	void setAction(ControllableAction action);
 	
 	/**
 	 * @return The current action for this controllable.
 	 */
-	public ControllableAction getAction();
+	ControllableAction getAction();
 	
 	/**
 	 * @return A representation of the controllable's state.
 	 */
-	public ControllableState getState();
+	ControllableState getState();
+	
+	/**
+	 * Return this controllable's unique identifying name.
+	 * @return
+	 */
+	String getName();
 }

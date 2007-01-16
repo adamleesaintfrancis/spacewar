@@ -13,17 +13,14 @@ Goals:
          /       \
  Simulator       Environment
      |                |
-              AgentEnvironmentView
+     |                |
      |                | 
 Controllable        Agent
 
 Controllables define what actions are available to manipulate objects in a Simulator.
 The simulator understands how specified actions are to be interpreted for a controllable
 in context of other controllables, non-controllables, and some set of internal simulation 
-"physics".  
-
-A controllable can be seen as presenting two interfaces:  for an agent, the controllable 
-presents a set of actions tht can be taken at any given time, and accepts a 
+"physics".   
 
 Agents decide which actions a controllable should take at any given time, based on the information
 about the state of the Simulator available through an Environment.  An Environment provides an 
