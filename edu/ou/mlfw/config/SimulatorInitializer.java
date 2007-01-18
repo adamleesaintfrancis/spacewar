@@ -63,6 +63,15 @@ public class SimulatorInitializer {
 				// TODO Auto-generated method stub
 				return null;
 			}
+
+			public void advance() {
+				// TODO Auto-generated method stub	
+			}
+
+			public boolean isRunning() {
+				// TODO Auto-generated method stub
+				return false;
+			}
 		}.getClass();
 		File file = new File("./foo.xml");
 		try {
