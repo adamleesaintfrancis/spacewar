@@ -7,7 +7,7 @@ import AIClass.ai.agents.SWCentComAgent;
 
 import javax.swing.*;
 
-import edu.ou.spacewar.Command;
+import edu.ou.spacewar.objects.ShipCommand;
 import edu.ou.spacewar.objects.Ship;
 
 import java.awt.*;
@@ -187,42 +187,42 @@ public class SpacewarViewer extends JFrame implements KeyListener {
             case KeyEvent.VK_S:
                 spacewarGui.toggleShadows();
             case KeyEvent.VK_UP:
-                this.command &= ~Command.THRUST_FLAG;
+                this.command &= ~ShipCommand.THRUST_FLAG;
                 break;
             case KeyEvent.VK_LEFT:
-                this.command &= ~Command.LEFT_FLAG;
+                this.command &= ~ShipCommand.LEFT_FLAG;
                 break;
             case KeyEvent.VK_RIGHT:
-                this.command &= ~Command.RIGHT_FLAG;
+                this.command &= ~ShipCommand.RIGHT_FLAG;
                 break;
             case KeyEvent.VK_SPACE:
-                this.command &= ~Command.FIRE_FLAG;
+                this.command &= ~ShipCommand.FIRE_FLAG;
                 break;
         }
 
         if(this.humanShip != null) {
-            this.humanShip.setUserCommand(Command.fromByte(this.command));
+            this.humanShip.setUserCommand(ShipCommand.fromByte(this.command));
         }
     }
 
     public void keyPressed(KeyEvent event) {
         switch (event.getKeyCode()) {
             case KeyEvent.VK_UP:
-                this.command |= Command.THRUST_FLAG;
+                this.command |= ShipCommand.THRUST_FLAG;
                 break;
             case KeyEvent.VK_LEFT:
-                this.command |= Command.LEFT_FLAG;
+                this.command |= ShipCommand.LEFT_FLAG;
                 break;
             case KeyEvent.VK_RIGHT:
-                this.command |= Command.RIGHT_FLAG;
+                this.command |= ShipCommand.RIGHT_FLAG;
                 break;
             case KeyEvent.VK_SPACE:
-                this.command |= Command.FIRE_FLAG;
+                this.command |= ShipCommand.FIRE_FLAG;
                 break;
         }
 
         if(this.humanShip != null) {
-            this.humanShip.setUserCommand(Command.fromByte(this.command));
+            this.humanShip.setUserCommand(ShipCommand.fromByte(this.command));
         }
     }
 }

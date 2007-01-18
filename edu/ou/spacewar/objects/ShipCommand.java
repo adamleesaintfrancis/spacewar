@@ -1,6 +1,8 @@
-package edu.ou.spacewar;
+package edu.ou.spacewar.objects;
 
-public enum Command {
+import edu.ou.mlfw.ControllableAction;
+
+public enum ShipCommand implements ControllableAction {
     DoNothing(false, false, false, false),
     Thrust(true, false, false, false),
     TurnRight(false, false, true, false),
@@ -23,7 +25,7 @@ public enum Command {
     public static final byte NOTHING_FLAG = 0x00;
 
     public static final int COMMANDS = values().length;
-    public static final Command[] commands = {
+    public static final ShipCommand[] commands = {
         DoNothing,
         Thrust,
         TurnRight,
@@ -38,7 +40,7 @@ public enum Command {
         ThrustLeftFire,
     };
 
-    public static final Command[] trunCmnds = {
+    public static final ShipCommand[] trunCmnds = {
         DoNothing,
         Thrust,
         TurnRight,
@@ -52,7 +54,7 @@ public enum Command {
     public final boolean fire;
     public final byte commandByte;
 
-    private Command(boolean thrust, boolean left, boolean right, boolean fire) {
+    private ShipCommand(boolean thrust, boolean left, boolean right, boolean fire) {
         this.thrust = thrust;
         this.left = left;
         this.right = right;
@@ -69,7 +71,7 @@ public enum Command {
         this.commandByte = commandByte;
     }
 
-    public static Command fromByte(int commandByte) {
+    public static ShipCommand fromByte(int commandByte) {
         switch (commandByte) {
         case THRUST_FLAG:
             return Thrust;
@@ -98,28 +100,28 @@ public enum Command {
         }
     }
 
-    public Command turnLeft() {
+    public ShipCommand turnLeft() {
         if (this.left)
             return this;
 
         return fromByte((toByte() & ~RIGHT_FLAG) | LEFT_FLAG);
     }
 
-    public Command turnRight() {
+    public ShipCommand turnRight() {
         if (this.right)
             return this;
 
         return fromByte((toByte() & ~LEFT_FLAG) | RIGHT_FLAG);
     }
 
-    public Command stopTurn() {
+    public ShipCommand stopTurn() {
         if (!this.left && !this.right)
             return this;
 
         return fromByte(toByte() & ~(RIGHT_FLAG | LEFT_FLAG));
     }
 
-    public Command setThrust(boolean thrust) {
+    public ShipCommand setThrust(boolean thrust) {
         if (this.thrust == thrust)
             return this;
 
@@ -129,7 +131,7 @@ public enum Command {
             return fromByte(toByte() & ~THRUST_FLAG);
     }
 
-    public Command setFire(boolean fire) {
+    public ShipCommand setFire(boolean fire) {
         if (this.fire == fire)
             return this;
 

@@ -1,6 +1,7 @@
 package edu.ou.spacewar.mlfw;
 
 import edu.ou.spacewar.*;
+import edu.ou.spacewar.objects.ShipCommand;
 import edu.ou.spacewar.objects.immutables.ImmutableSpacewarState;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
 import edu.ou.spacewar.objects.immutables.MyImmutableSpacewarState;
@@ -15,7 +16,7 @@ import java.util.Random;
  * environment provides the same ImmutableSpacewarState to all agents.
  */
 public class SWShipBasicEnvironment extends
-        Environment<ImmutableSpacewarState, MyImmutableSpacewarState, Command>  {
+        Environment<ImmutableSpacewarState, MyImmutableSpacewarState, ShipCommand>  {
 
     private final BasicSpacewarWorld world;
 
@@ -59,8 +60,8 @@ public class SWShipBasicEnvironment extends
      *
      * @return The current possible actions.
      */
-    public final Command[] getActions() {
-        return Command.values();
+    public final ShipCommand[] getActions() {
+        return ShipCommand.values();
     }
 
     /**
@@ -78,7 +79,7 @@ public class SWShipBasicEnvironment extends
      *
      * @param action The action the ship should take.
      */
-    protected final void takeAction(Command action) {
+    protected final void takeAction(ShipCommand action) {
         this.ship.setUserCommand(action);
     }
 

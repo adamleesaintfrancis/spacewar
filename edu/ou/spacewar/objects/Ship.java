@@ -3,9 +3,10 @@ package edu.ou.spacewar.objects;
 
 import java.util.Stack;
 
-import edu.ou.spacewar.Command;
+import edu.ou.mlfw.ControllableAction;
 import edu.ou.spacewar.SpacewarGame;
 import edu.ou.spacewar.gui.Shadow2D;
+import edu.ou.spacewar.objects.immutables.ImmutableShip;
 import edu.ou.spacewar.objects.shadows.ShipShadow;
 import edu.ou.spacewar.simulator.Object2D;
 import edu.ou.utils.Vector2D;
@@ -29,18 +30,21 @@ public class Ship extends Object2D {
     public static final float THRUST_ACCELERATION = 80;
     public static final float TURN_SPEED = (float) (150 * Math.PI / 180);
 
+    private final boolean isControllable;
+    
+    private ControllableShip controllable;
     protected Bullet[] bullets;
-
     private int energy, beacons, kills, deaths, hits, flags, team;
-    private Command userCommand, activeCommand;
+    private ShipCommand activeCommand;
     private float fireDelay;
     private Flag flag;
     private Stack<Bullet> clip;
 
 
-    public Ship(SpacewarGame space, int id) {
+    public Ship(SpacewarGame space, int id, boolean isControllable) {
         super(space, id, SHIP_RADIUS, SHIP_MASS);
 
+        this.isControllable = isControllable;
         this.bullets = new Bullet[MAX_AMMO];
         this.clip = new Stack<Bullet>();
         for (int i = 0; i < MAX_AMMO; i++) {
@@ -67,25 +71,19 @@ public class Ship extends Object2D {
 
         this.energy = MAX_ENERGY;
         this.flag = null;
-        this.userCommand = Command.DoNothing;
-        this.activeCommand = Command.DoNothing;
+        this.activeCommand = ShipCommand.DoNothing;
         this.fireDelay = 0;
     }
 
-
-    public final Command getUserCommand() {
-        return userCommand;
-    }
-
-    public final void setUserCommand(Command command) {
+    public final void setActiveCommand(ShipCommand command) {
         if(command != null) {
-            userCommand = command;
+            this.activeCommand = command;
         } else {
-            userCommand = Command.DoNothing;
+            this.activeCommand = ShipCommand.DoNothing;
         }
     }
 
-    public final Command getActiveCommand() {
+    public final ShipCommand getActiveCommand() {
         return activeCommand;
     }
 
@@ -194,22 +192,30 @@ public class Ship extends Object2D {
     public final void setFlag(Flag flag) {
         this.flag = flag;
     }
+    
+    
 
     protected final void advanceTime(float timestep) {
-        activeCommand = Command.DoNothing;
+    	if(isControllable && controllable != null) {
+    		ControllableAction a = controllable.getAction();
+    		if(a instanceof ShipCommand) {
+    			activeCommand = (ShipCommand)a;
+    		} else {
+    			throw new RuntimeException("Unknown ControllableAction");
+    		}
+    	} else {
+            activeCommand = ShipCommand.DoNothing;
+    	}
 
-        if (userCommand.thrust) {
-            activeCommand = activeCommand.setThrust(true);
+        if (activeCommand.thrust) {
             velocity = velocity.add(orientation.multiply(THRUST_ACCELERATION * timestep));
             takeDamage(THRUST_COST);
         }
 
-        if (userCommand.left) {
-            activeCommand = activeCommand.turnLeft();
+        if (activeCommand.left) {
             orientation = orientation.rotate(-TURN_SPEED * timestep);
             takeDamage(TURN_COST);
-        } else if (userCommand.right) {
-            activeCommand = activeCommand.turnRight();
+        } else if (activeCommand.right) {
             orientation = orientation.rotate(TURN_SPEED * timestep);
             takeDamage(TURN_COST);
         }
@@ -217,8 +223,7 @@ public class Ship extends Object2D {
         if (fireDelay > 0)
             fireDelay -= timestep;
 
-        if (userCommand.fire && !clip.isEmpty() && fireDelay <= 0) {
-            activeCommand = activeCommand.setFire(true);
+        if (activeCommand.fire && !clip.isEmpty() && fireDelay <= 0) {
             fireDelay = FIRE_DELAY;
             takeDamage(FIRE_COST);
 
@@ -243,5 +248,23 @@ public class Ship extends Object2D {
 	}
 
 
+
+	/**
+	 * Ships can be specified as Controllables, but we don't want to pass a
+	 * reference to an actual Ship object because we don't want to risk a
+	 * client fouling up the simulation.  So what we do instead is pass out
+	 * a ControllableShip, which we keep a reference to, and when it comes
+	 * time for us to update ourselves, we poll this object for whatever move
+	 * the client has set.
+	 */
+	public boolean isControllable() {
+		return this.isControllable;
+	}
+	
+	public ControllableShip getControllableShip() {
+		return new ControllableShip(this.getName(), 
+									ShipCommand.commands, 
+									new ImmutableShip(this));
+	}
 
 }
