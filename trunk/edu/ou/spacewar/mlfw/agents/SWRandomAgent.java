@@ -18,8 +18,8 @@ public class SWRandomAgent extends SpacewarAgent {
         super(env, label, team);
     }
 
-    public Command findAction() {
-        Command[] actions = getActions();
+    public ShipCommand findAction() {
+        ShipCommand[] actions = getActions();
         if (actions.length == 0)
             return null;
 

@@ -17,7 +17,7 @@ import java.io.FileReader;
  * which returns an array of actions that are available.  These can be called
  * from findAction() to facilitate the agent's interactions with its environment.
  */
-public abstract class SpacewarAgent extends Agent<MyImmutableSpacewarState, Command, SWShipBasicEnvironment> {
+public abstract class SpacewarAgent extends Agent<MyImmutableSpacewarState, ShipCommand, SWShipBasicEnvironment> {
     protected int team;
 
     public SpacewarAgent(SWShipBasicEnvironment env, String label, Integer team) {
@@ -49,7 +49,7 @@ public abstract class SpacewarAgent extends Agent<MyImmutableSpacewarState, Comm
      *
      * @return the selected Command.
      */
-    public abstract Command findAction();
+    public abstract ShipCommand findAction();
 
     /**
      * After all the agent commands have been processed and the physics engine has advanced,

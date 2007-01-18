@@ -22,8 +22,8 @@ public class SWDoNothingAgent extends SpacewarAgent {
         super(label, team);
     }
 
-    public Command findAction() {
-        return Command.DoNothing; 
+    public ShipCommand findAction() {
+        return ShipCommand.DoNothing; 
     }
 
     public void endAction() {

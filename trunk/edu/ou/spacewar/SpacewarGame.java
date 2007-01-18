@@ -171,7 +171,7 @@ public final class SpacewarGame extends Space {
             System.out.println("\t Ammo: " + ship.getAmmo());
 
             System.out.print("\t Command: (");
-            Command command = ship.getActiveCommand();
+            ShipCommand command = ship.getActiveCommand();
             System.out
                     .print((command.left || command.right) ? (command.left) ? "L"
                             : "R"

@@ -1,5 +1,3 @@
 package edu.ou.mlfw;
 
-public interface SimulatorState {
-
-}
+public interface SimulatorState {}

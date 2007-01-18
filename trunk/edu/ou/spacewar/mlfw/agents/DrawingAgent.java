@@ -30,7 +30,7 @@ public class DrawingAgent extends SpacewarAgent {
         super(env, label, team);
     }
 
-    public Command findAction() {
+    public ShipCommand findAction() {
         MyImmutableSpacewarState mystate = getState();
         ImmutableSpacewarState state = mystate.getState();
         ImmutableShip myShip = mystate.getShip();
@@ -77,7 +77,7 @@ public class DrawingAgent extends SpacewarAgent {
                 currBeacon = minbeacon;
                 distance = mindistance;
             } else {
-                return Command.DoNothing;
+                return ShipCommand.DoNothing;
             }
         }
 
@@ -86,13 +86,13 @@ public class DrawingAgent extends SpacewarAgent {
         float velangle = distance.angleBetween(myShip.getVelocity());
         if (Math.abs(velangle) > Math.PI / 26) {
             if (Math.abs(oriangle) < Math.PI / 4) {  //todo: tune these parameters
-                return (velangle > 0) ? Command.ThrustLeft : Command.ThrustRight;
+                return (velangle > 0) ? ShipCommand.ThrustLeft : ShipCommand.ThrustRight;
             } else {
-                return (oriangle > 0) ? Command.TurnLeft : Command.TurnRight;
+                return (oriangle > 0) ? ShipCommand.TurnLeft : ShipCommand.TurnRight;
             }
         } else {
             float magdiscount = 0.01f * myShip.getVelocity().getMagnitude();
-            return (getRandom().nextFloat() < 1.0 - magdiscount) ? Command.Thrust : Command.DoNothing;
+            return (getRandom().nextFloat() < 1.0 - magdiscount) ? ShipCommand.Thrust : ShipCommand.DoNothing;
         }
     }
 

@@ -1,7 +1,8 @@
 package edu.ou.spacewar.objects.immutables;
 
-import edu.ou.spacewar.Command;
+import edu.ou.mlfw.ControllableState;
 import edu.ou.spacewar.objects.Ship;
+import edu.ou.spacewar.objects.ShipCommand;
 
 /**
  * ImmutableShip acts as an immutable wrapper around a Ship.
@@ -9,7 +10,7 @@ import edu.ou.spacewar.objects.Ship;
  * of the ship, the ship's current command, and the id and name of the ship.
  * The Object2D information for the ship is also available.
  */
-public class ImmutableShip extends ImmutableObject2D {
+public class ImmutableShip extends ImmutableObject2D implements ControllableState {
     private final int id;
     private final String name;
     private final int team;
@@ -22,7 +23,7 @@ public class ImmutableShip extends ImmutableObject2D {
     private final int flags;
     private final boolean hasFlag;
     private final int flagTeam;
-    private final Command command;
+    private final ShipCommand command;
 
     public ImmutableShip(Ship ship) {
         super(ship);
@@ -159,7 +160,7 @@ public class ImmutableShip extends ImmutableObject2D {
      *
      * @return The ship's command.
      */
-    public final Command getCommand() {
+    public final ShipCommand getCommand() {
         return command;
     }
 

@@ -15,18 +15,31 @@ import edu.ou.utils.Vector2D;
  * generated, and into which a config file is loaded.  
  */
 public class SpacewarConfiguration {
-    public int seed;
-    public float width, height;
-    public int numberOfShips, numberOfObstacles, numberOfBeacons, numberOfFlags, numberOfBases, numberOfTeams;
-    public float maxInitialSpeed;
-    public String defaultShipAgent;
+    private int seed;
+    private float width, height;
+    private int numberOfShips, numberOfObstacles, numberOfBeacons, 
+    			numberOfFlags, numberOfBases, numberOfTeams;
+    private float maxInitialSpeed;
+    private String defaultShipAgent;
 
-    public ShipInformation[] ships;
-    public ObstacleInformation[] obstacles;
-    public BeaconInformation[] beacons;
-    public FlagInformation[] flags;
-    public BaseInformation[] bases;
-    public TeamInformation[] teams;
+    private ShipInformation[] ships;
+    private ObstacleInformation[] obstacles;
+    private BeaconInformation[] beacons;
+    private FlagInformation[] flags;
+    private BaseInformation[] bases;
+    private TeamInformation[] teams;
+    
+    public static XStream getXStream() {
+    	XStream xstream = new XStream();
+        xstream.alias("SpacewarConfiguration", SpacewarConfiguration.class);
+        xstream.alias("ShipInformation", ShipInformation.class);
+        xstream.alias("ObstacleInformation", ObstacleInformation.class);
+        xstream.alias("BeaconInformation", BeaconInformation.class);
+        xstream.alias("FlagInformation", FlagInformation.class);
+        xstream.alias("BaseInformation", BaseInformation.class);
+        xstream.alias("TeamInformation", TeamInformation.class);	
+        return xstream;
+    }
 
     public SpacewarConfiguration(int seed, float width, float height,
                                  int numberOfShips,
@@ -85,25 +98,25 @@ public class SpacewarConfiguration {
         this.teams = teams;
     }
 
-    private SWAgentRecord[] initShipRecords() {
-        SWAgentRecord[] srecords = new SWAgentRecord[ships.length];
-        for (int i = 0; i < srecords.length; i++) {
-            if (ships[i].agentRecord) {
-                srecords[i] = new SWAgentRecord(ships[i].name, ships[i].team);
-            }
-        }
-        return srecords;
-    }
-
-    private SWAgentRecord[] initTeamRecords() {
-        SWAgentRecord[] trecords = new SWAgentRecord[teams.length];
-        for (int i = 0; i < trecords.length; i++) {
-            if (teams[i].agentRecord) {
-                trecords[i] = new SWAgentRecord(teams[i].name, teams[i].number);
-            }
-        }
-        return trecords;
-    }
+//    private SWAgentRecord[] initShipRecords() {
+//        SWAgentRecord[] srecords = new SWAgentRecord[ships.length];
+//        for (int i = 0; i < srecords.length; i++) {
+//            if (ships[i].agentRecord) {
+//                srecords[i] = new SWAgentRecord(ships[i].name, ships[i].team);
+//            }
+//        }
+//        return srecords;
+//    }
+//
+//    private SWAgentRecord[] initTeamRecords() {
+//        SWAgentRecord[] trecords = new SWAgentRecord[teams.length];
+//        for (int i = 0; i < trecords.length; i++) {
+//            if (teams[i].agentRecord) {
+//                trecords[i] = new SWAgentRecord(teams[i].name, teams[i].number);
+//            }
+//        }
+//        return trecords;
+//    }
     
     public SpacewarGame newGame() throws IdCollisionException, IllegalPositionException, IllegalVelocityException, NoClassBufferException, ClassBufferBoundsException, NoOpenPositionException
     {
@@ -246,7 +259,7 @@ public class SpacewarConfiguration {
         SpacewarConfiguration gb = new SpacewarConfiguration(0, 800f, 600f, 6, 6, 1, 1, 1, 2,
                 30.0f, "BeaconCollector", ships, obstacles, beacons, flags, bases, teams);
 
-        XStream test = new XStream();
+        XStream test = getXStream();
         System.out.println(test.toXML(gb));
     }
 }

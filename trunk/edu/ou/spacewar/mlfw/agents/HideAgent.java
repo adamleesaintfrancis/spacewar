@@ -41,8 +41,8 @@ public class HideAgent extends SpacewarAgent {
         currentBehavior = UNKNOWN;
     }
 
-    public Command findAction() {
-        Command command = Command.DoNothing;
+    public ShipCommand findAction() {
+        ShipCommand command = ShipCommand.DoNothing;
         myState = getState();
         myShip = myState.getShip();
 
@@ -150,7 +150,7 @@ public class HideAgent extends SpacewarAgent {
      * If we are in danger, run away from the threatening obstacle (assumed to be the nearest)
      * @return the action to take if we are in danger
      */
-    private Command computeDangerCommand() {
+    private ShipCommand computeDangerCommand() {
         // set the myShip color (for visualizing the heuristic)
         //myShip.setColor(Color.RED);
 
@@ -186,21 +186,21 @@ public class HideAgent extends SpacewarAgent {
             turnCommand = pdTurn((float) angleGoal, Ship.TURN_SPEED, 0, Ship.TURN_SPEED);
             //System.out.println("Actually turning");
         } else {
-            turnCommand = Command.NOTHING_FLAG;
+            turnCommand = ShipCommand.NOTHING_FLAG;
         }
 
 
 //        byte turnCommand = pdTurn((float) oriented + Math.PI, Ship.getTurnSpeed(), 0, Ship.getTurnSpeed());
 
-        byte accelCommand = Command.NOTHING_FLAG;
+        byte accelCommand = ShipCommand.NOTHING_FLAG;
 
         // reset if we have reached our goal
-        if (turnCommand == Command.NOTHING_FLAG) {
-            accelCommand = Command.THRUST_FLAG;
+        if (turnCommand == ShipCommand.NOTHING_FLAG) {
+            accelCommand = ShipCommand.THRUST_FLAG;
             currentBehavior = UNKNOWN;
         }
 
-        Command command = Command.fromByte((byte) (turnCommand | accelCommand));
+        ShipCommand command = ShipCommand.fromByte((byte) (turnCommand | accelCommand));
 
         if (!shipInDanger()) {
             currentBehavior = UNKNOWN;
@@ -213,7 +213,7 @@ public class HideAgent extends SpacewarAgent {
      * Turn the myShip around and slow it down
      * @return command necessary to turn around and slow down
      */
-    private Command computeTurnToSlowCommand() {
+    private ShipCommand computeTurnToSlowCommand() {
         byte turnCommand, accelCommand;
 
         // set the myShip color (for visualizing the heuristic)
@@ -231,9 +231,9 @@ public class HideAgent extends SpacewarAgent {
         //System.out.println("Turn command " + turnCommand);
 
         // have we achieved our desired angle?  Then slow down.
-        accelCommand = Command.NOTHING_FLAG;
+        accelCommand = ShipCommand.NOTHING_FLAG;
 
-        if (turnCommand == Command.NOTHING_FLAG) {
+        if (turnCommand == ShipCommand.NOTHING_FLAG) {
             if (myShip.getVelocity().getMagnitude() < myShip.getRadius()) {
                 currentBehavior = UNKNOWN;
             } else {
@@ -244,19 +244,19 @@ public class HideAgent extends SpacewarAgent {
             }
 
             // we have achieved our desired velocity as well, so change behavior modes
-            if (accelCommand == Command.NOTHING_FLAG) {
+            if (accelCommand == ShipCommand.NOTHING_FLAG) {
                 currentBehavior = UNKNOWN;
             }
         }
 
-        return Command.fromByte((byte) (turnCommand | accelCommand));
+        return ShipCommand.fromByte((byte) (turnCommand | accelCommand));
     }
 
     /**
      * Compute the next command to keep hiding/following an obstacle
      * @return next Command to keep following a star
      */
-    private Command computeHideCommand() {
+    private ShipCommand computeHideCommand() {
         // set the myShip color (for visualizing the heuristic)
         //myShip.setColor(Color.YELLOW);
 
@@ -305,7 +305,7 @@ public class HideAgent extends SpacewarAgent {
 
         byte turnCommand = pdTurn(nearestObstacle.getOrientation().getAngle(),
                 Ship.TURN_SPEED, myShip.getOrientation().getAngle(), Ship.TURN_SPEED);
-        return Command.fromByte((byte) (turnCommand | accelCommand));
+        return ShipCommand.fromByte((byte) (turnCommand | accelCommand));
     }
 
     /**
@@ -332,13 +332,13 @@ public class HideAgent extends SpacewarAgent {
         if (Math.abs(angularAccel) < 0.01 ||
                 (Math.abs(refTurnAngle - myAngle) < Ship.TURN_SPEED / 10)) { // TODO: remove constant
             //System.out.println("Angle too small");
-            return Command.NOTHING_FLAG;
+            return ShipCommand.NOTHING_FLAG;
         } else if (angularAccel < 0) {
             //System.out.println("Left");
-            return Command.LEFT_FLAG;
+            return ShipCommand.LEFT_FLAG;
         } else {
             //System.out.println("Right");
-            return Command.RIGHT_FLAG;
+            return ShipCommand.RIGHT_FLAG;
         }
     }
 
@@ -363,9 +363,9 @@ public class HideAgent extends SpacewarAgent {
         // figure out what to do with the acceleration in terms of our discrete actions
         if (accel > 0) {
             // System.out.println("Thrust");
-            return Command.THRUST_FLAG;
+            return ShipCommand.THRUST_FLAG;
         } else {
-            return Command.NOTHING_FLAG;
+            return ShipCommand.NOTHING_FLAG;
         }
 
     }
