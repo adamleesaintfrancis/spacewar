@@ -143,7 +143,7 @@ public class SpacewarConfiguration {
             //build the ship as specified
             ShipInformation shipinfo = ships[shipcounter];
             if (!shipinfo.autoPlacement) {
-                Ship ship = new Ship(game, shipcounter);
+                Ship ship = new Ship(game, shipcounter, shipinfo.isControllable);
                 ship.setName(shipinfo.name);
                 ship.setTeam(shipinfo.team);
                 ship.setPosition(new Vector2D(shipinfo.positionX, shipinfo.positionY));
@@ -206,7 +206,7 @@ public class SpacewarConfiguration {
             //build the ship as specified
             ShipInformation shipinfo = ships[shipcounter];
             if (shipinfo.autoPlacement) {
-                Ship ship = new Ship(game, shipcounter);
+                Ship ship = new Ship(game, shipcounter, shipinfo.isControllable);
                 ship.setName(shipinfo.name);
                 ship.setTeam(shipinfo.team);
                 game.autoAdd(ship);
@@ -217,8 +217,11 @@ public class SpacewarConfiguration {
         for (; shipcounter < numberOfShips; shipcounter++) {
             //build the default ship as specified
             String label = "Default_" + (shipcounter - ships.length);
-            ShipInformation shipinfo = new ShipInformation(label, -1, defaultShipAgent, false);
-            Ship ship = new Ship(game, shipcounter);
+            // this ship is not controllable because it is an extra (specified by 
+            // the config file as number of ships field but not given an actual configuration)
+            ShipInformation shipinfo = new ShipInformation(label, -1, 
+            		defaultShipAgent, false, false);
+            Ship ship = new Ship(game, shipcounter, shipinfo.isControllable);
             ship.setName(shipinfo.name);
             ship.setTeam(shipinfo.team);
             game.autoAdd(ship);
@@ -239,7 +242,7 @@ public class SpacewarConfiguration {
      */
     public static void main(String[] args) {
         ShipInformation[] ships = new ShipInformation[1];
-        ships[0] = new ShipInformation("Test", 0, 400, 400, 0, 0, 0, 0, "MySpacewarAgent", true);
+        ships[0] = new ShipInformation("Test", 0, 400, 400, 0, 0, 0, 0, "MySpacewarAgent", true, true);
 
         ObstacleInformation[] obstacles = new ObstacleInformation[0];
         BeaconInformation[] beacons = new BeaconInformation[0];
