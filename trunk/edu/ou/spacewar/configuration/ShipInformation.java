@@ -12,29 +12,33 @@ public class ShipInformation {
     public float orientedX, orientedY;    //if autoplacement is false, specify the orientation
     public boolean agentRecord;           //the agentRecord to load.
     public String knowledgeFile;          //the knowledge file to load??todo:should this be here?
-
+    public boolean isControllable;        // is the ship a controllable object? 
+    
     public ShipInformation(String name,
                            float posX, float posY,
                            float velX, float velY,
                            float oriX, float oriY,
-                           String agent, boolean agentRecord) {
-        this(name, -1, posX, posY, velX, velY, oriX, oriY, agent, agentRecord);
+                           String agent, boolean agentRecord, boolean isControllable) {
+        this(name, -1, posX, posY, velX, velY, oriX, oriY, agent, agentRecord, isControllable);
     }
 
-    public ShipInformation(String name, String agent, boolean agentRecord) {
-        this(name, -1, agent, agentRecord);
+    public ShipInformation(String name, String agent, boolean agentRecord, 
+    		boolean isControllable) {
+        this(name, -1, agent, agentRecord, isControllable);
     }
 
     public ShipInformation(String name, int team,
                            float posX, float posY,
                            float velX, float velY,
                            float oriX, float oriY,
-                           String agent, boolean agentRecord) {
-        this(name, team, false, posX, posY, velX, velY, oriX, oriY, agent, agentRecord);
+                           String agent, boolean agentRecord, boolean isControllable) {
+        this(name, team, false, posX, posY, velX, velY, oriX, oriY, agent, 
+        		agentRecord, isControllable);
     }
 
-    public ShipInformation(String name, int team, String agent, boolean agentRecord) {
-        this(name, team, true, -1, -1, -1, -1, -1, -1, agent, agentRecord);
+    public ShipInformation(String name, int team, String agent, boolean agentRecord, 
+    		boolean isControllable) {
+        this(name, team, true, -1, -1, -1, -1, -1, -1, agent, agentRecord, isControllable);
     }
 
     private ShipInformation(String name, int team,
@@ -42,7 +46,7 @@ public class ShipInformation {
                             float posX, float posY,
                             float velX, float velY,
                             float oriX, float oriY,
-                            String agent, boolean agentRecord) {
+                            String agent, boolean agentRecord, boolean isControllable) {
         this.name = name;
         this.team = team;
         this.autoPlacement = autoPlacement;
@@ -53,6 +57,7 @@ public class ShipInformation {
         this.orientedX = oriX;
         this.orientedY = oriY;
         this.agentRecord = agentRecord;
+        this.isControllable = isControllable;
     }
 
 }
