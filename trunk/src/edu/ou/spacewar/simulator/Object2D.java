@@ -19,13 +19,14 @@ public abstract class Object2D {
     protected Vector2D orientation = Vector2D.X_UNIT_VECTOR;
     protected Vector2D startorientation = Vector2D.X_UNIT_VECTOR;
 
-    protected int index;
+    //spaceIndex is used by Space to speed up physics calculations, and is 
+    //package private.  This field is never modified or used in this class.  
+    int spaceIndex; 
 
     protected boolean alive;
     protected boolean startalive;
 
     private boolean initialized;
-
 
     protected Object2D(Space space, int id, float radius, float mass) {
         this.space = space;

@@ -91,6 +91,7 @@ public class World
 			throw new UnboundControllableException();
 		}
 		
+		//set instance variables
 		this.simulator = simulator;
 		this.mappings = mappings;
 	}

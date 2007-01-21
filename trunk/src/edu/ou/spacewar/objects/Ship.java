@@ -150,7 +150,7 @@ public class Ship extends Object2D {
         if (energy <= 0) {
             incrementDeaths();
             setAlive(false);
-            ((SpacewarGame)space).queue(this);
+            ((SpacewarGame)space).queueForRespawn(this, 3.0f);
             if(flag != null) {
                 flag.setPosition(this.getPosition());
                 flag.setAlive(true);

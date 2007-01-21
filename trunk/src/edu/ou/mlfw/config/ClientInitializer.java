@@ -32,6 +32,14 @@ public class ClientInitializer {
 	public EnvironmentEntry getEnvironmentEntry() {
 		return environmentEntry;
 	}
+	
+	public static XStream getXStream() {
+		final XStream xstream = new XStream();
+		xstream.alias("EnvironmentEntry", EnvironmentEntry.class);
+		xstream.alias("AgentEntry", AgentEntry.class);
+		xstream.alias("ClientInitializer", ClientInitializer.class);
+		return xstream;
+	}
 
 	public static void main(String[] args) {
 		//a small test case showing usage
@@ -46,19 +54,16 @@ public class ClientInitializer {
 
 		ClientInitializer cli = new ClientInitializer(env, ag);
 		
-		XStream xstream = new XStream();
-		xstream.alias("EnvironmentConfiguration", EnvironmentEntry.class);
-		xstream.alias("AgentConfiguration", AgentEntry.class);
-		xstream.alias("ClientConfiguration", ClientInitializer.class);
+		XStream xstream = getXStream();
 		
 		String serialized = xstream.toXML(cli);
 		System.out.println(serialized);
 		
-		ClientInitializer cli2 = (ClientInitializer)xstream.fromXML(serialized);
-		System.out.println(cli2.getEnvironmentEntry().getEnvironmentClass());
-		System.out.println(cli2.getEnvironmentEntry().getConfiguration());
-		System.out.println(cli2.getAgentEntry().getAgentClass());
-		System.out.println(cli2.getAgentEntry().getConfiguration());
-		System.out.println(cli2.getAgentEntry().getKnowledge());
+//		ClientInitializer cli2 = (ClientInitializer)xstream.fromXML(serialized);
+//		System.out.println(cli2.getEnvironmentEntry().getEnvironmentClass());
+//		System.out.println(cli2.getEnvironmentEntry().getConfiguration());
+//		System.out.println(cli2.getAgentEntry().getAgentClass());
+//		System.out.println(cli2.getAgentEntry().getConfiguration());
+//		System.out.println(cli2.getAgentEntry().getKnowledge());
 	}
 }

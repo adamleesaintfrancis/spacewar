@@ -23,6 +23,7 @@ import edu.ou.utils.Vector2D;
  */
 public abstract class Shadow2D {
     protected Vector2D drawposition;
+    protected Vector2D realposition;
     private int width, halfwidth, height, halfheight;
 
     /**
@@ -84,19 +85,27 @@ public abstract class Shadow2D {
     public final Vector2D getDrawPosition() {
         return this.drawposition;
     }
-
+    
+    /**
+     * Reset the drawing position to the real position.
+     */
+    public final void resetDrawPosition() {
+    	this.drawposition = getRealPosition();
+    }
 
     /**
-     * JSpacewarComponent uses this method in conjunction with the bounding box information
-     * to determine if the graphic needs to be redrawn to account for
+     * JSpacewarComponent uses this method in conjunction with the bounding box 
+     * information to determine if the graphic needs to be redrawn to account 
+     * for wrapping.  Real position is the position that resetDrawPosition sets
+     * the draw position to.   
      *
      * @return The current "real" center position of the bounding box.
      */
     public abstract Vector2D getRealPosition();
 
     /**
-     * Tell the JSpacewarComponent to draw or not draw this shadow.  This does not remove the shadow, it just keeps
-     * it from being drawn.
+     * Tell the JSpacewarComponent to draw or not draw this shadow.  This does 
+     * not remove the shadow, it just keeps it from being drawn.
      *
      * @return Whether the shadow should be drawn or not.
      */
@@ -111,8 +120,8 @@ public abstract class Shadow2D {
 
 
     /**
-     * A convenience method that gets called after all the drawings are complete and the drawposition is reset to the
-     * real position.
+     * A convenience method that gets called after all the drawings are 
+     * complete and the draw position is reset to the real position.
      */
     public abstract void cleanUp();
 

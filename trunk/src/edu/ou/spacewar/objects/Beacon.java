@@ -30,7 +30,7 @@ public class Beacon extends Object2D {
 
     public void collect() {
         setAlive(false);
-        ((SpacewarGame)space).queue(this);
+        ((SpacewarGame)space).queueForRespawn(this, 3.0f);
     }
 
     private void findNewPosition() {
