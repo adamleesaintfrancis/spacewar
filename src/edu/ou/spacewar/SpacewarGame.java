@@ -31,12 +31,11 @@ public final class SpacewarGame extends Space {
 
     private final long seed;
     private final Random rand;
-    private final float maxInitialSpeed;
+    private final float timeLimit;
 
-    class Span 
-    {
+    static class Span {
     	public final int start, length;
-    	public Span(int start, int size) {
+    	public Span(final int start, final int size) {
     		this.start = start; this.length = size;
     	}
     }
@@ -46,22 +45,15 @@ public final class SpacewarGame extends Space {
 
     private boolean initialized = false;
 
-    private class QWrapper implements Comparable<QWrapper> {
-        int t;
-        Object2D obj;
+    static class QWrapper implements Comparable<QWrapper> {
+        final float t; final Object2D obj;
 
-        public QWrapper(Beacon b) {
-            this.obj = b;
-            this.t = timestamp + 30; //3 sec @ 10fps
-        }
-
-        public QWrapper(Ship s) {
-            this.obj = s;
-            this.t = timestamp + (s.getDeaths() < 5 ? s.getDeaths() * 20 : 100);
+        public QWrapper(final Object2D obj, final float timestamp) {
+            this.obj = obj; this.t = timestamp;
         }
 
         public int compareTo(QWrapper other) {
-            return new Integer(this.t).compareTo(other.t);
+            return Float.compare(this.t, other.t);
         }
     }
 
@@ -71,20 +63,18 @@ public final class SpacewarGame extends Space {
      * @param ships The total number of ships in the game.
      * @param obstacles The total number of obstacles in the game.
      * @param beacons The total number of beacons in the game.
-     * @param maxInitialSpeed The maximum magnitude of a starting velocity vector.
      */
     public SpacewarGame(long seed,
                         float width,
                         float height,
                         Map<Class<? extends Object2D>, Integer> bufferinfo,
                         int buffertotal, //needed for call to super()
-                        float maxInitialSpeed) {
+                        float timeLimit) {
         super(width, height, new SpacewarCollisionHandler(), buffertotal);
 
         this.seed = seed;
         this.rand = new Random(seed);
-        this.maxInitialSpeed = maxInitialSpeed;
-        
+        this.timeLimit = timeLimit;
         this.buffers = new HashMap<Class<?>, Span>();
         
         int i = 0;
@@ -93,7 +83,7 @@ public final class SpacewarGame extends Space {
         	buffers.put(e.getKey(), s);
         	i += e.getValue();
         }
-
+        assert(i == buffertotal);  
         this.respawnQ = new PriorityQueue<QWrapper>();
     }
 
@@ -260,9 +250,6 @@ public final class SpacewarGame extends Space {
         if (!isOpenAtPosition(obj.getPosition(), obj.getRadius(), BUFFER_DIST)) {
             throw new IllegalPositionException(obj.getPosition());
         }
-        if (obj.getVelocity().getMagnitude() > maxInitialSpeed) {
-            throw new IllegalVelocityException();
-        }
         objects[objindx] = obj;	
         
         handleSpecialAdd(obj);
@@ -315,7 +302,6 @@ public final class SpacewarGame extends Space {
     	}
     }
     
-
     /**
      * Removes the ship at the specified ship index.
      * @param index
@@ -340,9 +326,9 @@ public final class SpacewarGame extends Space {
         return out;
     }
 
+    //TODO: are the initialize and reset methods necessary?
     public void initialize() {
         assert(!initialized);
-        timestamp = 0;
         rand.setSeed(seed);
         for(Object2D obj : objects) {
             if(obj != null) {
@@ -358,7 +344,6 @@ public final class SpacewarGame extends Space {
 
     public void reset(long seed) {
         assert(initialized);
-        this.timestamp = 0;
         this.rand.setSeed(seed);
         for(Object2D obj : objects) {
             if(obj != null) {
@@ -375,14 +360,14 @@ public final class SpacewarGame extends Space {
         }
     }
 
-    public void queue(Ship s) {
-        respawnQ.offer(new QWrapper(s));
+    public void queueForRespawn(Object2D obj, float delay) {
+        respawnQ.offer(new QWrapper(obj, getTimestamp() + delay));
     }
-
-    public void queue(Beacon b) {
-        respawnQ.offer(new QWrapper(b));
+    
+    public final boolean isRunning() {
+    	return getTimestamp() <= this.timeLimit;
     }
-
+    
     /**
      * Makes sure the game is initialized before calling super.advanceTime(timestep).
      * @param timestep
@@ -391,10 +376,11 @@ public final class SpacewarGame extends Space {
         if(!initialized) {
             initialize();
         }
-
-        while(!respawnQ.isEmpty() && respawnQ.peek().t <= timestamp) {
-            respawnQ.poll().obj.reset();
+        if( isRunning() ) {
+        	while(!respawnQ.isEmpty() && respawnQ.peek().t <= getTimestamp()) {
+        		respawnQ.poll().obj.reset();
+        	}
+        	super.advanceTime(timestep);
         }
-        super.advanceTime(timestep);
     }
 }

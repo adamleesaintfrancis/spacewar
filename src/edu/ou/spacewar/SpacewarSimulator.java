@@ -14,14 +14,14 @@ import edu.ou.mlfw.Controllable;
 import edu.ou.mlfw.Simulator;
 import edu.ou.mlfw.SimulatorState;
 import edu.ou.spacewar.configuration.SpacewarConfiguration;
-import edu.ou.spacewar.exceptions.ClassBufferBoundsException;
-import edu.ou.spacewar.exceptions.IdCollisionException;
-import edu.ou.spacewar.exceptions.IllegalPositionException;
-import edu.ou.spacewar.exceptions.IllegalVelocityException;
-import edu.ou.spacewar.exceptions.NoClassBufferException;
-import edu.ou.spacewar.exceptions.NoOpenPositionException;
 import edu.ou.spacewar.objects.Ship;
 
+/**
+ * SpacewarSimulator implements the Simulator interface to allow the use 
+ * of spacewar as a mlfw simulator.  
+ *  
+ * @author Jason
+ */
 public class SpacewarSimulator implements Simulator {
 	private SpacewarGame game;
 
@@ -46,46 +46,30 @@ public class SpacewarSimulator implements Simulator {
     {
     	try {
 			this.game = swconfig.newGame();
-		} catch (IdCollisionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalPositionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalVelocityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoClassBufferException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassBufferBoundsException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoOpenPositionException e) {
-			// TODO Auto-generated catch block
+		} catch (Exception e) {
+			//TODO: replace stack trace printouts with logging
 			e.printStackTrace();
 		}
     }
     
     public boolean isRunning() {
-		// TODO Auto-generated method stub
-    	return false;
+    	return this.game.isRunning();
 	}
 	
     public void advance() {
 		assert(this.game != null);
-		this.game.advanceTime(100.0f);
+		this.game.advanceTime(0.1f);  //TODO: find right advanceTime value
 	}
 	
 	public SimulatorState getState() {
-//		 TODO Auto-generated method stub
-		return null;
+		return new ImmutableSpacewarState(this.game);
 	}
 	
 	public Collection<Controllable> getControllables() {
-		//for now, only ships are controllable
+		//only ships are controllable
 		Ship[] ships = this.game.getLive(Ship.class);
-		Collection<Controllable> out = new ArrayList<Controllable>(ships.length);		
+		Collection<Controllable> out 
+			= new ArrayList<Controllable>(ships.length);		
 		for(Ship s : ships) {
 			if(s.isControllable()) {
 				out.add(s.getControllableShip());
@@ -95,7 +79,8 @@ public class SpacewarSimulator implements Simulator {
 	}
 
 	public void shutdown(OutputStream config) {
-		// TODO Auto-generated method stub
+		// TODO: game stats get collected here?
+		// TODO: rethink this interface: why would shutdown need to write back to config? 
 		
 	}
 }

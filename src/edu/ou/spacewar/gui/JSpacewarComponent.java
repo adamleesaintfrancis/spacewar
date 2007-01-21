@@ -1,14 +1,14 @@
 package edu.ou.spacewar.gui;
 
 import java.awt.*;
-import java.util.LinkedList;
-import java.util.ArrayList;
+import java.util.*;
+
 import javax.swing.JComponent;
 
-import edu.ou.spacewar.simulator.Object2D;
-import edu.ou.spacewar.simulator.Space;
 import edu.ou.utils.Vector2D;
 
+//TODO:  This doesn't have to be spacewar specific...it just draws shadows in
+//a wraparound fashion on some win
 public class JSpacewarComponent extends JComponent {
     private static final long serialVersionUID = 1L;
 
@@ -24,26 +24,23 @@ public class JSpacewarComponent extends JComponent {
     private boolean showshadows;
     private int width, height;
 
-    public JSpacewarComponent(Space space) {
+    public JSpacewarComponent(final int width, final int height) {
         this.shadows = new ArrayList<Shadow2D>();
         this.usershadows = new LinkedList<Shadow2D>();
         this.showshadows = true;
-        this.width = (int) space.getWidth();
-        this.height = (int) space.getHeight();
+        this.width = width;
+        this.height = height;
 
         this.setPreferredSize(new Dimension(width, height));
         this.setBackground(Color.BLACK);
         this.setForeground(Color.BLACK);
     }
 
-    public void initialize(Space space) {
-        this.width = (int) space.getWidth();
-        this.height = (int) space.getHeight();
+    public void initialize(final int width, final int height, Collection<Shadow2D> shadows) {
+        this.width = width;
+        this.height = height;
         this.setPreferredSize(new Dimension(width, height));
-
-        for (Object2D obj : space.getObjects()) {
-            shadows.add(obj.getShadow());
-        }
+        this.shadows.addAll(shadows);
     }
 
     public void addShadow(Shadow2D shadow) {
@@ -74,30 +71,20 @@ public class JSpacewarComponent extends JComponent {
         Graphics2D graphics = (Graphics2D) g;
         graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        synchronized (this.shadows) {
-            for (Shadow2D shadow : this.shadows) {
-                synchronized (shadow) {
-                    if (!shadow.drawMe()) {
-                        continue;
-                    }
-
-                    drawShadow(shadow, graphics);
-                }
-            }
+        for (Shadow2D shadow : this.shadows) {
+        	if (!shadow.drawMe()) {
+        		continue;
+        	}
+        	drawShadow(shadow, graphics);
         }
 
         if (showshadows) {
-            synchronized (this.usershadows) {
-                for (Shadow2D shadow : this.usershadows) {
-                    synchronized (shadow) {
-                        if (!shadow.drawMe()) {
-                            continue;
-                        }
-
-                        drawShadow(shadow, graphics);
-                    }
-                }
-            }
+        	for (Shadow2D shadow : this.usershadows) {
+        		if (!shadow.drawMe()) {
+        			continue;
+        		}
+        		drawShadow(shadow, graphics);
+        	}
         }
     }
 

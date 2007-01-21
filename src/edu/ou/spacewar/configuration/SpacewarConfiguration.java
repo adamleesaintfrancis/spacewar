@@ -15,11 +15,11 @@ import edu.ou.utils.Vector2D;
  * generated, and into which a config file is loaded.  
  */
 public class SpacewarConfiguration {
-    private int seed;
+    private long seed;
     private float width, height;
     private int numberOfShips, numberOfObstacles, numberOfBeacons, 
     			numberOfFlags, numberOfBases, numberOfTeams;
-    private float maxInitialSpeed;
+    private float timeLimit;
     private String defaultShipAgent;
 
     private ShipInformation[] ships;
@@ -48,8 +48,7 @@ public class SpacewarConfiguration {
                                  int numberOfFlags,
                                  int numberOfBases,
                                  int numberOfTeams,
-                                 float maxInitialSpeed,
-                                 String defaultShipAgent,
+                                 float timeLimit,
                                  ShipInformation[] ships,
                                  ObstacleInformation[] obstacles,
                                  BeaconInformation[] beacons,
@@ -65,8 +64,7 @@ public class SpacewarConfiguration {
         this.numberOfFlags = numberOfFlags;
         this.numberOfBases = numberOfBases;
         this.numberOfTeams = numberOfTeams;
-        this.maxInitialSpeed = maxInitialSpeed;
-        this.defaultShipAgent = defaultShipAgent;
+        this.timeLimit = timeLimit;
 
         this.ships = ships;
         this.obstacles = obstacles;
@@ -134,7 +132,7 @@ public class SpacewarConfiguration {
         	numberOfBeacons + numberOfFlags + numberOfObstacles + numberOfBases;
         
     	SpacewarGame game = new SpacewarGame(seed, width, height, 
-    			bufferinfo, buffertotal, maxInitialSpeed);
+    			bufferinfo, buffertotal, timeLimit);
     	
     	int shipcounter, obstcounter, bconcounter, flagcounter, basecounter;
 
@@ -260,7 +258,7 @@ public class SpacewarConfiguration {
         TeamInformation[] teams = new TeamInformation[0];
 
         SpacewarConfiguration gb = new SpacewarConfiguration(0, 800f, 600f, 6, 6, 1, 1, 1, 2,
-                30.0f, "BeaconCollector", ships, obstacles, beacons, flags, bases, teams);
+                30.0f, ships, obstacles, beacons, flags, bases, teams);
 
         XStream test = getXStream();
         System.out.println(test.toXML(gb));

@@ -28,6 +28,13 @@ public class WorldConfiguration {
 	public File getSimulatorInitializerFile() {
 		return simulatorInitializerFile;
 	}
+	
+	public static XStream getXStream() {
+		XStream out = new XStream();
+		out.alias("WorldConfiguration", WorldConfiguration.class);
+		out.alias("ClientMappingEntry", ClientMappingEntry.class);
+		return out;
+	}
 
 	public static void main(String[] args) 
 	{
@@ -40,9 +47,7 @@ public class WorldConfiguration {
 
 		WorldConfiguration world = new WorldConfiguration(sim, mapping);
 		
-		XStream xstream = new XStream();
-		xstream.alias("WorldConfiguration", WorldConfiguration.class);
-		
+		XStream xstream = getXStream();
 		String serialized = xstream.toXML(world);
 		System.out.println(serialized);
 		
