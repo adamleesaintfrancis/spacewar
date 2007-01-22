@@ -12,6 +12,7 @@ import edu.ou.mlfw.exceptions.NameCollisionException;
 import edu.ou.mlfw.exceptions.UnboundAgentException;
 import edu.ou.mlfw.exceptions.UnboundControllableException;
 
+//TODO: Replace System.out.println with logging.
 public class World 
 {
     //By default, we want to look in the current working directory for this
@@ -51,12 +52,18 @@ public class World
 			NameCollisionException, UnboundAgentException, 
 			UnboundControllableException 
 	{
-		SimulatorInitializer siminit = fromXML(
-				worldconfig.getSimulatorInitializerFile(),
-				SimulatorInitializer.class );
+		System.out.print("Loading Simulator initializer...");
+		SimulatorInitializer siminit = (SimulatorInitializer)fromXML(
+				SimulatorInitializer.getXStream(),
+				worldconfig.getSimulatorInitializerFile());
+		System.out.println("Done");
+		
+		System.out.print("Initializing Simulator...");
 		Simulator simulator = siminit.getSimulatorClass().newInstance();
 		simulator.initialize(siminit.getConfiguration());
+		System.out.println("Done");
 		
+		System.out.print("Extracting controllables...");
 		Set<String> controllables = new HashSet<String>();
 		for(Controllable c: simulator.getControllables()) {
 			if(controllables.contains(c.getName())) {
@@ -65,27 +72,52 @@ public class World
 			//Client will be associated later
 			controllables.add(c.getName()); 
 		}
+		System.out.println("Done");
 		
+		System.out.println("Initializing clients:");
 		Map<String, Client> mappings = new HashMap<String, Client>();
 		for(ClientMappingEntry mapping : worldconfig.getMappingInformation()) {
 			if(!controllables.contains(mapping.getControllableName())) {
 				throw new UnboundAgentException();
 			}
 			
-			ClientInitializer clientinit = fromXML(
-					mapping.getClientInitializerFile(),
-					ClientInitializer.class );
+			File clientInitFile = mapping.getClientInitializerFile();
+			System.out.print("Loading ClientInitializer for " 
+					+ clientInitFile + "...");
+			ClientInitializer clientinit = (ClientInitializer)fromXML(
+					ClientInitializer.getXStream(), clientInitFile);
+			System.out.println("Done");
 			
 			EnvironmentEntry ee = clientinit.getEnvironmentEntry();
+			Class<?> envclass = ee.getEnvironmentClass();
+			System.out.print("Instantiating client environment (" 
+					+ envclass.getCanonicalName() +")...");
 			Environment env = ee.getEnvironmentClass().newInstance();
-			env.initialize(ee.getConfiguration());
+			System.out.println("Done");
+			
+			File envconfig = ee.getConfiguration();
+			System.out.print("Initializing client environment ("
+					+ envconfig.getAbsolutePath() + ")...");
+			env.initialize(envconfig);
+			System.out.println("Done");
 			
 			AgentEntry ae = clientinit.getAgentEntry();
+			Class<?> aclass = ae.getAgentClass();
+			System.out.print("Instantiating client agent ("
+					+ aclass.getCanonicalName() +")...");
 			Agent agent = ae.getAgentClass().newInstance();
-			agent.initialize(ae.getConfiguration());
+			System.out.println("Done");
+			
+			File aconfig = ae.getConfiguration();
+			System.out.print("Initializing client agent ("
+					+ aconfig.getAbsolutePath() + ")...");
+			agent.initialize(aconfig);
+			System.out.println("Done");
 			
 			mappings.put(mapping.getControllableName(), new Client(env, agent));
+			controllables.remove(mapping.getControllableName());
 		}
+		System.out.println("Clients Initialized");
 		
 		if(!controllables.isEmpty()) {
 			throw new UnboundControllableException();
@@ -100,23 +132,23 @@ public class World
 	 * The basic run loop.  
 	 */
 	public void run() {
-		SimulatorState state = simulator.getState();
+		State state = simulator.getState();
 		while(simulator.isRunning()) {
 			for(Controllable cntrl : simulator.getControllables()) {
 				Client client = mappings.get(cntrl.getName());
-				AgentState as = client.env.getAgentState(state);
-				Set<ControllableAction> cas = cntrl.getLegalActions();
-				Set<AgentAction> aas = client.env.getAgentActions(cas);
-				AgentAction aa = client.agent.startAction(as, aas);
-				ControllableAction ca = client.env.getControllableAction(aa);  
-				cntrl.setAction(ca);
+				State agentState = client.env.getAgentState(state);
+				Set<Action> cActions = cntrl.getLegalActions();
+				Set<Action> aActions = client.env.getAgentActions(cActions);
+				Action aAction = client.agent.startAction(agentState, aActions);
+				Action cAction = client.env.getControllableAction(aAction);  
+				cntrl.setAction(cAction);
 			}
 			simulator.advance();
 			state = simulator.getState();
 			for(Controllable cntrl : simulator.getControllables()) {
 				Client client = mappings.get(cntrl.getName());
-				AgentState as = client.env.getAgentState(state);
-				client.agent.endAction(as);
+				State agentState = client.env.getAgentState(state);
+				client.agent.endAction(agentState);
 			}
 		}
 	}
@@ -124,12 +156,19 @@ public class World
 	public static void main(String[] args) 
 	{
 		Arguments arguments = parseArgs(args);
-		WorldConfiguration worldconfig = fromXML(
-				arguments.configLocation, WorldConfiguration.class);
+		System.out.print("Loading world configuration...");
+		WorldConfiguration worldconfig = (WorldConfiguration)fromXML(
+				WorldConfiguration.getXStream(),
+				arguments.configLocation);
+		System.out.println("Done");
 		
 		try {
+			System.out.println("Initializing World: ");
 			World world = new World(worldconfig);
+			System.out.println("World initialized");
+			System.out.println("Starting simulation");
 			world.run();
+			System.out.println("Simulation completed successfully");
 		} catch(Exception e) {
 			e.printStackTrace();
 			exit("Error instantiating World");
@@ -201,21 +240,17 @@ public class World
 	 * @param klass The target class
 	 * @return An instance of the target class from the serialized xml.
 	 */
-	private static <T> T fromXML(File loc, Class<T> klass)
-	{
-		XStream xstream = new XStream();
-        xstream.alias(klass.getSimpleName(), klass);
-
-        Object config = null;
-        try {
-            FileReader fr = new FileReader(loc);
-            config = xstream.fromXML(fr);
+	public static Object fromXML(XStream xstream, File location) {
+		Object out = null;
+		try {
+            FileReader fr = new FileReader(location);
+            out = xstream.fromXML(fr);
             fr.close();
 		} catch(Exception e) {
 			e.printStackTrace();
-			exit("Error loading " + klass.getSimpleName() + " file");
+			World.exit("Error loading Object from file");
 		}
-		return klass.cast(config);
+		return out;
 	}
 	
 	/**

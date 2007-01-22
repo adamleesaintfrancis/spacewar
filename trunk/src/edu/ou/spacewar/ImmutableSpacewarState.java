@@ -2,7 +2,7 @@ package edu.ou.spacewar;
 
 import java.util.LinkedList;
 
-import edu.ou.mlfw.SimulatorState;
+import edu.ou.mlfw.State;
 import edu.ou.spacewar.objects.*;
 import edu.ou.spacewar.objects.immutables.*;
 import edu.ou.spacewar.simulator.Space;
@@ -13,7 +13,7 @@ import edu.ou.utils.Vector2D;
  * The information provided includes the ships, obstacles, and bullets present
  * in the game, the width and height of the game space, and a timestamp.
  */
-public class ImmutableSpacewarState implements SimulatorState {
+public class ImmutableSpacewarState implements State {
     private final ImmutableShip[] ships;
     private final ImmutableObstacle[] obstacles;
     private final ImmutableBullet[] bullets;

@@ -1,6 +1,6 @@
 package edu.ou.spacewar.objects.immutables;
 
-import edu.ou.mlfw.ControllableState;
+import edu.ou.mlfw.State;
 import edu.ou.spacewar.objects.Ship;
 import edu.ou.spacewar.objects.ShipCommand;
 
@@ -10,7 +10,7 @@ import edu.ou.spacewar.objects.ShipCommand;
  * of the ship, the ship's current command, and the id and name of the ship.
  * The Object2D information for the ship is also available.
  */
-public class ImmutableShip extends ImmutableObject2D implements ControllableState {
+public class ImmutableShip extends ImmutableObject2D implements State {
     private final int id;
     private final String name;
     private final int team;

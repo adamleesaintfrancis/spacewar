@@ -137,7 +137,8 @@ public final class SpacewarGame extends Space {
                     liveobjs.add((T)objects[i]);
                 }
             }
-            out = (T[])liveobjs.toArray();
+            T[] t = (T[])Array.newInstance(klass, liveobjs.size());
+            out = liveobjs.toArray(t);
     	}
     	else {
     		out = (T[])Array.newInstance(klass, 0);

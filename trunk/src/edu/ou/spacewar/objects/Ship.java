@@ -3,7 +3,7 @@ package edu.ou.spacewar.objects;
 
 import java.util.Stack;
 
-import edu.ou.mlfw.ControllableAction;
+import edu.ou.mlfw.Action;
 import edu.ou.spacewar.SpacewarGame;
 import edu.ou.spacewar.gui.Shadow2D;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
@@ -197,7 +197,7 @@ public class Ship extends Object2D {
 
     protected final void advanceTime(float timestep) {
     	if(isControllable && controllable != null) {
-    		ControllableAction a = controllable.getAction();
+    		Action a = controllable.getAction();
     		if(a instanceof ShipCommand) {
     			activeCommand = (ShipCommand)a;
     		} else {
