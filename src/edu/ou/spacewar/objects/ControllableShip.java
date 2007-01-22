@@ -1,13 +1,8 @@
 package edu.ou.spacewar.objects;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import edu.ou.mlfw.Controllable;
-import edu.ou.mlfw.ControllableAction;
-import edu.ou.mlfw.ControllableState;
+import edu.ou.mlfw.*;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
 
 /**
@@ -19,29 +14,29 @@ import edu.ou.spacewar.objects.immutables.ImmutableShip;
  */
 public class ControllableShip implements Controllable {
 	private final String name;
-	private final Set<ControllableAction> legal;
-	private final ControllableState state;
-	private ControllableAction current;
+	private final Set<Action> legal;
+	private final State state;
+	private Action current;
 	
 	public ControllableShip(String name, ShipCommand[] legal, ImmutableShip state) {
 		this.name = name;
-		this.legal = new HashSet<ControllableAction>(Arrays.asList(legal));
+		this.legal = new HashSet<Action>(Arrays.asList(legal));
 		this.state = state;
 	}
 
-	public Set<ControllableAction> getLegalActions() {
+	public Set<Action> getLegalActions() {
 		return Collections.unmodifiableSet(this.legal);
 	}
 
-	public ControllableAction getAction() {
+	public Action getAction() {
 		return this.current;
 	}
 
-	public void setAction(ControllableAction action) {
+	public void setAction(Action action) {
 		this.current = action;
 	}
 	
-	public ControllableState getState() {
+	public State getState() {
 		return this.state;
 	}
 	

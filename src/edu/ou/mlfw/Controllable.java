@@ -23,23 +23,23 @@ public interface Controllable {
 	/**
 	 * @return A set of actions that are legal for this controllable's current state.
 	 */
-	Set<ControllableAction> getLegalActions();
+	Set<Action> getLegalActions();
 	
 	/**
 	 * Accept an action. 
 	 * @param action
 	 */
-	void setAction(ControllableAction action);
+	void setAction(Action action);
 	
 	/**
 	 * @return The current action for this controllable.
 	 */
-	ControllableAction getAction();
+	Action getAction();
 	
 	/**
 	 * @return A representation of the controllable's state.
 	 */
-	ControllableState getState();
+	State getState();
 	
 	/**
 	 * Return this controllable's unique identifying name.

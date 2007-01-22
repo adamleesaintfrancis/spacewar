@@ -1,15 +1,11 @@
 package edu.ou.mlfw.config;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Collection;
 
 import com.thoughtworks.xstream.XStream;
 
-import edu.ou.mlfw.Controllable;
-import edu.ou.mlfw.Simulator;
-import edu.ou.mlfw.SimulatorState;
+import edu.ou.mlfw.*;
 
 /**
  * A SimulatorInitializer is the means by which a world finds, loads, and
@@ -43,6 +39,12 @@ public class SimulatorInitializer {
 	public Class<? extends Simulator> getSimulatorClass() {
 		return simulatorClass;
 	}
+	
+	public static XStream getXStream() {
+		XStream out = new XStream();
+		out.alias("SimulatorInitializer", SimulatorInitializer.class);
+		return out;
+	}
 
 	public static void main(String[] args) {
 		Class<? extends Simulator> klass = new Simulator() {
@@ -59,7 +61,7 @@ public class SimulatorInitializer {
 				System.out.println("shutdown called!");
 			}
 
-			public SimulatorState getState() {
+			public State getState() {
 				// TODO Auto-generated method stub
 				return null;
 			}
@@ -81,8 +83,7 @@ public class SimulatorInitializer {
 		}
 		
 		SimulatorInitializer simconf = new SimulatorInitializer(klass, file);
-		XStream xstream = new XStream();
-		xstream.alias("SimulatorConfiguration", SimulatorInitializer.class);
+		XStream xstream = getXStream();
 		System.out.println(xstream.toXML(simconf));
 		
 		try {

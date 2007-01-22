@@ -5,7 +5,7 @@ import java.util.Set;
 import edu.ou.utils.Initializable;
 
 public interface Environment extends Initializable {
-	AgentState getAgentState(SimulatorState state);
-	Set<AgentAction> getAgentActions(Set<ControllableAction> legalActions);
-	ControllableAction getControllableAction(AgentAction aa);
+	State getAgentState(State state);
+	Set<Action> getAgentActions(Set<Action> legalActions);
+	Action getControllableAction(Action aa);
 }

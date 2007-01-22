@@ -1,8 +1,8 @@
 package edu.ou.spacewar.objects;
 
-import edu.ou.mlfw.ControllableAction;
+import edu.ou.mlfw.*;
 
-public enum ShipCommand implements ControllableAction {
+public enum ShipCommand implements Action {
     DoNothing(false, false, false, false),
     Thrust(true, false, false, false),
     TurnRight(false, false, true, false),

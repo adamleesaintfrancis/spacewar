@@ -7,7 +7,7 @@ import edu.ou.utils.Initializable;
 
 public interface Simulator extends Initializable
 {
-	SimulatorState getState();
+	State getState();
 	Collection<Controllable> getControllables();
 	void shutdown(OutputStream config);
 	boolean isRunning();

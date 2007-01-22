@@ -1,18 +1,11 @@
 package edu.ou.spacewar;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.*;
+import java.util.*;
 
 import com.thoughtworks.xstream.XStream;
 
-import edu.ou.mlfw.Controllable;
-import edu.ou.mlfw.Simulator;
-import edu.ou.mlfw.SimulatorState;
+import edu.ou.mlfw.*;
 import edu.ou.spacewar.configuration.SpacewarConfiguration;
 import edu.ou.spacewar.objects.Ship;
 
@@ -61,7 +54,7 @@ public class SpacewarSimulator implements Simulator {
 		this.game.advanceTime(0.1f);  //TODO: find right advanceTime value
 	}
 	
-	public SimulatorState getState() {
+	public State getState() {
 		return new ImmutableSpacewarState(this.game);
 	}
 	

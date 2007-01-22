@@ -14,6 +14,6 @@ import edu.ou.utils.Initializable;
  */
 public interface Agent extends Initializable 
 {
-	AgentAction startAction(AgentState state, Set<AgentAction> actions);
-	void endAction(AgentState state);
+	Action startAction(State state, Set<Action> actions);
+	void endAction(State state);
 }
