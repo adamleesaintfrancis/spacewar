@@ -20,6 +20,7 @@
 <target name="init">
     <tstamp/>
     <mkdir dir="${build}"/>
+	<mkdir dir="${dist}"/>
 </target>
 
 <target name="compile" depends="init"> 
@@ -72,8 +73,10 @@
     <delete dir="${dist}"/>
 </target>
 
-<target name="run" depends="dist">
-    <java jar="${dist}/main.jar" fork="true" dir="${dist}"/>
+<target name="run" depends="separated">
+    <java jar="${dist}/main.jar" fork="true" dir="${dist}">
+    	<arg value="-g"/>
+    </java>
 </target>
 </project>
 
