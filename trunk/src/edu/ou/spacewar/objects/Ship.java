@@ -193,8 +193,6 @@ public class Ship extends Object2D {
         this.flag = flag;
     }
     
-    
-
     protected final void advanceTime(float timestep) {
     	if(isControllable && controllable != null) {
     		Action a = controllable.getAction();
@@ -262,9 +260,9 @@ public class Ship extends Object2D {
 	}
 	
 	public ControllableShip getControllableShip() {
-		return new ControllableShip(this.getName(), 
-									ShipCommand.commands, 
-									new ImmutableShip(this));
+		this.controllable = new ControllableShip(this.getName(), 
+				ShipCommand.commands, new ImmutableShip(this));
+		return this.controllable;
 	}
 
 }

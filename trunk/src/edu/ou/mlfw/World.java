@@ -3,14 +3,15 @@ package edu.ou.mlfw;
 import jargs.gnu.CmdLineParser;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+
+import javax.swing.JComponent;
 
 import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.config.*;
-import edu.ou.mlfw.exceptions.NameCollisionException;
-import edu.ou.mlfw.exceptions.UnboundAgentException;
-import edu.ou.mlfw.exceptions.UnboundControllableException;
+import edu.ou.mlfw.exceptions.*;
 
 //TODO: Replace System.out.println with logging.
 public class World 
@@ -28,6 +29,8 @@ public class World
 		}
 	}
 	
+	private final boolean showGUI;
+	private final JComponent gui;
 	private final Simulator simulator;
 	private final Map<String, Client> mappings;
 	
@@ -47,7 +50,7 @@ public class World
 	 * @throws UnboundAgentException
 	 * @throws UnboundControllableException 
 	 */
-	public World(WorldConfiguration worldconfig) 
+	public World(WorldConfiguration worldconfig, boolean showGUI) 
 		throws InstantiationException, IllegalAccessException, 
 			NameCollisionException, UnboundAgentException, 
 			UnboundControllableException 
@@ -123,13 +126,54 @@ public class World
 			throw new UnboundControllableException();
 		}
 		
+		if(showGUI) {
+			this.gui = simulator.getGUI();
+			if(this.gui != null) {
+				try {
+					javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
+					    public void run() {
+					    	new Viewer(gui);
+					    }
+					});
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} else {
+			this.gui = null;
+		}
+		
 		//set instance variables
+		this.showGUI = showGUI;
 		this.simulator = simulator;
 		this.mappings = mappings;
 	}
 	
 	/**
-	 * The basic run loop.  
+	 * The basic run loop.  While the simulator reports that it is running,
+	 * we drive the simulation with two phases per loop.  In the first phase,
+	 * we iterate over each controllable, find the client associated with that
+	 * controllable, pass the simulator state to the client's environment to
+	 * prepare it for the client's agent, and pull out the controllable's legal
+	 * actions and pass them to the client's environment to prepare them for
+	 * the client's agent.  Once we have the state and legal actions ready for
+	 * the agent, we pass these to the agent's startAction() method.  From this
+	 * call, we receive an action, which we pass through the environment's 
+	 * getControllableAction before setting the Controllable's action.
+	 * 
+	 * Once all the controllables have an action, we advance the simulator.
+	 * TODO: Should time be passed in here?  Would this be the best way to 
+	 * handle synchronizing simulator time with gui framerate?
+	 * 
+	 * After the simulator has advanced, we pull out the new state, and pass
+	 * that state to each client's environment and then to each client's 
+	 * endAction() method.
+	 * 
+	 * Finally, if the gui is enabled, we draw the game state.
 	 */
 	public void run() {
 		State state = simulator.getState();
@@ -143,12 +187,23 @@ public class World
 				Action cAction = client.env.getControllableAction(aAction);  
 				cntrl.setAction(cAction);
 			}
-			simulator.advance();
+			//TODO:  add ability to specify framerate for gui, decision rate
+			//       for agents, and update rate for physics
+			simulator.advance(0.0333f);  
 			state = simulator.getState();
 			for(Controllable cntrl : simulator.getControllables()) {
 				Client client = mappings.get(cntrl.getName());
 				State agentState = client.env.getAgentState(state);
 				client.agent.endAction(agentState);
+			}
+			
+			if(this.showGUI && this.gui != null) {
+				this.gui.repaint();
+				try {
+					Thread.sleep(33);//~30 fps
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -164,7 +219,7 @@ public class World
 		
 		try {
 			System.out.println("Initializing World: ");
-			World world = new World(worldconfig);
+			World world = new World(worldconfig, arguments.gui);
 			System.out.println("World initialized");
 			System.out.println("Starting simulation");
 			world.run();

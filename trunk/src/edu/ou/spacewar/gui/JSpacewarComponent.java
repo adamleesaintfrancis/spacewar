@@ -2,6 +2,7 @@ package edu.ou.spacewar.gui;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import javax.swing.JComponent;
 
@@ -18,28 +19,18 @@ public class JSpacewarComponent extends JComponent {
     public static final BasicStroke STROKE = new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     public static final BasicStroke THICK_STROKE = new BasicStroke(7, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 
-    private final ArrayList<Shadow2D> shadows;
-    private final LinkedList<Shadow2D> usershadows;
+    private final List<Shadow2D> shadows = new ArrayList<Shadow2D>();
+    private final List<Shadow2D> usershadows = new LinkedList<Shadow2D>();
 
-    private boolean showshadows;
+    private boolean showshadows = true;
     private int width, height;
-
-    public JSpacewarComponent(final int width, final int height) {
-        this.shadows = new ArrayList<Shadow2D>();
-        this.usershadows = new LinkedList<Shadow2D>();
-        this.showshadows = true;
-        this.width = width;
-        this.height = height;
-
-        this.setPreferredSize(new Dimension(width, height));
-        this.setBackground(Color.BLACK);
-        this.setForeground(Color.BLACK);
-    }
 
     public void initialize(final int width, final int height, Collection<Shadow2D> shadows) {
         this.width = width;
         this.height = height;
         this.setPreferredSize(new Dimension(width, height));
+        this.setBackground(Color.BLACK);
+        this.setForeground(Color.BLACK);
         this.shadows.addAll(shadows);
     }
 
@@ -69,8 +60,12 @@ public class JSpacewarComponent extends JComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D graphics = (Graphics2D) g;
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+        		RenderingHints.VALUE_ANTIALIAS_ON);
 
+        g.setColor(getBackground());
+        g.fillRect(0, 0, getWidth(), getHeight());
+        
         for (Shadow2D shadow : this.shadows) {
         	if (!shadow.drawMe()) {
         		continue;

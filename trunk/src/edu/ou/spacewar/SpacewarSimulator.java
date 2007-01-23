@@ -3,10 +3,13 @@ package edu.ou.spacewar;
 import java.io.*;
 import java.util.*;
 
+import javax.swing.JComponent;
+
 import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.*;
 import edu.ou.spacewar.configuration.SpacewarConfiguration;
+import edu.ou.spacewar.gui.*;
 import edu.ou.spacewar.objects.Ship;
 
 /**
@@ -17,6 +20,7 @@ import edu.ou.spacewar.objects.Ship;
  */
 public class SpacewarSimulator implements Simulator {
 	private SpacewarGame game;
+	private JSpacewarComponent gui = null;
 
 	public void initialize(File configfile) {
 		XStream xstream = SpacewarConfiguration.getXStream();
@@ -49,9 +53,9 @@ public class SpacewarSimulator implements Simulator {
     	return this.game.isRunning();
 	}
 	
-    public void advance() {
+    public void advance(float secs) {
 		assert(this.game != null);
-		this.game.advanceTime(0.1f);  //TODO: find right advanceTime value
+		this.game.advanceTime(secs);  
 	}
 	
 	public State getState() {
@@ -75,5 +79,16 @@ public class SpacewarSimulator implements Simulator {
 		// TODO: game stats get collected here?
 		// TODO: rethink this interface: why would shutdown need to write back to config? 
 		
+	}
+
+	public JComponent getGUI() {
+		if(this.gui == null) {
+			int width = (int)this.game.getWidth();
+			int height = (int)this.game.getHeight();
+			Collection<Shadow2D> shadows = game.getShadows(); 
+			this.gui = new JSpacewarComponent();
+			this.gui.initialize(width, height, shadows);
+		} 
+		return this.gui;
 	}
 }
