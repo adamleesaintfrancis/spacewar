@@ -1,18 +1,13 @@
 package edu.ou.spacewar;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Random;
+import java.util.*;
 import java.util.Map.Entry;
 
 import edu.ou.spacewar.exceptions.*;
+import edu.ou.spacewar.gui.Shadow2D;
 import edu.ou.spacewar.objects.*;
-import edu.ou.spacewar.simulator.Object2D;
-import edu.ou.spacewar.simulator.Space;
-import edu.ou.spacewar.simulator.SpacewarCollisionHandler;
+import edu.ou.spacewar.simulator.*;
 import edu.ou.utils.Vector2D;
 
 /**
@@ -325,6 +320,20 @@ public final class SpacewarGame extends Space {
 
         handleSpecialRemove(out);
         return out;
+    }
+    
+    public Collection<Shadow2D> getShadows() {
+    	final Collection<Shadow2D> out 
+    		= new ArrayList<Shadow2D>(objects.length);
+    	for(Object2D obj: objects) {
+    		if(obj != null) {
+    			Shadow2D shadow = obj.getShadow();
+    			if(shadow != null) {
+    				out.add(shadow);
+    			}
+    		}
+    	}
+    	return out;
     }
 
     //TODO: are the initialize and reset methods necessary?

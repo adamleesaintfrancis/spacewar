@@ -3,6 +3,8 @@ package edu.ou.mlfw.config;
 import java.io.*;
 import java.util.Collection;
 
+import javax.swing.JComponent;
+
 import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.*;
@@ -66,13 +68,18 @@ public class SimulatorInitializer {
 				return null;
 			}
 
-			public void advance() {
+			public void advance(float secs) {
 				// TODO Auto-generated method stub	
 			}
 
 			public boolean isRunning() {
 				// TODO Auto-generated method stub
 				return false;
+			}
+
+			public JComponent getGUI() {
+				// TODO Auto-generated method stub
+				return null;
 			}
 		}.getClass();
 		File file = new File("./foo.xml");
