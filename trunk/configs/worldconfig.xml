@@ -1,0 +1,9 @@
+<WorldConfiguration>
+  <simulatorInitializerFile>siminit.xml</simulatorInitializerFile>
+  <mappingInformation>
+    <ClientMappingEntry>
+      <controllableName>Test</controllableName>
+      <clientInitializerFile>clientinit1.xml</clientInitializerFile>
+    </ClientMappingEntry>
+  </mappingInformation>
+</WorldConfiguration>
