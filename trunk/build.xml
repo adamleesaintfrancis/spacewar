@@ -52,10 +52,11 @@
     <jar jarfile="${dist}/lib/mlfw.jar" basedir="${build}" includes="edu/ou/mlfw/**"/>
     <jar jarfile="${dist}/lib/spacewar.jar" basedir="${build}" includes="edu/ou/spacewar/**"/>
     <jar jarfile="${dist}/lib/utils.jar" basedir="${build}" includes="edu/ou/utils/**"/>
+	<jar jarfile="${dist}/lib/useragent.jar" basedir="${build}" excludes="edu/**"/>
     <jar jarfile="${dist}/main.jar">
         <manifest>
             <attribute name="Main-class" value="edu.ou.mlfw.World"/>
-            <attribute name="Class-path" value="lib/utils.jar lib/spacewar.jar lib/mlfw.jar lib/xpp3.jar lib/xstream.jar lib/jargs.jar ."/>
+            <attribute name="Class-path" value="lib/utils.jar lib/spacewar.jar lib/mlfw.jar lib/xpp3.jar lib/xstream.jar lib/jargs.jar lib/useragent.jar ."/>
         </manifest>
     </jar>
     <copy todir="${dist}">
@@ -65,7 +66,7 @@
     <copy file="lib/xpp3.jar" tofile="${dist}/lib/xpp3.jar"/>
     <copy file="lib/jargs.jar" tofile="${dist}/lib/jargs.jar"/>
 </target>
-<target name="dist" depends="combined,separated">
+<target name="dist" depends="separated">
 </target>
 
 <target name="clean">
