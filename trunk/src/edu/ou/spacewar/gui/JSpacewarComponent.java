@@ -7,6 +7,7 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import edu.ou.mlfw.gui.*;
+import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.utils.Vector2D;
 
 //TODO:  This doesn't have to be spacewar specific...it just draws shadows in
