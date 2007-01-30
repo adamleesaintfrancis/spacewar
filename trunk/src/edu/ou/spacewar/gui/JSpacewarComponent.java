@@ -6,11 +6,12 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
+import edu.ou.mlfw.gui.*;
 import edu.ou.utils.Vector2D;
 
 //TODO:  This doesn't have to be spacewar specific...it just draws shadows in
 //a wraparound fashion on some win
-public class JSpacewarComponent extends JComponent {
+public class JSpacewarComponent extends JComponent implements Shadow2DCanvas {
     private static final long serialVersionUID = 1L;
 
     public static final Color TEXT_COLOR = new Color(0, 218, 159);

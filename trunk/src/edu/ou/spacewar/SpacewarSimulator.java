@@ -8,6 +8,7 @@ import javax.swing.JComponent;
 import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.*;
+import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.configuration.SpacewarConfiguration;
 import edu.ou.spacewar.gui.*;
 import edu.ou.spacewar.objects.Ship;

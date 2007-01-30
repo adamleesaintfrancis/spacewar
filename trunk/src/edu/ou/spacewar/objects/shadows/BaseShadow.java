@@ -3,7 +3,7 @@ package edu.ou.spacewar.objects.shadows;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
-import edu.ou.spacewar.gui.Shadow2D;
+import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.objects.Base;
 import edu.ou.spacewar.objects.Ship;
 import edu.ou.utils.Vector2D;

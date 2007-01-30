@@ -1,6 +1,6 @@
 package edu.ou.spacewar.objects;
 
-import edu.ou.spacewar.gui.Shadow2D;
+import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.objects.shadows.BaseShadow;
 import edu.ou.spacewar.simulator.Object2D;
 import edu.ou.spacewar.simulator.Space;

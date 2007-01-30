@@ -2,6 +2,7 @@ package edu.ou.spacewar.gui;
 
 import java.awt.*;
 
+import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.utils.Vector2D;
 
 /**

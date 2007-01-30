@@ -1,6 +1,6 @@
 package edu.ou.spacewar.simulator;
 
-import edu.ou.spacewar.gui.Shadow2D;
+import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.utils.Vector2D;
 
 public abstract class Object2D {

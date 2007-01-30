@@ -1,4 +1,4 @@
-package edu.ou.mlfw;
+package edu.ou.mlfw.gui;
 
 import javax.swing.*;
 import java.awt.event.*;
