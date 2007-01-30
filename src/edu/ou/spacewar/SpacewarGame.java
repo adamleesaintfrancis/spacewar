@@ -4,8 +4,8 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.util.Map.Entry;
 
+import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.exceptions.*;
-import edu.ou.spacewar.gui.Shadow2D;
 import edu.ou.spacewar.objects.*;
 import edu.ou.spacewar.simulator.*;
 import edu.ou.utils.Vector2D;

@@ -1,22 +1,28 @@
 package edu.ou.spacewar.mlfw.agents;
 
+import java.awt.Graphics;
 import java.io.File;
 import java.util.*;
+
 import edu.ou.mlfw.*;
-import edu.ou.utils.*;
+import edu.ou.mlfw.gui.*;
 import edu.ou.spacewar.ImmutableSpacewarState;
-import edu.ou.spacewar.objects.immutables.*;
 import edu.ou.spacewar.objects.ShipNavigationActions;
+import edu.ou.spacewar.objects.immutables.ImmutableObstacle;
+import edu.ou.spacewar.objects.shadows.CrossHairShadow;
+import edu.ou.utils.Vector2D;
 /**
  * HighLevelRandomAgent is a simple high level agent that chooses a random location (not in an obstacle) 
  * and moves to that location using the custom built high level actions and environment.
  */
-public class HighLevelRandomAgent implements Agent {
+public class HighLevelRandomAgent implements Agent, Drawer {
 private final Random random = new Random();
+private Vector2D goalPos;
+private CrossHairShadow shadow;
 
 /**
  * The agent receives the current state (which should be cast to ImmutableSpacewarState 
- * to make it more useful, and a set of available actions. Normally these actions are simply the set of 
+ * to make it more useful), and a set of available actions. Normally these actions are simply the set of 
  * legal ShipCommands to make (see the other random agent), in this case we have a custom environment which 
  * sends a single action, from which two types of actions can be created. The first is to do nothing. The 
  * second is to move to some point in space, specified by the x and y locations.
@@ -41,7 +47,7 @@ public Action startAction(State state, Set<Action> actions) {
   float dirY;
   float newX;
   float newY;
-  Vector2D goalPos = null;
+  goalPos = null;
   while(goalPos == null) {
       dirX = random.nextFloat() - (float)0.5;
       dirY = random.nextFloat() - (float)0.5;
@@ -67,5 +73,27 @@ public void endAction(State state) {
 
 public void initialize(File configfile) {
 //no configuration necessary
+}
+
+public Set<Shadow2D> registerShadows() {
+	if(shadow == null) {
+		shadow = new CrossHairShadow();
+		shadow.setDrawMe(true);
+		Set<Shadow2D> out = new HashSet<Shadow2D>();
+		out.add(shadow);
+		return out;
+	}
+	return null;
+}
+
+public Set<Shadow2D> unregisterShadows() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+public void updateGraphics(Graphics g) {
+	if(shadow != null && goalPos != null) {
+		shadow.setRealPosition(goalPos);
+	}
 }
 }

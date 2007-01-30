@@ -3,8 +3,8 @@ package edu.ou.spacewar.objects.shadows;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
+import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.gui.JSpacewarComponent;
-import edu.ou.spacewar.gui.Shadow2D;
 import edu.ou.spacewar.objects.Ship;
 import edu.ou.utils.Vector2D;
 

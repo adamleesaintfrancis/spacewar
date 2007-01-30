@@ -1,25 +1,19 @@
-package edu.ou.spacewar.gui;
+package edu.ou.mlfw.gui;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 
 import edu.ou.utils.Vector2D;
 
 /**
- * Shadow2D provides a way for objects, agents, or whatever else to draw on the JSpacewarComponent.  The main
- * consideration here is that a Space object represents a toroidal surface, so for some drawing cases, the image
- * will have to be drawn multiple times when they overlap the edges of the screen.  The Shadow class, in conjunction
- * with the JspacewarComponent class, standardizes how this happens.
- * <p/>
- * For images that need to wrap, the width and height passed into a Shadow2D constructor form a ounding box around the
- * graphic.  In conjunction with the getRealPosition() method, JspacewarComponent uses this bounding box information
- * to determine when to draw the image so that it shows up on both side of the screen.
- * <p/>
- * For images that don't need to wrap, the width and height are unnecessary, and can be specified as 0.
- * <p/>
- * At draw time, JSpacewarComponent hands each shadow a Graphics2D object by calling the draw(Graphics2D) method.
- * This is where any drawing operations should be handled.
- * <p/>
- * For examples of how to use Shadows, refer to AIClass.ai.agents.DrawingAgent
+ * Shadow2D provides a way for agents, environments, or whatever else to draw 
+ * on a Shadow2DCanvas.  The main consideration for a Shadow2D is that the
+ * Shadow2DCanvas be able to find its current "real" position as well as 
+ * set its current "draw" position.  A Shadow2D also needs to specify the width
+ * and height of a bounding box.  This bounding box should but does not have to
+ * be respected by the draw method; however, respecting this boundry box can 
+ * allow a specific implementation of Shadow2DCanvas to provide some convenient
+ * handling for special-case drawing conditions (for instance, wrapping a 
+ * drawing around the borders of a toroidal environment). 
  */
 public abstract class Shadow2D {
     protected Vector2D drawposition;
@@ -27,7 +21,8 @@ public abstract class Shadow2D {
     private int width, halfwidth, height, halfheight;
 
     /**
-     * Initialize the shadow with a bounding box, calculate the halfwidth and halfheight
+     * Initialize the shadow with a bounding box, calculate the halfwidth and 
+     * halfheight
      *
      * @param width The width of the bounding box.
      * @param height The height of the bounding box.
@@ -69,9 +64,10 @@ public abstract class Shadow2D {
     }
 
     /**
-     * Centers the bounding box around a particular point for drawing.  This should only need to be used by
-     * JSpacewarComponent, but is available if you want it for something else.  The draw position gets set back to
-     * the real position after the drw routine has finished.
+     * Centers the bounding box around a particular point for drawing.  This 
+     * should only need to be used by Shadow2DCanvav, but is available if you 
+     * want it for something else.  The draw position gets set back to
+     * the real position after the draw routine has finished.
      *
      * @param pos The new drawing position.
      */
@@ -104,7 +100,7 @@ public abstract class Shadow2D {
     public abstract Vector2D getRealPosition();
 
     /**
-     * Tell the JSpacewarComponent to draw or not draw this shadow.  This does 
+     * Tell the Shadow2DCanvas to draw or not draw this shadow.  This does 
      * not remove the shadow, it just keeps it from being drawn.
      *
      * @return Whether the shadow should be drawn or not.
@@ -113,8 +109,7 @@ public abstract class Shadow2D {
 
 
     /**
-     * The actual drawing routine.  For an example, see
-     * @param g
+     * The actual drawing routine.  
      */
     public abstract void draw(Graphics2D g);
 

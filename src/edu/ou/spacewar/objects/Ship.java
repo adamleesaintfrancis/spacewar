@@ -3,9 +3,9 @@ package edu.ou.spacewar.objects;
 
 import java.util.Stack;
 
-import edu.ou.mlfw.Action;
+import edu.ou.mlfw.*;
+import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.SpacewarGame;
-import edu.ou.spacewar.gui.Shadow2D;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
 import edu.ou.spacewar.objects.shadows.ShipShadow;
 import edu.ou.spacewar.simulator.Object2D;

@@ -2,9 +2,9 @@ package edu.ou.spacewar.objects;
 
 import java.util.Random;
 
+import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.SpacewarGame;
 import edu.ou.spacewar.exceptions.*;
-import edu.ou.spacewar.gui.Shadow2D;
 import edu.ou.spacewar.objects.shadows.BeaconShadow;
 import edu.ou.spacewar.simulator.Object2D;
 import edu.ou.utils.Vector2D;

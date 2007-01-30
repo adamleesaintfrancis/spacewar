@@ -12,6 +12,7 @@ import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.config.*;
 import edu.ou.mlfw.exceptions.*;
+import edu.ou.mlfw.gui.*;
 
 //TODO: Replace System.out.println with logging.
 public class World 
@@ -21,15 +22,14 @@ public class World
 	//format of an XStream-serialized WorldConfiguration object.
 	public static final String DEFAULT_CONFIG = "worldconfig.xml";
 	
-	public static class Client {  //TODO: Refactor this out to package?
+	//A Client is a simple wrapper for an environment/agent pair.
+	public static class Client {  
 		final Environment env; final Agent agent;
-		
 		public Client(Environment e, Agent a) {
 			this.env = e; this.agent = a;
 		}
 	}
 	
-	private final boolean showGUI;
 	private final JComponent gui;
 	private final Simulator simulator;
 	private final Map<String, Client> mappings;
@@ -47,8 +47,6 @@ public class World
 	 * @throws NameCollisionException 
 	 * @throws UnboundAgentException 
 	 * @throws UnboundControllableException
-	 * @throws UnboundAgentException
-	 * @throws UnboundControllableException 
 	 */
 	public World(WorldConfiguration worldconfig, boolean showGUI) 
 		throws InstantiationException, IllegalAccessException, 
@@ -126,31 +124,27 @@ public class World
 			throw new UnboundControllableException();
 		}
 		
-		if(showGUI) {
-			this.gui = simulator.getGUI();
-			if(this.gui != null) {
-				try {
-					javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
-					    public void run() {
-					    	new Viewer(gui);
-					    }
-					});
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		} else {
-			this.gui = null;
-		}
-		
 		//set instance variables
-		this.showGUI = showGUI;
 		this.simulator = simulator;
 		this.mappings = mappings;
+		this.gui = showGUI ? simulator.getGUI() : null;
+
+		//start gui if necessary
+		if(this.gui != null) {
+			try {
+				javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
+				    public void run() {
+				    	new Viewer(gui);
+				    }
+				});
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	/**
@@ -197,12 +191,39 @@ public class World
 				client.agent.endAction(agentState);
 			}
 			
-			if(this.showGUI && this.gui != null) {
+			if(this.gui != null) {
+				for(Client c: mappings.values()) {
+					if(c.env instanceof Drawer) {
+						handleDrawer((Drawer)c.env);
+					}
+					if(c.agent instanceof Drawer) {
+						handleDrawer((Drawer)c.agent);
+					}
+				}
+				
 				this.gui.repaint();
 				try {
 					Thread.sleep(33);//~30 fps
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private void handleDrawer(Drawer d) {
+		d.updateGraphics(this.gui.getGraphics());
+		if(this.gui instanceof Shadow2DCanvas) {
+			Set<Shadow2D> toregister = d.registerShadows();
+			if(toregister != null) {
+				for(Shadow2D s: toregister) {
+					((Shadow2DCanvas)(this.gui)).addShadow(s);
+				}
+			}
+			Set<Shadow2D> tounregister = d.unregisterShadows();
+			if(tounregister != null) {
+				for(Shadow2D s: tounregister) {
+					((Shadow2DCanvas)(this.gui)).removeShadow(s);
 				}
 			}
 		}
