@@ -16,6 +16,10 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
     public static final Vector2D X_NEG_UNIT_VECTOR = new Vector2D(-1, 0);
     public static final Vector2D Y_UNIT_VECTOR = new Vector2D(0, 1);
     public static final Vector2D Y_NEG_UNIT_VECTOR = new Vector2D(0, -1);
+    
+    public static final float HALFPI = 0.5f * (float)Math.PI;
+    public static final float THREEHALFPI = 1.5f * (float)Math.PI;
+    public static final float TWOPI = 2.0f * (float)Math.PI;
 
     /**
      * Create a vector with the given x and y values.
