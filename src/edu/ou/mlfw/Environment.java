@@ -27,9 +27,23 @@ import edu.ou.utils.Initializable;
  * state should be kept from the getAgentState call.
  * 
  * After the corresponding agent has been called on the resulting State and
- * Action set, getControllableAction will be called.  
+ * Action set, getControllableAction will be called.  The Action returned by
+ * this method should be understandable by an instance of the simulator's
+ * controllable.    
  */
 public interface Environment extends Initializable {
+	/**
+	 * setControllableName is called when a Controllable is paired with 
+	 * a client.  This name may be used to retrieve the client's controllable
+	 * from the State instance that is passed in for getAgentState.  This
+	 * same name is passed to the Agent as well, so care should taken that
+	 * the protocol for how an Agent interacts with the information it receives
+	 * from this Environment is clearly defined and followed.
+	 * 
+	 * @param name
+	 */
+	void setControllableName(String name);
+	
 	State getAgentState(State state);
 	Set<Action> getAgentActions(Set<Action> legalActions);
 	Action getControllableAction(Action aa);

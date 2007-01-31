@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.*;
 
 import edu.ou.mlfw.*;
-import edu.ou.mlfw.gui.Drawer;
 
 /**
  * RandomAgent is a simple general agent that returns a random action at every timestep.
@@ -25,4 +24,9 @@ public class RandomAgent implements Agent {
 	public void initialize(File configfile) {
 		//no configuration necessary
 	}
+
+	public void setControllableName(String name) {
+		// random agent, do nothing.
+	}
+	
 }

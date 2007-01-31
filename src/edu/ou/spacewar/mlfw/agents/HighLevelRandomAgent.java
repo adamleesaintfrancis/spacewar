@@ -134,4 +134,8 @@ public void updateGraphics(Graphics g) {
 		shadow.setRealPosition(goalPos);
 	}
 }
+
+public void setControllableName(String name) {
+	// random agent, do nothing
+}
 }
