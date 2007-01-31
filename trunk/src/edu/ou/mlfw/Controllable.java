@@ -1,6 +1,7 @@
 package edu.ou.mlfw;
 
 import java.util.Set;
+import edu.ou.mlfw.Record;
 
 /**
  * A Controllable is an element of a simulator that can be controlled by an agent. At each 
@@ -46,4 +47,10 @@ public interface Controllable {
 	 * @return
 	 */
 	String getName();
+
+	/**
+	 * Return this controllable's statistic information.
+	 * @return
+	 */
+	Record getRecord();
 }

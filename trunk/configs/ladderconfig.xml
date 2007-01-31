@@ -1,0 +1,25 @@
+<LadderConfiguration>
+  <simulatorInitializerFile>.\siminit.xml</simulatorInitializerFile>
+  <outputHTML>.\ladder.html</outputHTML>
+  <numVariableAgentsPerGame>1</numVariableAgentsPerGame>
+  <numMatchRepeats>1</numMatchRepeats>
+  <variableClientMappingInformation>
+    <ClientMappingEntry>
+      <controllableName>Test</controllableName>
+      <clientInitializerFile>clientinit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Test</controllableName>
+      <clientInitializerFile>clientinit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Test</controllableName>
+      <clientInitializerFile>clientinit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Test</controllableName>
+      <clientInitializerFile>clientinit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+  </variableClientMappingInformation>
+  <staticClientMappingInformation/>
+</LadderConfiguration>

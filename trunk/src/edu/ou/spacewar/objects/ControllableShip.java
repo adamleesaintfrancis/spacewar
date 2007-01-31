@@ -17,11 +17,13 @@ public class ControllableShip implements Controllable {
 	private final Set<Action> legal;
 	private final State state;
 	private Action current;
+	private Record stats;
 	
-	public ControllableShip(String name, ShipCommand[] legal, ImmutableShip state) {
+	public ControllableShip(String name, ShipCommand[] legal, ImmutableShip state, Record stats) {
 		this.name = name;
 		this.legal = new HashSet<Action>(Arrays.asList(legal));
 		this.state = state;
+		this.stats = stats;
 	}
 
 	public Set<Action> getLegalActions() {
@@ -42,5 +44,9 @@ public class ControllableShip implements Controllable {
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public Record getRecord(){
+		return this.stats;
 	}
 }

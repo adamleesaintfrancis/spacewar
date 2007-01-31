@@ -40,7 +40,6 @@ public class Ship extends Object2D {
     private Flag flag;
     private Stack<Bullet> clip;
 
-
     public Ship(SpacewarGame space, int id, boolean isControllable) {
         super(space, id, SHIP_RADIUS, SHIP_MASS);
 
@@ -260,9 +259,10 @@ public class Ship extends Object2D {
 	}
 	
 	public ControllableShip getControllableShip() {
+		ShipRecord stats = new ShipRecord(this.getName(), 1, this.beacons, this.kills, 
+				this.deaths, this.hits, this.flags, 0, 0);
 		this.controllable = new ControllableShip(this.getName(), 
-				ShipCommand.commands, new ImmutableShip(this));
+				ShipCommand.commands, new ImmutableShip(this), stats);
 		return this.controllable;
 	}
-
 }

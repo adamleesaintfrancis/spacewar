@@ -3,7 +3,7 @@
   <mappingInformation>
     <ClientMappingEntry>
       <controllableName>Test</controllableName>
-      <clientInitializerFile>clientinit1.xml</clientInitializerFile>
+      <clientInitializerFile>clientinit.xml</clientInitializerFile>
     </ClientMappingEntry>
   </mappingInformation>
 </WorldConfiguration>

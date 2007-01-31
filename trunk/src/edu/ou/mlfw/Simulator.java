@@ -12,6 +12,7 @@ public interface Simulator extends Initializable
 	JComponent getGUI();
 	State getState();
 	Collection<Controllable> getControllables();
+	Collection<Controllable> getAllControllables();
 	void shutdown(OutputStream config);
 	boolean isRunning();
 	void advance(float seconds);
