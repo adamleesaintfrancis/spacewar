@@ -30,26 +30,24 @@ public class ImmutableSpacewarState implements State {
      * @param swg
      */
     public ImmutableSpacewarState(SpacewarGame swg) {
-        int i;
-
         //get all the ships
         Ship[] swgships = swg.getLive(Ship.class);
         ships = new ImmutableShip[swgships.length];
-        for(i = 0;i < swgships.length; i++) {
+        for(int i = 0;i < swgships.length; i++) {
             ships[i] = new ImmutableShip(swgships[i]);
         }
 
         //get all the obstacles
         Obstacle[] swgobs = swg.getLive(Obstacle.class);
         obstacles = new ImmutableObstacle[swgobs.length];
-        for(i = 0;i < swgobs.length; i++) {
+        for(int i = 0;i < swgobs.length; i++) {
             obstacles[i] = new ImmutableObstacle(swgobs[i]);
         }
 
         //get all the bullets
         Bullet[] swgblts = swg.getLive(Bullet.class);
         LinkedList<ImmutableBullet> blltstmp = new LinkedList<ImmutableBullet>();
-        for(i = 0;i < swgblts.length; i++) {
+        for(int i = 0;i < swgblts.length; i++) {
             blltstmp.add(new ImmutableBullet(swgblts[i]));
         }
         bullets = blltstmp.toArray(new ImmutableBullet[blltstmp.size()]);
@@ -57,7 +55,7 @@ public class ImmutableSpacewarState implements State {
         //get all the beacons
         Beacon[] swgbcns = swg.getLive(Beacon.class);
         beacons = new ImmutableBeacon[swgbcns.length];
-        for(i = 0;i < swgbcns.length; i++) {
+        for(int i = 0;i < swgbcns.length; i++) {
             beacons[i] = new ImmutableBeacon(swgbcns[i]);
         }
 
@@ -65,7 +63,7 @@ public class ImmutableSpacewarState implements State {
         Flag[] swgflags = swg.getLive(Flag.class);
         //Flag[] swgflags = swg.getAllFlags();
         flags = new ImmutableFlag[swgflags.length];
-        for (i = 0; i < swgflags.length; i++) {
+        for (int i = 0; i < swgflags.length; i++) {
             Flag f = swgflags[i];
             //if(f.isAlive()) {
                 flags[i] = new ImmutableFlag(f);
@@ -82,7 +80,7 @@ public class ImmutableSpacewarState implements State {
         //get all the bases
         Base[] swgbases = swg.getLive(Base.class);
         bases = new ImmutableBase[swgbases.length];
-        for (i = 0; i < swgbases.length; i++) {
+        for (int i = 0; i < swgbases.length; i++) {
             bases[i] = new ImmutableBase(swgbases[i]);
         }
 

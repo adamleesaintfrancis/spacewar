@@ -161,5 +161,7 @@ public class HighLevelEnvironment implements Environment {
     }
 
 
-
+	public void setControllableName(String name) {
+		// nothing needs to be done here...
+	}
 }

@@ -21,4 +21,8 @@ public class PassThroughEnvironment implements Environment {
 	public void initialize(File configfile) {
 		//do nothing
 	}
+
+	public void setControllableName(String name) {
+		//do nothing
+	}
 }

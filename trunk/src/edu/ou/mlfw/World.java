@@ -78,7 +78,8 @@ public class World
 		System.out.println("Initializing clients:");
 		Map<String, Client> mappings = new HashMap<String, Client>();
 		for(ClientMappingEntry mapping : worldconfig.getMappingInformation()) {
-			if(!controllables.contains(mapping.getControllableName())) {
+			String controllableName = mapping.getControllableName();
+			if(!controllables.contains(controllableName)) {
 				throw new UnboundAgentException();
 			}
 			
@@ -94,6 +95,7 @@ public class World
 			System.out.print("Instantiating client environment (" 
 					+ envclass.getCanonicalName() +")...");
 			Environment env = ee.getEnvironmentClass().newInstance();
+			env.setControllableName(controllableName);
 			System.out.println("Done");
 			
 			File envconfig = ee.getConfiguration();
@@ -107,6 +109,7 @@ public class World
 			System.out.print("Instantiating client agent ("
 					+ aclass.getCanonicalName() +")...");
 			Agent agent = ae.getAgentClass().newInstance();
+			agent.setControllableName(controllableName);
 			System.out.println("Done");
 			
 			File aconfig = ae.getConfiguration();
@@ -115,8 +118,8 @@ public class World
 			agent.initialize(aconfig);
 			System.out.println("Done");
 			
-			mappings.put(mapping.getControllableName(), new Client(env, agent));
-			controllables.remove(mapping.getControllableName());
+			mappings.put(controllableName, new Client(env, agent));
+			controllables.remove(controllableName);
 		}
 		System.out.println("Clients Initialized");
 		
