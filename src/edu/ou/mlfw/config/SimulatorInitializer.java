@@ -55,6 +55,11 @@ public class SimulatorInitializer {
 				return null;
 			}
 
+			public Collection<Controllable> getAllControllables() {
+				System.out.println("getAllControllables called!");
+				return null;
+			}
+			
 			public void initialize(File config) {
 				System.out.println("initialize called!");
 			}

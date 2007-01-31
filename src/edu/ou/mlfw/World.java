@@ -22,11 +22,15 @@ public class World
 	//format of an XStream-serialized WorldConfiguration object.
 	public static final String DEFAULT_CONFIG = "worldconfig.xml";
 	
-	//A Client is a simple wrapper for an environment/agent pair.
-	public static class Client {  
-		final Environment env; final Agent agent;
-		public Client(Environment e, Agent a) {
-			this.env = e; this.agent = a;
+	public static class Client {  //TODO: Refactor this out to package?
+		final Environment env; 
+		final Agent agent;
+		final String displayName;
+		
+		public Client(Environment e, Agent a, String s) {
+			this.env = e; 
+			this.agent = a;
+			this.displayName = s;
 		}
 	}
 	
@@ -51,7 +55,8 @@ public class World
 	public World(WorldConfiguration worldconfig, boolean showGUI) 
 		throws InstantiationException, IllegalAccessException, 
 			NameCollisionException, UnboundAgentException, 
-			UnboundControllableException 
+			UnboundControllableException, ClassNotFoundException,
+			FileNotFoundException, IOException
 	{
 		System.out.print("Loading Simulator initializer...");
 		SimulatorInitializer siminit = (SimulatorInitializer)fromXML(
@@ -86,8 +91,10 @@ public class World
 			File clientInitFile = mapping.getClientInitializerFile();
 			System.out.print("Loading ClientInitializer for " 
 					+ clientInitFile + "...");
-			ClientInitializer clientinit = (ClientInitializer)fromXML(
+			
+			 ClientInitializer clientinit = (ClientInitializer)fromXML(
 					ClientInitializer.getXStream(), clientInitFile);
+			
 			System.out.println("Done");
 			
 			EnvironmentEntry ee = clientinit.getEnvironmentEntry();
@@ -118,7 +125,9 @@ public class World
 			agent.initialize(aconfig);
 			System.out.println("Done");
 			
-			mappings.put(controllableName, new Client(env, agent));
+			String displayName = clientinit.getDisplayName();
+			
+			mappings.put(controllableName, new Client(env, agent, displayName));
 			controllables.remove(controllableName);
 		}
 		System.out.println("Clients Initialized");
@@ -232,16 +241,28 @@ public class World
 		}
 	}
 	
+	public Collection<Record> getRecords(){
+		Collection<Controllable> controllables = simulator.getAllControllables();
+		Collection<Record> out 
+			= new ArrayList<Record>(controllables.size());
+		for(Controllable c: controllables){
+			String displayName = mappings.get(c.getName()).displayName;
+			Record r = c.getRecord();
+			r.setDisplayName(displayName);
+			out.add(r);
+		}
+		return out;
+	}
+	
 	public static void main(String[] args) 
 	{
 		Arguments arguments = parseArgs(args);
 		System.out.print("Loading world configuration...");
-		WorldConfiguration worldconfig = (WorldConfiguration)fromXML(
+		try {
+			WorldConfiguration worldconfig = (WorldConfiguration)fromXML(
 				WorldConfiguration.getXStream(),
 				arguments.configLocation);
-		System.out.println("Done");
-		
-		try {
+			System.out.println("Done");
 			System.out.println("Initializing World: ");
 			World world = new World(worldconfig, arguments.gui);
 			System.out.println("World initialized");
@@ -319,16 +340,13 @@ public class World
 	 * @param klass The target class
 	 * @return An instance of the target class from the serialized xml.
 	 */
-	public static Object fromXML(XStream xstream, File location) {
+	public static Object fromXML(XStream xstream, File location) 
+		throws ClassNotFoundException, NullPointerException, IOException, 
+			FileNotFoundException {
 		Object out = null;
-		try {
-            FileReader fr = new FileReader(location);
-            out = xstream.fromXML(fr);
-            fr.close();
-		} catch(Exception e) {
-			e.printStackTrace();
-			World.exit("Error loading Object from file");
-		}
+        FileReader fr = new FileReader(location);
+        out = xstream.fromXML(fr);
+        fr.close();
 		return out;
 	}
 	

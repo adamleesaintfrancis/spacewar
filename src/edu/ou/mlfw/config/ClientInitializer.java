@@ -16,13 +16,15 @@ import edu.ou.mlfw.Environment;
 public class ClientInitializer {
 	private final EnvironmentEntry environmentEntry;
 	private final AgentEntry agentEntry;
+	private final String displayName;
 	
 	public ClientInitializer(EnvironmentEntry environmentEntry, 
-								AgentEntry agentEntry) 
+								AgentEntry agentEntry, String displayName) throws ClassNotFoundException 
 	{
 		super();
 		this.environmentEntry = environmentEntry;
 		this.agentEntry = agentEntry;
+		this.displayName = displayName;
 	}
 
 	public AgentEntry getAgentEntry() {
@@ -31,6 +33,10 @@ public class ClientInitializer {
 
 	public EnvironmentEntry getEnvironmentEntry() {
 		return environmentEntry;
+	}
+	
+	public String getDisplayName() {
+		return displayName;
 	}
 	
 	public static XStream getXStream() {
@@ -52,7 +58,15 @@ public class ClientInitializer {
 		File knowledge = new File("./knowledge.txt"); 
 		AgentEntry ag = new AgentEntry(agclass, agconfig, knowledge);
 
-		ClientInitializer cli = new ClientInitializer(env, ag);
+		String name = new String("Foo");
+		
+		ClientInitializer cli = null;
+		try{
+			cli = new ClientInitializer(env, ag, name);
+		}catch(Exception e){
+			e.printStackTrace();
+			System.exit(-1);
+		}
 		
 		XStream xstream = getXStream();
 		

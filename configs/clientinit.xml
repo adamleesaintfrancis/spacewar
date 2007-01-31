@@ -8,5 +8,5 @@
     <configuration>agent1.xml</configuration>
     <knowledge>knowledge.txt</knowledge>
   </agentEntry>
-  <displayName>Random1</displayName>
+  <displayName>HLRandom</displayName>
 </ClientInitializer>

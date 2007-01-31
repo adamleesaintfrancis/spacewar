@@ -76,6 +76,19 @@ public class SpacewarSimulator implements Simulator {
 		return out;
 	}
 
+	public Collection<Controllable> getAllControllables() {
+		//only ships are controllable
+		Ship[] ships = this.game.getAll(Ship.class);
+		Collection<Controllable> out 
+			= new ArrayList<Controllable>(ships.length);		
+		for(Ship s : ships) {
+			if(s.isControllable()) {
+				out.add(s.getControllableShip());
+			}
+		}
+		return out;
+	}
+	
 	public void shutdown(OutputStream config) {
 		// TODO: game stats get collected here?
 		// TODO: rethink this interface: why would shutdown need to write back to config? 
