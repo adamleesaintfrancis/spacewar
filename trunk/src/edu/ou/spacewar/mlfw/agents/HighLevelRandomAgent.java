@@ -10,6 +10,7 @@ import edu.ou.spacewar.ImmutableSpacewarState;
 import edu.ou.spacewar.objects.ShipNavigationActions;
 import edu.ou.spacewar.objects.immutables.ImmutableObstacle;
 import edu.ou.spacewar.objects.shadows.CrossHairShadow;
+import edu.ou.mlfw.gui.LineShadow;
 import edu.ou.utils.Vector2D;
 /**
  * HighLevelRandomAgent is a simple high level agent that chooses a random location (not in an obstacle) 
@@ -19,6 +20,12 @@ public class HighLevelRandomAgent implements Agent, Drawer {
 private final Random random = new Random();
 private Vector2D goalPos;
 private CrossHairShadow shadow;
+private LineShadow lineShadow = null;
+private LineShadow oldLineShadow;
+private boolean makeNewLine = false;
+private Vector2D startPosition;
+private Vector2D lineVec;
+
 
 /**
  * The agent receives the current state (which should be cast to ImmutableSpacewarState 
@@ -42,7 +49,10 @@ public Action startAction(State state, Set<Action> actions) {
   int fixed_multiplier = 1000;
   boolean goalIsClear = true;
   Vector2D pos = ((ImmutableSpacewarState)state).getShips()[0].getPosition();
-  
+  // save some information for drawing the line to the goal
+  startPosition = pos;
+  makeNewLine = true;
+
   float dirX;
   float dirY;
   float newX;
@@ -63,6 +73,8 @@ public Action startAction(State state, Set<Action> actions) {
             break;
           }
       }
+  // save a vector pointing to the goal from current position (for drawing only)
+  lineVec = ((ImmutableSpacewarState)state).findShortestDistance(startPosition, goalPos);
   return navAct.MoveToPoint(goalPos.getX(), goalPos.getY());
 
 }
@@ -71,24 +83,50 @@ public void endAction(State state) {
 //do nothing
 }
 
+/** 
+ * This is called when an agent is created
+ */
 public void initialize(File configfile) {
-//no configuration necessary
+	
 }
 
 public Set<Shadow2D> registerShadows() {
+	Set<Shadow2D> out = new HashSet<Shadow2D>();
+
 	if(shadow == null) {
 		shadow = new CrossHairShadow();
 		shadow.setDrawMe(true);
-		Set<Shadow2D> out = new HashSet<Shadow2D>();
+		System.out.println("Registering shadow");
 		out.add(shadow);
+	}
+	
+	// if there is a new line to be added, then add it to the queue
+	if (makeNewLine) {
+		// keep the old line around for removal
+		oldLineShadow = lineShadow;
+		
+		lineShadow = new LineShadow(lineVec, startPosition);
+		lineShadow.setDrawMe(true);
+		out.add(lineShadow);
 		return out;
 	}
+	
 	return null;
 }
 
+/**
+ * Remove any old shadows
+ */
 public Set<Shadow2D> unregisterShadows() {
-	// TODO Auto-generated method stub
-	return null;
+	// if we have created a new line, remove the old one
+	if (makeNewLine && oldLineShadow != null) {
+		Set<Shadow2D> out = new HashSet<Shadow2D>();
+		out.add(oldLineShadow);
+		makeNewLine = false;
+		return out;
+	} else {
+		return null;
+	}
 }
 
 public void updateGraphics(Graphics g) {
