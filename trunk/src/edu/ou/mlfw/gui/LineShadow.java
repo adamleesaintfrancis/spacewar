@@ -25,8 +25,8 @@ public class LineShadow extends Shadow2D {
     	
     	realposition = start.add(linesegment.divide(2.0f));
     	float angle = linesegment.getAngle();
-    	System.out.println("X= " + linesegment.getX() + ", Y= " + linesegment.getY());
-    	System.out.println("Angle= " + angle);
+    	//System.out.println("X= " + linesegment.getX() + ", Y= " + linesegment.getY());
+    	//System.out.println("Angle= " + angle);
 		slopesUp = (angle >= 0.0f && angle <= Vector2D.HALFPI) ||
 				   (angle < -Vector2D.HALFPI);
     }
