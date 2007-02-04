@@ -1,0 +1,14 @@
+#summary Frequently Asked Questions about Spacewar
+
+= FAQ =
+
+  * *Q*: Why did you create spacewar?  
+
+  * *Q*: How do I run it?
+
+  * *Q*: How do I program a new agent?
+
+
+
+
+
