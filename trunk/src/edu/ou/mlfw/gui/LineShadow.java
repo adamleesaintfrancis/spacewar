@@ -9,6 +9,7 @@ public class LineShadow extends Shadow2D {
 	private boolean slopesUp;
 	private Color myColor = Color.RED;
     private boolean drawme;
+    private float width;
     
     /**
      * start should be the starting point of the line, and linesegment should 
@@ -29,10 +30,15 @@ public class LineShadow extends Shadow2D {
     	//System.out.println("Angle= " + angle);
 		slopesUp = (angle >= 0.0f && angle <= Vector2D.HALFPI) ||
 				   (angle < -Vector2D.HALFPI);
+		width=2f;
     }
 	
 	public void setColor(Color newColor) {
 		myColor = newColor;
+	}
+	
+	public void setWidth(float w) {
+		width = w;
 	}
 	
 	public void cleanUp() {
@@ -41,7 +47,7 @@ public class LineShadow extends Shadow2D {
 
 	public void draw(Graphics2D g) {
 		g.setColor(myColor);
-        g.setStroke(new BasicStroke(2f));
+        g.setStroke(new BasicStroke(width));
 
         if(slopesUp) {
         	g.drawLine((int) drawposition.getX() - getHalfWidth(), 
