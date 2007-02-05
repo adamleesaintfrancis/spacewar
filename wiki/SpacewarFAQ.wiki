@@ -1,13 +1,16 @@
 #summary Frequently Asked Questions about Spacewar
 
+* This page will be done by march 8, 2007 in time for the SIGCSE open source release!*
+
 = FAQ =
 
   * *Q*: Why did you create spacewar?  
 
+    * *A*: Spacewar is designed as a educational tool for introductory artificial intelligence classes.  It is designed to be easy to create new agents and to be extensible to the many kinds of projects an AI class may do.  We include sample projects for Astar, machine learning, and planning.  
+
   * *Q*: How do I run it?
 
   * *Q*: How do I program a new agent?
-
 
 
 
