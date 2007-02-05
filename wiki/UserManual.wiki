@@ -1,0 +1,10 @@
+A short user manual for both students and potential educators who may use this project.
+
+= Introduction =
+
+This manual is under construction.  It will be ready for the SIGCSE open source release on March 8, 2007.
+
+= Details =
+
+
+
