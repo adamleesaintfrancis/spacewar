@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="Spacewar" default="run" basedir=".">
+<project name="Spacewar" default="gui" basedir=".">
 <property name="src" value="src"/>
 <property name="build" value="build"/>
 <property name="dist" value="dist"/>
@@ -75,6 +75,12 @@
 </target>
 
 <target name="run" depends="separated">
+    <java jar="${dist}/main.jar" fork="true" dir="${dist}">
+    	<jvmarg value="-Djava.awt.headless=true"/>
+    </java>
+</target>
+	
+<target name="gui" depends="separated">
     <java jar="${dist}/main.jar" fork="true" dir="${dist}">
     	<arg value="-g"/>
     </java>
