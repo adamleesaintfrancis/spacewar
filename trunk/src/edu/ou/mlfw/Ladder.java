@@ -101,25 +101,27 @@ public class Ladder {
 			for(int i = 0; i < a.size(); i++){
 				a.get(i).setRank(i+1);
 			}
-			out.write((a.get(0)).getHTMLHeader());
-			out.write("\n");
-			for(Record r: records){
-				out.write(r.toHTML());
+			if (a.size() > 0){
+				out.write((a.get(0)).getHTMLHeader());
 				out.write("\n");
-			}
-			out.write((((ArrayList<Record>) records).get(0)).getHTMLFooter());
+				for(Record r: records){
+					out.write(r.toHTML());
+					out.write("\n");
+				}
+				out.write((((ArrayList<Record>) records).get(0)).getHTMLFooter());
 			
-			GregorianCalendar calendar = new GregorianCalendar();
-			out.write("<p>Ladder updated as of ");
-			out.write(Integer.toString(calendar.get(Calendar.MONTH)+1) + "/" + 
-					Integer.toString(calendar.get(Calendar.DATE)) + "/" + 
-					Integer.toString(calendar.get(Calendar.YEAR)));
-			out.write(" at ");
-			out.write(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + 
-					Integer.toString(calendar.get(Calendar.MINUTE)) + ":" + 
-					Integer.toString(calendar.get(Calendar.SECOND)) + " " + 
-					TimeZone.getDefault().getDisplayName() + "</p>");
-			out.write("</body>\n");
+				GregorianCalendar calendar = new GregorianCalendar();
+				out.write("<p>Ladder updated as of ");
+				out.write(Integer.toString(calendar.get(Calendar.MONTH)+1) + "/" + 
+						Integer.toString(calendar.get(Calendar.DATE)) + "/" + 
+						Integer.toString(calendar.get(Calendar.YEAR)));
+				out.write(" at ");
+				out.write(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + 
+						Integer.toString(calendar.get(Calendar.MINUTE)) + ":" + 
+						Integer.toString(calendar.get(Calendar.SECOND)) + " " + 
+						TimeZone.getDefault().getDisplayName() + "</p>");
+				out.write("</body>\n");
+			}
 			out.close();
 		}
 		catch(Exception e){

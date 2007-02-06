@@ -108,8 +108,7 @@ public class ShipRecord extends Record implements Comparable{
 		return new String("Display Name,Average Beacons,Total Beacons,Average Kills,Total Kills,Average Hits,Total Hits,Average Deaths,Total Deaths,Average Flags,Total Flags");
 	}
 
-	@Override
-	public String getHTMLHeader() {
+	public static String getHTMLHeader_s(){
 		return new String("<title> Spacewar Ladder </title>\n"+
 				"<body>\n" +
 				"<h1> Spacewar Ladder </h1>\n" +
@@ -133,6 +132,11 @@ public class ShipRecord extends Record implements Comparable{
 				"<th>Average CPU Time</th>\n" +
 				"<th>Total CPU Time</th>\n" +
 				"</tr>");
+	}
+	
+	@Override
+	public String getHTMLHeader() {
+		return getHTMLHeader_s();
 	}
 
 	@Override
