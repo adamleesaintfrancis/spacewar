@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 import edu.ou.mlfw.gui.Shadow2D;
-import edu.ou.spacewar.objects.Beacon;
 import edu.ou.utils.Vector2D;
 
 /**

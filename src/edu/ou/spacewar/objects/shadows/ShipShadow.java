@@ -115,6 +115,10 @@ public class ShipShadow extends Shadow2D {
         number = Integer.toString(ship.getHits());
         g.setPaint(Color.GRAY);
         g.drawString(number, ship.getPosition().getX() - 24, ship.getPosition().getY() + 1);
+        
+        number = Integer.toString(ship.getBeacons());
+        g.setPaint(Color.GREEN);
+        g.drawString(number, ship.getPosition().getX() - 24, ship.getPosition().getY() + 23 );
     }
 
     public void cleanUp() {
