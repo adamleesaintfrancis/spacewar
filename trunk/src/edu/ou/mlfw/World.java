@@ -2,6 +2,7 @@ package edu.ou.mlfw;
 
 import jargs.gnu.CmdLineParser;
 
+import java.awt.event.KeyListener;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -80,6 +81,9 @@ public class World
 		}
 		System.out.println("Done");
 		
+		//a set to hold any key listeners that any human agents might define
+		//these are only added if running in gui mode.
+		final Set<KeyListener> keylisteners = new HashSet<KeyListener>();
 		System.out.println("Initializing clients:");
 		Map<String, Client> mappings = new HashMap<String, Client>();
 		for(ClientMappingEntry mapping : worldconfig.getMappingInformation()) {
@@ -117,6 +121,9 @@ public class World
 					+ aclass.getCanonicalName() +")...");
 			Agent agent = ae.getAgentClass().newInstance();
 			agent.setControllableName(controllableName);
+			if(showGUI && agent instanceof HumanAgent) {
+				keylisteners.add(((HumanAgent)agent).getKeyListener());
+			}
 			System.out.println("Done");
 			
 			File aconfig = ae.getConfiguration();
@@ -146,7 +153,10 @@ public class World
 			try {
 				javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
 				    public void run() {
-				    	new Viewer(gui);
+				    	Viewer viewer = new Viewer(gui);
+				    	for(KeyListener kl : keylisteners) {
+				    		viewer.addKeyListener(kl);
+				    	}
 				    }
 				});
 			} catch (InterruptedException e) {

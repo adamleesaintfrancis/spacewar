@@ -32,7 +32,6 @@ public class Viewer extends JFrame implements KeyListener {
     /**
      * Specifies a set of useful GUI keystrokes.
      *
-     * 'r' resets the game.<br/>
      * 'p' pauses the game.<br/>
      * '='  speeds up the simulator.</br>
      * '-'  slows down the simulator.</br>
@@ -43,9 +42,6 @@ public class Viewer extends JFrame implements KeyListener {
      */
     public void keyReleased(KeyEvent event) {
         switch (event.getKeyCode()) {
-            case KeyEvent.VK_R:
-                //reset();
-                break;
             case KeyEvent.VK_EQUALS:
                 this.speed *= 2;
                 break;
