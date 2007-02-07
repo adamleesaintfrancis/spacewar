@@ -121,9 +121,9 @@ public class World
 					+ aclass.getCanonicalName() +")...");
 			Agent agent = ae.getAgentClass().newInstance();
 			agent.setControllableName(controllableName);
-			if(showGUI && agent instanceof HumanAgent) {
-				keylisteners.add(((HumanAgent)agent).getKeyListener());
-			}
+			//if(showGUI && agent instanceof HumanAgent) {
+			//	keylisteners.add(((HumanAgent)agent).getKeyListener());
+			//}
 			System.out.println("Done");
 			
 			File aconfig = ae.getConfiguration();
