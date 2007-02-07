@@ -27,7 +27,10 @@ public abstract class Record implements Comparable{
 	}
 	
 	public boolean equals(Object a){
-		if(a instanceof Record){
+		if(a == null){
+			return false;
+		}
+		else if(a instanceof Record){
 			Record b = (Record) a;
 			return this.displayName.equals(b.displayName);
 		}
