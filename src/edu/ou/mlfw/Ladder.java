@@ -70,6 +70,12 @@ public class Ladder {
 				}
 				else if(recordTemp != null){
 					for(Record r: recordTemp){
+						if(r == null){
+							continue;
+						}
+						if(r.getDisplayName()==null){
+							continue;
+						}
 						if(records.contains(r)){
 							for(Record r2: records){
 								if(r2.equals(r)){
