@@ -25,7 +25,7 @@ public class ClientInitializer {
 		this.environmentEntry = environmentEntry;
 		this.agentEntry = agentEntry;
 		if(displayName==null){
-			this.displayName = new String("I have no Name");
+			this.displayName = new String("displayName not set");
 		}
 		else{
 			this.displayName = displayName;
