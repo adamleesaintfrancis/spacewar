@@ -2,7 +2,7 @@
   <simulatorInitializerFile>siminit.xml</simulatorInitializerFile>
   <mappingInformation>
     <ClientMappingEntry>
-      <controllableName>Test</controllableName>
+      <controllableName>Me</controllableName>
       <clientInitializerFile>clientinit.xml</clientInitializerFile>
     </ClientMappingEntry>
   </mappingInformation>
