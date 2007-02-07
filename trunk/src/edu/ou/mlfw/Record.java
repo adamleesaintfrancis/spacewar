@@ -32,6 +32,9 @@ public abstract class Record implements Comparable{
 		}
 		else if(a instanceof Record){
 			Record b = (Record) a;
+			if(b.displayName==null){
+				return false;
+			}
 			return this.displayName.equals(b.displayName);
 		}
 		else{
