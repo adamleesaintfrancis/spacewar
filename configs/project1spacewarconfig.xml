@@ -11,7 +11,7 @@
   <timeLimit>300.0</timeLimit>
   <ships>
     <ShipInformation>
-      <name>Amy</name>
+      <name>Me</name>
       <team>0</team>
       <autoPlacement>true</autoPlacement>
       <positionX>400.0</positionX>
