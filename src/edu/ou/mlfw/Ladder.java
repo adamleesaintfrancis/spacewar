@@ -74,7 +74,7 @@ public class Ladder {
 							continue;
 						}
 						if(r.getDisplayName()==null){
-							continue;
+							r.setDisplayName(new String("displayName not set"));
 						}
 						if(records.contains(r)){
 							for(Record r2: records){
