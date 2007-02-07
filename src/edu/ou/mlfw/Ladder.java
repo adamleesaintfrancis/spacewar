@@ -59,7 +59,7 @@ public class Ladder {
 					System.err.println("An agent required a class that could not be found");
 				}
 				catch(NullPointerException e){
-					System.err.println("An agent required a class that could not be found");
+					System.err.println("An agent had a null pointer exception");
 				}
 				catch(Exception e){
 					e.printStackTrace();
