@@ -1,0 +1,4 @@
+<SimulatorInitializer>
+  <simulatorClass>edu.ou.spacewar.SpacewarSimulator</simulatorClass>
+  <configuration>project1spacewarthreeships.xml</configuration>
+</SimulatorInitializer>
