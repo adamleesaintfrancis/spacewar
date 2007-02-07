@@ -24,14 +24,18 @@ public class ClientInitializer {
 		super();
 		this.environmentEntry = environmentEntry;
 		this.agentEntry = agentEntry;
-		if(displayName==null){
-			this.displayName = new String("displayName not set");
-		}
-		else{
-			this.displayName = displayName;
-		}
+		this.displayName = displayName;
 	}
 
+	public ClientInitializer(EnvironmentEntry environmentEntry, 
+			AgentEntry agentEntry) throws ClassNotFoundException 
+	{
+		super();
+		this.environmentEntry = environmentEntry;
+		this.agentEntry = agentEntry;
+		this.displayName = new String("displayName not set");
+}
+	
 	public AgentEntry getAgentEntry() {
 		return agentEntry;
 	}
