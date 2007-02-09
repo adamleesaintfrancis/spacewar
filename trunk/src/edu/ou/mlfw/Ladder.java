@@ -56,9 +56,11 @@ public class Ladder {
 					recordTemp = world.getRecords();
 				}
 				catch(java.lang.ClassNotFoundException e){
+					e.printStackTrace();
 					System.err.println("An agent required a class that could not be found");
 				}
 				catch(NullPointerException e){
+					e.printStackTrace();
 					System.err.println("An agent had a null pointer exception");
 				}
 				catch(Exception e){
