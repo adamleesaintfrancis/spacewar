@@ -34,7 +34,8 @@ public class Ship extends Object2D {
     
     private ControllableShip controllable;
     protected Bullet[] bullets;
-    private int energy, beacons, kills, deaths, hits, flags, team;
+    private int energy, beacons, kills, deaths, hits, flags, team, shots;
+    private long cpuTime; 
     private ShipCommand activeCommand;
     private float fireDelay;
     private Flag flag;
@@ -63,6 +64,8 @@ public class Ship extends Object2D {
         this.deaths = 0;
         this.hits = 0;
         this.flags = 0;
+        this.shots = 0;
+        this.cpuTime = 0;
     }
 
     public void reset() {
@@ -118,10 +121,18 @@ public class Ship extends Object2D {
         return hits;
     }
 
+    public final int getShots() {
+        return shots;
+    }
+    
     public final int getFlags() {
         return flags;
     }
 
+    public final long getCpuTime() {
+        return cpuTime;
+    }
+    
     public final boolean hasFlag() {
         return flag != null;
     }
@@ -173,6 +184,14 @@ public class Ship extends Object2D {
         hits++;
     }
 
+    public final void incrementShots() {
+        shots++;
+    }
+    
+    public final void incrementCpuTime(int dCpuTime) {
+        cpuTime += dCpuTime;
+    }
+    
     public final void setEnergy(int energy) {
         this.energy = energy;
     }
@@ -226,7 +245,7 @@ public class Ship extends Object2D {
 
             if (!clip.isEmpty()) {
                 Bullet bullet = clip.pop();
-
+                shots++;
                 bullet.setOrientation(this.orientation);
                 bullet.setPosition(this.position.add(
                 		this.orientation.multiply(SHIP_RADIUS - Bullet.BULLET_RADIUS)
@@ -260,7 +279,7 @@ public class Ship extends Object2D {
 	
 	public ControllableShip getControllableShip() {
 		ShipRecord stats = new ShipRecord(this.getName(), 1, this.beacons, this.kills, 
-				this.deaths, this.hits, this.flags, 0, 0);
+				this.deaths, this.hits, this.flags, this.shots, this.cpuTime);
 		this.controllable = new ControllableShip(this.getName(), 
 				ShipCommand.commands, new ImmutableShip(this), stats);
 		return this.controllable;
