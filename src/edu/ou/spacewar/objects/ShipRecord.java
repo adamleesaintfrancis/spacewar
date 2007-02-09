@@ -19,7 +19,7 @@ public class ShipRecord extends Record implements Comparable{
 	private int totalHits;
 	private int totalFlags;
 	private int totalShotsFired;
-	private int totalCPUTime;
+	private long totalCPUTime;
 	
 	public ShipRecord(String displayName){
 		super(displayName);
@@ -48,7 +48,7 @@ public class ShipRecord extends Record implements Comparable{
 					int totalHits,
 					int totalFlags,
 					int totalShotsFired,
-					int totalCPUTime){
+					long totalCPUTime){
 		super(displayName);
 		this.totalGames = totalGames;
 		this.totalBeacons = totalBeacons;
@@ -113,24 +113,24 @@ public class ShipRecord extends Record implements Comparable{
 				"<body>\n" +
 				"<h1> Spacewar Ladder </h1>\n" +
 				"<table border=2>\n" +
-				"<tr>\n" +
-				"<th>Display Name</th>\n" +
-				"<th>Rank</th>\n" +
-				"<th>Number of Games</th>\n" +
-				"<th>Average Beacons</th>\n" +
-				"<th>Total Beacons</th>\n" +
-				"<th>Average Deaths</th>\n" +
-				"<th>Total Deaths</th>\n" +
-				"<th>Average Kills</th>\n" +
-				"<th>Total Kills</th>\n" +
-				"<th>Average Hits</th>\n" +
-				"<th>Total Hits</th>\n" +
-				"<th>Average Shots Fired</th>\n" +
-				"<th>Total Shots Fired</th>\n" +
-				"<th>Average Flags</th>\n" +
-				"<th>Total Flags</th>\n" +
-				"<th>Average CPU Time</th>\n" +
-				"<th>Total CPU Time</th>\n" +
+				"<tr>" +
+				"<th>Display Name</th>" +
+				"<th>Rank</th>" +
+				"<th>Number of Games</th>" +
+				"<th>Average Beacons</th>" +
+				"<th>Total Beacons</th>" +
+				"<th>Average Deaths</th>" +
+				"<th>Total Deaths</th>" +
+				"<th>Average Kills</th>" +
+				"<th>Total Kills</th>" +
+				"<th>Average Hits</th>" +
+				"<th>Total Hits</th>" +
+				"<th>Average Shots Fired</th>" +
+				"<th>Total Shots Fired</th>" +
+				"<th>Average Flags</th>" +
+				"<th>Total Flags</th>" +
+				"<th>Average CPU Time</th>" +
+				"<th>Total CPU Time</th>" +
 				"</tr>");
 	}
 	
@@ -152,24 +152,24 @@ public class ShipRecord extends Record implements Comparable{
 
 	@Override
 	public String toHTML() {
-		return new String("<tr>\n" +
-				"<td>" + displayName + "</td>\n" +
-				"<td>" + Integer.toString(rank) + "</td>\n" +
-				"<td>" + Integer.toString(totalGames) + "</td>\n" +
-				"<td>" + Float.toString(avgBeacons)+ "</td>\n" +
-				"<td>" + Integer.toString(totalBeacons) + "</td>\n" +
-				"<td>" + Float.toString(avgDeaths)+ "</td>\n" +
-				"<td>" + Integer.toString(totalDeaths) + "</td>\n" +
-				"<td>" + Float.toString(avgKills)+ "</td>\n" +
-				"<td>" + Integer.toString(totalKills) + "</td>\n" +
-				"<td>" + Float.toString(avgHits)+ "</td>\n" +
-				"<td>" + Integer.toString(totalHits) + "</td>\n" +
-				"<td>" + Float.toString(avgShotsFired)+ "</td>\n" +
-				"<td>" + Integer.toString(totalShotsFired) + "</td>\n" +
-				"<td>" + Float.toString(avgFlags)+ "</td>\n" +
-				"<td>" + Integer.toString(totalFlags) + "</td>\n" +
-				"<td>" + Float.toString(avgCPUTime)+ "</td>\n" +
-				"<td>" + Integer.toString(totalCPUTime) + "</td>\n" +
+		return new String("<tr>" +
+				"<td>" + displayName + "</td>" +
+				"<td>" + Integer.toString(rank) + "</td>" +
+				"<td>" + Integer.toString(totalGames) + "</td>" +
+				"<td>" + Float.toString(avgBeacons)+ "</td>" +
+				"<td>" + Integer.toString(totalBeacons) + "</td>" +
+				"<td>" + Float.toString(avgDeaths)+ "</td>" +
+				"<td>" + Integer.toString(totalDeaths) + "</td>" +
+				"<td>" + Float.toString(avgKills)+ "</td>" +
+				"<td>" + Integer.toString(totalKills) + "</td>" +
+				"<td>" + Float.toString(avgHits)+ "</td>" +
+				"<td>" + Integer.toString(totalHits) + "</td>" +
+				"<td>" + Float.toString(avgShotsFired)+ "</td>" +
+				"<td>" + Integer.toString(totalShotsFired) + "</td>" +
+				"<td>" + Float.toString(avgFlags)+ "</td>" +
+				"<td>" + Integer.toString(totalFlags) + "</td>" +
+				"<td>" + Float.toString(avgCPUTime)+ "</td>" +
+				"<td>" + Long.toString(totalCPUTime) + "</td>" +
 				"</tr>");
 	}
 
@@ -246,7 +246,7 @@ public class ShipRecord extends Record implements Comparable{
 		return totalShotsFired;
 	}
 	
-	public int getTotalCPUTime(){
+	public long getTotalCPUTime(){
 		return totalCPUTime;
 	}
 }
