@@ -72,6 +72,7 @@
 <target name="clean">
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
+	<delete dir="docs/api"/>
 </target>
 
 <target name="run" depends="separated">
@@ -85,5 +86,27 @@
     	<arg value="-g"/>
     </java>
 </target>
+	
+<target name="doc">
+	<mkdir dir="docs" />
+	<javadoc 
+		destdir="docs/api"
+		author="true"
+		version="true"
+		use="true"
+		windowtitle="Machine Learning Framework / Spacewar! API"> 
+		<packageset dir="src" defaultexcludes="yes">
+			<include name="edu/**"/>
+		</packageset>
+		
+		<doctitle><![CDATA[<h1>Machine Learning Framework / Spacewar! API</h1>]]></doctitle>
+		<bottom><![CDATA[<i>Copyright &#169; 2007 University of Oklahoma. All Rights Reserved.</i>]]></bottom>
+		<tag name="todo" scope="all" description="To do:"/>
+		<group title="Machine Learning Framework Packages" packages="edu.ou.mlfw*"/>
+		<group title="Spacewar! Packages" packages="edu.ou.spacewar*"/>
+		<group title="Utilities Packages" packages="edu.ou.utils*"/>
+	</javadoc>	
+</target>
+	
 </project>
 
