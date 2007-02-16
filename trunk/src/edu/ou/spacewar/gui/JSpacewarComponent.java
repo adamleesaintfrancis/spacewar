@@ -7,7 +7,6 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import edu.ou.mlfw.gui.*;
-import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.utils.Vector2D;
 
 //TODO:  This doesn't have to be spacewar specific...it just draws shadows in
@@ -21,8 +20,10 @@ public class JSpacewarComponent extends JComponent implements Shadow2DCanvas {
     public static final BasicStroke STROKE = new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     public static final BasicStroke THICK_STROKE = new BasicStroke(7, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 
-    private final List<Shadow2D> shadows = new ArrayList<Shadow2D>();
-    private final List<Shadow2D> usershadows = new LinkedList<Shadow2D>();
+	// Hooray for thread-safety while using fail-fast iterators in a different thread
+	// than the accessors! -BMM
+    private final List<Shadow2D> shadows = Collections.synchronizedList(new ArrayList<Shadow2D>());
+    private final List<Shadow2D> usershadows = Collections.synchronizedList(new LinkedList<Shadow2D>());
 
     private boolean showshadows = true;
     private int width, height;
@@ -68,19 +69,24 @@ public class JSpacewarComponent extends JComponent implements Shadow2DCanvas {
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
         
-        for (Shadow2D shadow : this.shadows) {
-        	if (!shadow.drawMe()) {
-        		continue;
-        	}
-        	drawShadow(shadow, graphics);
-        }
+		synchronized (this.shadows) {  // must be used for iterator
+	        for (Shadow2D shadow : this.shadows) {
+	        	if (!shadow.drawMe()) {
+	        		continue;
+	        	}
+	        	drawShadow(shadow, graphics);
+	        }
+		}
 
         if (showshadows) {
-        	for (Shadow2D shadow : this.usershadows) {
-        		if (!shadow.drawMe()) {
-        			continue;
-        		}
-        		drawShadow(shadow, graphics);
+        	synchronized (this.usershadows) { // must be used for iterator
+				for (Shadow2D shadow : this.usershadows) {
+        	
+	        		if (!shadow.drawMe()) {
+	        			continue;
+	        		}
+	        		drawShadow(shadow, graphics);
+	        	}
         	}
         }
     }
