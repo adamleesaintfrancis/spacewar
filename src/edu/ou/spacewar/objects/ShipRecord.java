@@ -202,10 +202,10 @@ public class ShipRecord extends Record implements Comparable{
 				return -1;
 			}
 			else{
-				if(this.avgDeaths < s.avgDeaths){
+				if(this.avgDeaths > s.avgDeaths){
 					return 1;
 				}
-				else if(this.avgDeaths > s.avgDeaths){
+				else if(this.avgDeaths < s.avgDeaths){
 					return -1;
 				}
 				else{
