@@ -26,7 +26,7 @@ public class Ladder {
 	private final int numMatchRepeats;
 	private final ClientMappingEntry[] variableClientMappingInformation;
 	private final ClientMappingEntry[] staticClientMappingInformation;
-	private Collection<Record> records;
+	private List<Record> records;
 	
 	public Ladder(LadderConfiguration ladderconfig){
 		this.simulatorInitializerFile = ladderconfig.getSimulatorInitializerFile();
@@ -37,7 +37,7 @@ public class Ladder {
 		this.numVariableAgentsPerGame = ladderconfig.getNumVariableAgentsPerGame();
 	}
 	
-	public void run(){
+	public void run() {
 		ClientMappingEntry[] a = new ClientMappingEntry[numVariableAgentsPerGame + staticClientMappingInformation.length];
 		for(int i = 0; i < staticClientMappingInformation.length; i++){
 			a[i+1] = staticClientMappingInformation[i];
@@ -49,7 +49,7 @@ public class Ladder {
 			}
 			for(int k = 0; k < numMatchRepeats; k++){
 				WorldConfiguration worldconfig = new WorldConfiguration(simulatorInitializerFile, a);
-				Collection<Record> recordTemp = null;
+				List<Record> recordTemp = null;
 				try{
 					World world = new World(worldconfig, false);
 					world.run();
@@ -104,13 +104,12 @@ public class Ladder {
 			exit("Error opening output file");
 		}
 		try{
-			ArrayList<Record> a = (ArrayList<Record>) records;
-			Collections.sort(a);
-			for(int i = 0; i < a.size(); i++){
-				a.get(i).setRank(i+1);
+			Collections.sort(records);
+			for(int i = 0; i < records.size(); i++){
+				records.get(i).setRank(i+1);
 			}
-			if (a.size() > 0){
-				out.write((a.get(0)).getHTMLHeader());
+			if (records.size() > 0){
+				out.write((records.get(0)).getHTMLHeader());
 				out.write("\n");
 				for(Record r: records){
 					out.write(r.toHTML());

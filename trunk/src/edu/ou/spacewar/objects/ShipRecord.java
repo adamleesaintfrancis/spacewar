@@ -1,10 +1,9 @@
 package edu.ou.spacewar.objects;
 
 import edu.ou.mlfw.Record;
-import java.lang.Comparable;
 import java.lang.ClassCastException;
 
-public class ShipRecord extends Record implements Comparable{
+public class ShipRecord extends Record {
 	private float avgBeacons;
 	private float avgKills;
 	private float avgHits;
@@ -191,7 +190,7 @@ public class ShipRecord extends Record implements Comparable{
 		this.totalCPUTime = 0;
 	}
 	
-	public int compareTo(Object o){
+	public int compareTo(Record o){
 		
 		if(o instanceof ShipRecord){
 			ShipRecord s = (ShipRecord) o;

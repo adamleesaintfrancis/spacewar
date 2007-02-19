@@ -1,4 +1,7 @@
 <SpacewarConfiguration>
+	<!-- This file is probably no longer valid; however, we should keep it 
+		 around for now as reference for a future similar config. -->
+
     <!--Specify the random seed (used for replay abilities)-->
     <seed>1</seed>
 

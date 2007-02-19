@@ -1,6 +1,6 @@
 package edu.ou.mlfw;
 
-public abstract class Record implements Comparable{
+public abstract class Record implements Comparable<Record> {
 	protected String displayName;
 	protected int rank;
 	

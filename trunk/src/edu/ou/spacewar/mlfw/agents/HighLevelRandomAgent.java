@@ -47,7 +47,7 @@ public Action startAction(State state, Set<Action> actions) {
   ShipNavigationActions navAct = (ShipNavigationActions)actions.toArray()[0];
   
   int fixed_multiplier = 1000;
-  boolean goalIsClear = true;
+  //boolean goalIsClear = true;
   Vector2D pos = ((ImmutableSpacewarState)state).getShips()[0].getPosition();
   // save some information for drawing the line to the goal
   startPosition = pos;

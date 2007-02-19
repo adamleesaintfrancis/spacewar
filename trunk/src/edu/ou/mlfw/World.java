@@ -251,9 +251,9 @@ public class World
 		}
 	}
 	
-	public Collection<Record> getRecords(){
+	public List<Record> getRecords(){
 		Collection<Controllable> controllables = simulator.getAllControllables();
-		Collection<Record> out 
+		List<Record> out 
 			= new ArrayList<Record>(controllables.size());
 		for(Controllable c: controllables){
 			String displayName = mappings.get(c.getName()).displayName;
