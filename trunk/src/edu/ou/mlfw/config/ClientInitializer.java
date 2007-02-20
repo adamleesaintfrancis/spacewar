@@ -1,6 +1,6 @@
 package edu.ou.mlfw.config;
 
-import java.io.File;
+import java.io.*;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -54,6 +54,14 @@ public class ClientInitializer {
 		xstream.alias("AgentEntry", AgentEntry.class);
 		xstream.alias("ClientInitializer", ClientInitializer.class);
 		return xstream;
+	}
+	
+	public static ClientInitializer fromXMLFile(File f) throws IOException {
+		FileReader fr = new FileReader(f);
+		XStream xstream = getXStream();
+		ClientInitializer out = (ClientInitializer) xstream.fromXML(fr);
+		fr.close();
+		return out;
 	}
 
 	public static void main(String[] args) {
