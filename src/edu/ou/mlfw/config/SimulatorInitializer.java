@@ -47,6 +47,14 @@ public class SimulatorInitializer {
 		out.alias("SimulatorInitializer", SimulatorInitializer.class);
 		return out;
 	}
+	
+	public static SimulatorInitializer fromXMLFile(File f) throws IOException {
+		FileReader fr = new FileReader(f);
+		XStream xstream = getXStream();
+		SimulatorInitializer out = (SimulatorInitializer) xstream.fromXML(fr);
+		fr.close();
+		return out;
+	}
 
 	public static void main(String[] args) {
 		Class<? extends Simulator> klass = new Simulator() {

@@ -35,6 +35,14 @@ public class WorldConfiguration {
 		out.alias("ClientMappingEntry", ClientMappingEntry.class);
 		return out;
 	}
+	
+	public static WorldConfiguration fromXMLFile(File f) throws IOException {
+		FileReader fr = new FileReader(f);
+		XStream xstream = getXStream();
+		WorldConfiguration out = (WorldConfiguration) xstream.fromXML(fr);
+		fr.close();
+		return out;
+	}	
 
 	public static void main(String[] args) 
 	{
