@@ -1,8 +1,9 @@
-package edu.ou.mlfw;
+package edu.ou.mlfw.deprecated;
 
+import java.io.File;
 import java.util.Set;
 
-import edu.ou.utils.Initializable;
+import edu.ou.mlfw.*;
 
 /**
  * Agent defines the methods that are needed for a generic agent.  The agent is
@@ -12,7 +13,7 @@ import edu.ou.utils.Initializable;
  * a robot arm that is manipulating items according to the controller, or agent.
  *
  */
-public interface Agent extends Initializable {
+public interface Agent {
 	/**
 	 * setControllableName is called when a Controllable is paired with 
 	 * a client.  However, the agent may not ever interact directly with the
@@ -45,4 +46,6 @@ public interface Agent extends Initializable {
 	 * @param state
 	 */
 	void endAction(State state);
+
+	void initialize(File agentconfig);
 }

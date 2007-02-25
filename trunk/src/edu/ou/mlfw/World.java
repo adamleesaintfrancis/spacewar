@@ -77,10 +77,6 @@ public class World {
 		}
 		System.out.println("Done");
 
-		// a set to hold any key listeners that any human agents might define
-		// these are only added if running in gui mode.
-		final Set<KeyListener> keylisteners = new HashSet<KeyListener>();
-
 		System.out.println("Initializing clients:");
 		final Map<String, Client> mappings = new HashMap<String, Client>();
 		for (final ClientMappingEntry mapping : 
@@ -90,9 +86,16 @@ public class World {
 			if (!controllables.contains(controllableName)) {
 				throw new UnboundAgentException();
 			}
-			final File clientInitFile = mapping.getClientInitializerFile();
-			final Client client = new Client(clientInitFile, controllableName);
-			controllables.remove(controllableName);
+			final NewClientInitializer clientinit 
+				= NewClientInitializer.fromXMLFile(
+					mapping.getClientInitializerFile());
+			final Client client = clientinit.getClientClass().newInstance();
+			client.initialize(clientinit.getConfiguration());
+			client.loadData(clientinit.getData());
+			
+			//we remove from the controllables set here to make sure we can 
+			//check later that all controllables were successfully paired.
+			controllables.remove(controllableName); 
 			mappings.put(controllableName, client);
 		}
 		System.out.println("Clients Initialized");
@@ -108,6 +111,10 @@ public class World {
 
 		// start gui if necessary
 		if (this.gui != null) {
+			// a set to hold any key listeners that any human agents might 
+			// define these are only added if running in gui mode.
+			final Set<KeyListener> keylisteners = new HashSet<KeyListener>();
+			
 			try {
 				javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
 					public void run() {
@@ -148,22 +155,14 @@ public class World {
 	 * Finally, if the gui is enabled, we draw the game state.
 	 */
 	public void run() {
-		State state = simulator.getState();
+		
 		while (simulator.isRunning()) {
-			startActions(state);
-			// TODO: add ability to specify framerate for gui, decision rate
-			// for agents, and update rate for physics
-			simulator.advance(0.0333f);
-			state = simulator.getState();
-			endActions(state);
+			step(0.0333f, true);
 
 			if (this.gui != null) {
 				for (Client c : mappings.values()) {
-					if (c.getEnvironment() instanceof Drawer) {
-						handleDrawer((Drawer) c.getEnvironment());
-					}
-					if (c.getAgent() instanceof Drawer) {
-						handleDrawer((Drawer) c.getAgent());
+					if (c instanceof Drawer) {
+						handleDrawer((Drawer) c);
 					}
 				}
 
@@ -178,40 +177,42 @@ public class World {
 	}
 	
 	/**
+	 * Step through the simulator a single step.  This includes the requests to
+	 * the clients, the 
+	 *
+	 */
+	private void step(float simulatedSeconds, boolean updateAgents) {
+		State state = simulator.getState();	
+		startActions(state);
+		simulator.advance(simulatedSeconds);
+		state = simulator.getState();  //if getState is expensive, simulator should memoize
+		endActions(state);
+	}
+	
+	/**
 	 * For each current controllable, get the action from the corresponding 
-	 * client.  In the future, most of the mechanics of passing between an 
-	 * agent and an environment may be refactored into a method of Client, and 
-	 * this method may focus on running clients in parallel on multiprocessor
-	 * machines.
+	 * client. 
 	 * 
 	 * @param state The state of the simulator prior to updating.
 	 */
 	private void startActions(final State state) {
 		for (Controllable cntrl : simulator.getControllables()) {
 			Client client = mappings.get(cntrl.getName());
-			State agentState = client.getEnvironment().getAgentState(state);
-			Set<Action> cActions = cntrl.getLegalActions();
-			Set<Action> aActions = client.getEnvironment().getAgentActions(cActions);
-			Action aAction = client.getAgent().startAction(agentState, aActions);
-			Action cAction = client.getEnvironment().getControllableAction(aAction);
+			Action cAction = client.startAction(state, cntrl);
 			cntrl.setAction(cAction);
 		}
 	}
 	
 	/**
 	 * For each current controllable, allow each client to update its internal 
-	 * state based on the updated simulator state.  In the future, most of the
-	 * mechanics of passing between an agent and its environment may be 
-	 * refactored into a method of Client, and this method may focus on running
-	 * clients in parallel on multiprocessor machines.
+	 * state based on the updated simulator state.  
 	 * 
 	 * @param state The state of the simulator immediately following an update.
 	 */
 	private void endActions(final State state) {
 		for (Controllable cntrl : simulator.getControllables()) {
 			Client client = mappings.get(cntrl.getName());
-			State agentState = client.getEnvironment().getAgentState(state);
-			client.getAgent().endAction(agentState);
+			client.endAction(state, cntrl);
 		}
 	}
 	

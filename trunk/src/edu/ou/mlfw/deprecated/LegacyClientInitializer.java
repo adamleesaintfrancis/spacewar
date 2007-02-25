@@ -1,25 +1,23 @@
-package edu.ou.mlfw.config;
+package edu.ou.mlfw.deprecated;
 
 import java.io.*;
 
 import com.thoughtworks.xstream.XStream;
 
-import edu.ou.mlfw.Agent;
-import edu.ou.mlfw.Environment;
-
 /**
- * A ClientInitializer is the means by which a world finds, loads, and
- * initializes an Environment/Agent pair.  A ClientMappingEntry from a 
- * WorldConfiguration points to a ClientInitializer, which in turn holds
+ * A LegacyClientInitializer is the means by which a LegacyClientBridge finds, 
+ * loads, and initializes an Environment/Agent pair.  A ClientMappingEntry from
+ * a WorldConfiguration points to a ClientInitializer, which in turn holds
  * an EnvironmentEntry and an AgentEntry.  
  */
-public class ClientInitializer {
+public class LegacyClientInitializer {
 	private final EnvironmentEntry environmentEntry;
 	private final AgentEntry agentEntry;
 	private final String displayName;
 	
-	public ClientInitializer(EnvironmentEntry environmentEntry, 
-								AgentEntry agentEntry, String displayName) throws ClassNotFoundException 
+	public LegacyClientInitializer(EnvironmentEntry environmentEntry, 
+								AgentEntry agentEntry, String displayName) 
+		throws ClassNotFoundException 
 	{
 		super();
 		this.environmentEntry = environmentEntry;
@@ -27,8 +25,9 @@ public class ClientInitializer {
 		this.displayName = displayName;
 	}
 
-	public ClientInitializer(EnvironmentEntry environmentEntry, 
-			AgentEntry agentEntry) throws ClassNotFoundException 
+	public LegacyClientInitializer(EnvironmentEntry environmentEntry, 
+									AgentEntry agentEntry) 
+		throws ClassNotFoundException 
 	{
 		super();
 		this.environmentEntry = environmentEntry;
@@ -52,14 +51,14 @@ public class ClientInitializer {
 		final XStream xstream = new XStream();
 		xstream.alias("EnvironmentEntry", EnvironmentEntry.class);
 		xstream.alias("AgentEntry", AgentEntry.class);
-		xstream.alias("ClientInitializer", ClientInitializer.class);
+		xstream.alias("ClientInitializer", LegacyClientInitializer.class);
 		return xstream;
 	}
 	
-	public static ClientInitializer fromXMLFile(File f) throws IOException {
+	public static LegacyClientInitializer fromXMLFile(File f) throws IOException {
 		FileReader fr = new FileReader(f);
 		XStream xstream = getXStream();
-		ClientInitializer out = (ClientInitializer) xstream.fromXML(fr);
+		LegacyClientInitializer out = (LegacyClientInitializer) xstream.fromXML(fr);
 		fr.close();
 		return out;
 	}
@@ -77,9 +76,9 @@ public class ClientInitializer {
 
 		String name = new String("Foo");
 		
-		ClientInitializer cli = null;
+		LegacyClientInitializer cli = null;
 		try{
-			cli = new ClientInitializer(env, ag, name);
+			cli = new LegacyClientInitializer(env, ag, name);
 		}catch(Exception e){
 			e.printStackTrace();
 			System.exit(-1);
