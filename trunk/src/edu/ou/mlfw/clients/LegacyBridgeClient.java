@@ -13,18 +13,38 @@ import edu.ou.mlfw.gui.*;
  * basically a transfer of the old World code
  */
 public class LegacyBridgeClient implements Client, Drawer {
-	private final Environment env;
-	private final Agent agent;
-	private final String displayName;
+	private Environment env;
+	private Agent agent;
+	private String displayName;
 	
-	public LegacyBridgeClient() {
-		this.agent = null;
-		this.env = null;
-		this.displayName = "Fix Me!!";
+	public void initialize(File config) {
+		try {
+			System.out.print("Loading ClientInitializer for " + config + "...");
+			final LegacyClientInitializer clientinit 
+				= LegacyClientInitializer.fromXMLFile(config);
+			System.out.println("Done");
+
+			EnvironmentEntry ee = clientinit.getEnvironmentEntry();
+			this.env = initClientEnv(ee);
+
+			AgentEntry ae = clientinit.getAgentEntry();
+			this.agent = initClientAgent(ae);
+		
+			this.displayName = clientinit.getDisplayName();
+		} catch(Exception e) {
+			//TODO: there's a better way to do this... figure it out now while 
+			//you're making huge changes.
+			e.printStackTrace();
+		}
 	}
 	
 	public Action startAction(State state, Controllable controllable)
 	{
+		//ugliness to make sure the name gets set correctly for code that 
+		//relies on controllable names for understanding the state.
+		this.env.setControllableName(controllable.getName());
+		this.agent.setControllableName(controllable.getName());
+		
 		State agentState = this.env.getAgentState(state);
 		Set<Action> cActions = controllable.getLegalActions();
 		Set<Action> aActions = this.env.getAgentActions(cActions);
@@ -37,6 +57,11 @@ public class LegacyBridgeClient implements Client, Drawer {
 	
 	public void endAction(State state, Controllable controllable)
 	{
+		//ugliness to make sure the name gets set correctly for code that 
+		//relies on controllable names for understanding the state.
+		this.env.setControllableName(controllable.getName());
+		this.agent.setControllableName(controllable.getName());
+		
 		State agentState = this.env.getAgentState(state);
 		this.agent.endAction(agentState);
 	}
@@ -44,23 +69,36 @@ public class LegacyBridgeClient implements Client, Drawer {
 	public Set<Shadow2D> registerShadows() {
 		Set<Shadow2D> out = new HashSet<Shadow2D>();
 		if(this.env instanceof Drawer) {
-			out.addAll( ((Drawer) this.env).registerShadows() );
+			Set<Shadow2D> toreg = ((Drawer) this.env).registerShadows();
+			if (toreg != null) {
+				out.addAll( toreg );
+			}
 		}
 		
 		if (this.agent instanceof Drawer) {
-			out.addAll( ((Drawer) this.agent).registerShadows() );
+			Set<Shadow2D> toreg = ((Drawer) this.agent).registerShadows();
+			if (toreg != null) {
+				out.addAll( toreg );
+			}
 		}
 		return out;
 	}
 
 	public Set<Shadow2D> unregisterShadows() {
 		Set<Shadow2D> out = new HashSet<Shadow2D>();
+		
 		if(this.env instanceof Drawer) {
-			out.addAll( ((Drawer) this.env).unregisterShadows() );
+			Set<Shadow2D> tounreg = ((Drawer) this.env).unregisterShadows();
+			if (tounreg != null) {
+				out.addAll( tounreg );
+			}
 		}
 		
 		if (this.agent instanceof Drawer) {
-			out.addAll( ((Drawer) this.agent).unregisterShadows() );
+			Set<Shadow2D> tounreg = ((Drawer) this.agent).unregisterShadows();
+			if (tounreg != null) {
+				out.addAll( tounreg );
+			}
 		}
 		return out;
 	}
@@ -75,38 +113,6 @@ public class LegacyBridgeClient implements Client, Drawer {
 		}
 	}
 	
-
-	
-	/**
-	 * Instantiate a client based on a given clientInitFile, and a specified
-	 * controllable name.  In an instance of World, the pairing of a client and
-	 * a controllable is made using this controllable name.
-	 * 
-	 * @param clientInitFile The client initialization file.
-	 * @param controllableName The name of a controllable.
-	 * @throws IOException
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 */
-	public LegacyBridgeClient(final File clientInitFile, 
-								final String controllableName) 
-		throws IOException, InstantiationException, IllegalAccessException 
-	{
-		System.out.print("Loading ClientInitializer for " + clientInitFile
-				+ "...");
-		final LegacyClientInitializer clientinit 
-			= LegacyClientInitializer.fromXMLFile(clientInitFile);
-		System.out.println("Done");
-
-		EnvironmentEntry ee = clientinit.getEnvironmentEntry();
-		this.env = initClientEnv(ee, controllableName);
-
-		AgentEntry ae = clientinit.getAgentEntry();
-		this.agent = initClientAgent(ae, controllableName);
-
-		this.displayName = clientinit.getDisplayName();
-	}
-	
 	/**
 	 * Initialize a client's environment from an instance of EnvironmentEntry.
 	 * 
@@ -117,15 +123,14 @@ public class LegacyBridgeClient implements Client, Drawer {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	private static Environment initClientEnv(final EnvironmentEntry ee, 
-												final String controllableName) 
+	private static Environment initClientEnv(final EnvironmentEntry ee) 
 		throws InstantiationException, IllegalAccessException 
 	{
 		Class<?> envclass = ee.getEnvironmentClass();
 		System.out.print("Instantiating client environment ("
 				+ envclass.getCanonicalName() + ")...");
 		Environment env = ee.getEnvironmentClass().newInstance();
-		env.setControllableName(controllableName);
+		
 		System.out.println("Done");
 
 		File envconfig = ee.getConfiguration();
@@ -146,15 +151,13 @@ public class LegacyBridgeClient implements Client, Drawer {
 	 * @throws InstantiationException
 	 * @throws IllegalAccessException
 	 */
-	private static Agent initClientAgent(final AgentEntry ae, 
-											final String controllableName) 
+	private static Agent initClientAgent(final AgentEntry ae) 
 		throws InstantiationException, IllegalAccessException
 	{
 		Class<?> aclass = ae.getAgentClass();
 		System.out.print("Instantiating client agent ("
 				+ aclass.getCanonicalName() + ")...");
 		Agent agent = ae.getAgentClass().newInstance();
-		agent.setControllableName(controllableName);
 		System.out.println("Done");
 
 		File aconfig = ae.getConfiguration();
@@ -189,10 +192,7 @@ public class LegacyBridgeClient implements Client, Drawer {
 		return this.displayName;
 	}
 
-	public void initialize(File config) {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 	public void loadData(File data) {
 		// TODO Auto-generated method stub
