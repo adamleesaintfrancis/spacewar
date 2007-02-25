@@ -1,10 +1,9 @@
-package edu.ou.mlfw.config;
+package edu.ou.mlfw.deprecated;
 
 import java.io.File;
 
 import com.thoughtworks.xstream.XStream;
 
-import edu.ou.mlfw.Agent;
 
 /**
  * An AgentEntry is a helper class for a ClientInitializer.  It stores the 

@@ -1,8 +1,9 @@
-package edu.ou.mlfw;
+package edu.ou.mlfw.deprecated;
 
+import java.io.File;
 import java.util.Set;
 
-import edu.ou.utils.Initializable;
+import edu.ou.mlfw.*;
 
 /**
  * An implementation of Environment acts as a transformation layer between a 
@@ -31,7 +32,7 @@ import edu.ou.utils.Initializable;
  * this method should be understandable by an instance of the simulator's
  * controllable.    
  */
-public interface Environment extends Initializable {
+public interface Environment {
 	/**
 	 * setControllableName is called when a Controllable is paired with 
 	 * a client.  This name may be used to retrieve the client's controllable
@@ -47,4 +48,6 @@ public interface Environment extends Initializable {
 	State getAgentState(State state);
 	Set<Action> getAgentActions(Set<Action> legalActions);
 	Action getControllableAction(Action aa);
+
+	void initialize(File envconfig);
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 
 import edu.ou.spacewar.simulator.*;
 import edu.ou.mlfw.*;
+import edu.ou.mlfw.deprecated.Environment;
 import edu.ou.utils.*;
 import edu.ou.spacewar.*;
 import edu.ou.spacewar.objects.immutables.*;
