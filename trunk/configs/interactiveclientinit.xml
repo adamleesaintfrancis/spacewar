@@ -1,0 +1,6 @@
+<ClientInitializer>
+  <clientClass>edu.ou.spacewar.mlfw.agents.HumanClient</clientClass>
+  <!--<configuration>./clientinit.xml</configuration>-->
+  <!--<data>./knowledge.txt</data>-->
+  <displayName>Human</displayName>
+</ClientInitializer>
