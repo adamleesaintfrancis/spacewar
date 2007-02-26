@@ -7,7 +7,7 @@ import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 import edu.ou.mlfw.config.*;
 import edu.ou.mlfw.exceptions.*;
@@ -32,7 +32,6 @@ public class World {
 	// format of an XStream-serialized WorldConfiguration object.
 	public static final String DEFAULT_CONFIG = "worldconfig.xml";
 
-	private final JComponent gui;
 	private final Simulator simulator;
 	private final Map<String, Client> mappings;
 
@@ -52,7 +51,7 @@ public class World {
 	 * @throws UnboundAgentException
 	 * @throws UnboundControllableException
 	 */
-	public World(final WorldConfiguration worldconfig, final boolean showGUI)
+	public World(final WorldConfiguration worldconfig)
 		throws InstantiationException, IllegalAccessException,
 			NameCollisionException, UnboundAgentException,
 			UnboundControllableException, ClassNotFoundException,
@@ -107,29 +106,6 @@ public class World {
 		// set instance variables
 		this.simulator = simulator;
 		this.mappings = mappings;
-		this.gui = showGUI ? simulator.getGUI() : null;
-
-		// start gui if necessary
-		if (this.gui != null) {
-			// a set to hold any key listeners that any human agents might 
-			// define these are only added if running in gui mode.
-			final Set<KeyListener> keylisteners = new HashSet<KeyListener>();
-			
-			try {
-				javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
-					public void run() {
-						Viewer viewer = new Viewer(gui);
-						for (KeyListener kl : keylisteners) {
-							viewer.addKeyListener(kl);
-						}
-					}
-				});
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	/**
@@ -155,31 +131,72 @@ public class World {
 	 * Finally, if the gui is enabled, we draw the game state.
 	 */
 	public void run() {
-		
 		while (simulator.isRunning()) {
 			step(0.0333f, true);
-
-			if (this.gui != null) {
-				for (Client c : mappings.values()) {
-					if (c instanceof Drawer) {
-						handleDrawer((Drawer) c);
-					}
-				}
-
-				this.gui.repaint();
-				try {
-					Thread.sleep(33);// ~30 fps
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 	
+	public void runGUI() {
+		final JComponent gui = this.simulator.getGUI();
+		// a set to hold any key listeners that any human agents might 
+		// define these are only added if running in gui mode.
+		final Set<KeyListener> keylisteners = new HashSet<KeyListener>();
+		for(Client c : this.mappings.values()) {
+			if (c instanceof InteractiveClient) {
+				System.out.println("Adding interactive client for " + 
+						c.getDisplayName());
+				keylisteners.add(((InteractiveClient)c).getKeyListener());
+			}
+		}
+			
+		try {
+			javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
+				public void run() {
+					Viewer viewer = new Viewer(gui);
+					for (KeyListener kl : keylisteners) {
+						viewer.addKeyListener(kl);
+					}
+				}
+			});
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			while (simulator.isRunning()) {
+				SwingUtilities.invokeAndWait(new Runnable() {
+					public void run() {
+						step(0.0333f, true);
+						for (Client c : mappings.values()) {
+							if (c instanceof Drawer) {
+								handleDrawer(gui, (Drawer) c);
+							}
+						}
+					}
+				});
+				gui.repaint();
+				SwingUtilities.invokeAndWait(new Runnable() {
+					public void run() {
+						try {
+							Thread.sleep(33);// ~30 fps
+						} catch(InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}	
+	
 	/**
-	 * Step through the simulator a single step.  This includes the requests to
-	 * the clients, the 
-	 *
+	 * Step through the simulator a single step. 
+	 * 
 	 */
 	private void step(float simulatedSeconds, boolean updateAgents) {
 		State state = simulator.getState();	
@@ -224,19 +241,22 @@ public class World {
 	 *  
 	 * @param d A Drawer object.
 	 */
-	private void handleDrawer(Drawer d) {
-		d.updateGraphics(this.gui.getGraphics());
-		if (this.gui instanceof Shadow2DCanvas) {
+	private void handleDrawer(final JComponent gui, final Drawer d) {
+//		System.out.println("isEventDispatchThread:" + 
+//				SwingUtilities.isEventDispatchThread());
+		
+		d.updateGraphics(gui.getGraphics());
+		if (gui instanceof Shadow2DCanvas) {
 			Set<Shadow2D> toregister = d.registerShadows();
 			if (toregister != null) {
 				for (Shadow2D s : toregister) {
-					((Shadow2DCanvas) (this.gui)).addShadow(s);
+					((Shadow2DCanvas) (gui)).addShadow(s);
 				}
 			}
 			Set<Shadow2D> tounregister = d.unregisterShadows();
 			if (tounregister != null) {
 				for (Shadow2D s : tounregister) {
-					((Shadow2DCanvas) (this.gui)).removeShadow(s);
+					((Shadow2DCanvas) (gui)).removeShadow(s);
 				}
 			}
 		}
@@ -276,10 +296,14 @@ public class World {
 				= WorldConfiguration.fromXMLFile(arguments.configLocation);
 			System.out.println("Done");
 			System.out.println("Initializing World: ");
-			World world = new World(worldconfig, arguments.gui);
+			World world = new World(worldconfig);
 			System.out.println("World initialized");
 			System.out.println("Starting simulation");
-			world.run();
+			if(arguments.gui) {
+				world.runGUI();
+			} else {
+				world.run();
+			}
 			System.out.println("Simulation completed successfully");
 		} catch (Exception e) {
 			e.printStackTrace();

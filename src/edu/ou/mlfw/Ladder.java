@@ -51,7 +51,7 @@ public class Ladder {
 				WorldConfiguration worldconfig = new WorldConfiguration(simulatorInitializerFile, a);
 				List<Record> recordTemp = null;
 				try{
-					World world = new World(worldconfig, false);
+					World world = new World(worldconfig);
 					world.run();
 					recordTemp = world.getRecords();
 				}

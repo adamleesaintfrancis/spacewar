@@ -3,7 +3,8 @@
   <mappingInformation>
     <ClientMappingEntry>
       <controllableName>Me</controllableName>
-      <clientInitializerFile>newstyle_clientinit_bridge.xml</clientInitializerFile>
+      <!--<clientInitializerFile>newstyle_clientinit_bridge.xml</clientInitializerFile>-->
+      <clientInitializerFile>interactiveclientinit.xml</clientInitializerFile>
     </ClientMappingEntry>
   </mappingInformation>
 </WorldConfiguration>
