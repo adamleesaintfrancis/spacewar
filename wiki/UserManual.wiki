@@ -10,7 +10,7 @@ Spacewar is actually two projects:
 
 1.)  A simple framework for writing simulators and clients for artificial intelligence algorithms, along with utilities for adding graphics, reporting on client performance, and running tournaments among many clients. 
 
-2.)  An implemented simulator, Spacewar, that allows students to take control of a small spaceship navigating around moving asteroids and other hostile ships.  
+2.)  An implemented simulator, Spacewar, that allows students to take control of a small spaceship navigating around moving asteroids and other hostile ships.  This spaceship can be controlled by both humans but, more importantly for classwork, it can be controlled by writing intelligent controllers.
 
 Each component uses simple XML-based configuration to control its behavior.
 
