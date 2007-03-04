@@ -5,6 +5,7 @@ import java.io.File;
 
 import edu.ou.mlfw.*;
 import edu.ou.spacewar.objects.ShipCommand;
+import edu.ou.spacewar.objects.immutables.ImmutableShip;
 
 public class HumanClient implements InteractiveClient, KeyListener {
 	private static final long serialVersionUID = 1L;
@@ -63,10 +64,13 @@ public class HumanClient implements InteractiveClient, KeyListener {
 	}
 	
 	public Action startAction(State state, Controllable controllable) {
-		// TODO: is this called from the same thread as the key listener?
-		// if so, we either need to get everything into the same thread,
-		// or we need to do our sychronization, or we need to verify that we
-		// really don't care.
+		//am i dead?
+		if( controllable.getState() instanceof ImmutableShip ) {
+			ImmutableShip s = (ImmutableShip)(controllable.getState());
+			if (!s.isAlive()) {
+				//System.out.println("Dead ship!");
+			}
+		}
 		return ShipCommand.fromByte(this.shipCommandAsByte);
 	}
 

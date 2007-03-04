@@ -1,8 +1,10 @@
-package edu.ou.mlfw.deprecated;
+package edu.ou.mlfw.config;
 
 import java.io.File;
 
 import com.thoughtworks.xstream.XStream;
+
+import edu.ou.mlfw.Environment;
 
 
 /**

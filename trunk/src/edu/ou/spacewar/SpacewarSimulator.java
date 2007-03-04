@@ -65,7 +65,7 @@ public class SpacewarSimulator implements Simulator {
 	
 	public Collection<Controllable> getControllables() {
 		//only ships are controllable
-		Ship[] ships = this.game.getLive(Ship.class);
+		Ship[] ships = this.game.getAll(Ship.class);
 		Collection<Controllable> out 
 			= new ArrayList<Controllable>(ships.length);		
 		for(Ship s : ships) {

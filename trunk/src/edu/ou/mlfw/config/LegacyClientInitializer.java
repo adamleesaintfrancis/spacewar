@@ -1,8 +1,10 @@
-package edu.ou.mlfw.deprecated;
+package edu.ou.mlfw.config;
 
 import java.io.*;
 
 import com.thoughtworks.xstream.XStream;
+
+import edu.ou.mlfw.*;
 
 /**
  * A LegacyClientInitializer is the means by which a LegacyClientBridge finds, 

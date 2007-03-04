@@ -31,7 +31,7 @@ public class ImmutableSpacewarState implements State {
      */
     public ImmutableSpacewarState(SpacewarGame swg) {
         //get all the ships
-        Ship[] swgships = swg.getLive(Ship.class);
+        Ship[] swgships = swg.getAll(Ship.class);
         ships = new ImmutableShip[swgships.length];
         for(int i = 0;i < swgships.length; i++) {
             ships[i] = new ImmutableShip(swgships[i]);

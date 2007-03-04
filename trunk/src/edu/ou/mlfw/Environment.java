@@ -1,9 +1,7 @@
-package edu.ou.mlfw.deprecated;
+package edu.ou.mlfw;
 
 import java.io.File;
 import java.util.Set;
-
-import edu.ou.mlfw.*;
 
 /**
  * An implementation of Environment acts as a transformation layer between a 

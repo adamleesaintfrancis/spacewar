@@ -5,7 +5,6 @@ import java.io.File;
 import java.util.*;
 
 import edu.ou.mlfw.*;
-import edu.ou.mlfw.deprecated.Agent;
 import edu.ou.mlfw.gui.*;
 import edu.ou.spacewar.ImmutableSpacewarState;
 import edu.ou.spacewar.objects.ShipNavigationActions;
@@ -26,7 +25,6 @@ private LineShadow oldLineShadow;
 private boolean makeNewLine = false;
 private Vector2D startPosition;
 private Vector2D lineVec;
-
 
 /**
  * The agent receives the current state (which should be cast to ImmutableSpacewarState 

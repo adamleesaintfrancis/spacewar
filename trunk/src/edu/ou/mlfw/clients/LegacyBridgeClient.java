@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.*;
 
 import edu.ou.mlfw.*;
-import edu.ou.mlfw.deprecated.*;
+import edu.ou.mlfw.config.*;
 import edu.ou.mlfw.gui.*;
 
 /**

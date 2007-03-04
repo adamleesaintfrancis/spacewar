@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Set;
 
 import edu.ou.mlfw.*;
-import edu.ou.mlfw.deprecated.Environment;
 
 public class PassThroughEnvironment implements Environment {
 	public Set<Action> getAgentActions(Set<Action> legalActions) {
