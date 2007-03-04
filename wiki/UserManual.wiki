@@ -1,5 +1,4 @@
 #summary A short user manual for both students and educators.
-#labels Featured
 
 = Introduction =
 
