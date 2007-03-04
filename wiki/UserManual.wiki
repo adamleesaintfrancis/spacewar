@@ -5,3 +5,18 @@
 This manual is under construction.  It will be ready for the SIGCSE open source release on March 8, 2007.
 
 = Details =
+
+Spacewar is actually two projects:
+
+1.)  A simple framework for writing simulators and clients for artificial intelligence algorithms, along with utilities for adding graphics, reporting on client performance, and running tournaments among many clients. 
+
+2.)  An implemented simulator, Spacewar, that allows students to take control of a small spaceship navigating around moving asteroids and other hostile ships.  
+
+Each component uses simple XML-based configuration to control its behavior.
+
+= The Machine Learning / Artificial Intelligence Framework = 
+
+The main class in the framework is the World class.  A World instance is responsible for driving a simulator, and for joining controllable objects exposed by the simulator with clients that control them. 
+
+
+ 
