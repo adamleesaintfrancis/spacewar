@@ -26,10 +26,6 @@ The spacewar simulator is currently in use by the Introduction to Artificial Int
   * Evolutionary computation clients that also learn to intelligently choose among a set of high-level actions
   * STRIPS-style planning agents that are able to intelligently play Capture the flag where they must coordinate actions within a multi-agent team
 
+= Getting started = 
 
-
- 
-
-
-
-
+Since the spacewar simulator package can be used both for the implemented asteroids-style gaming environment and for other simulation environments, you might wonder where to start.  The best way to start is to download the current source, build the system using the build.xml file, and run it.  The default client is a human-controlled ship that will simply sit there until you start it moving.  You can control it using the keyboard arrow and space keys.  To get started on writing your own intelligent agent, we suggest that you look at the included random and high-level random agents.  Although these agents are not intelligent at all, they give a starting point on how to construct your own agent.  
