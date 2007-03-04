@@ -18,5 +18,14 @@ Each component uses simple XML-based configuration to control its behavior.
 
 The main class in the framework is the World class.  A World instance is responsible for driving a simulator, and for joining controllable objects exposed by the simulator with clients that control them. 
 
+= The implemented simulator = 
+
+The spacewar simulator is currently in use by the Introduction to Artificial Intelligence class at the University of Oklahoma.  The spacewar simulator has been used for both the Spring 2006 and Spring 2007 classes and will be used in the future.  It is general enough that our projects have included:
+  * Astar clients for intelligent navigation
+  * Reinforcement learning clients that learn to intelligently choose among a set of high-level actions to control each ship
+  * Evolutionary computation clients that also learn to intelligently choose among a set of high-level actions
+  * STRIPS-style planning agents that are able to intelligently play Capture the flag where they must coordinate actions within a multi-agent team
+
+
 
  
