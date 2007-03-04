@@ -17,9 +17,9 @@ import edu.ou.mlfw.gui.*;
  * World is where a Simulator, that simulator's Controllables, and a set of 
  * Clients are all brought together, and an instance of the simulator is 
  * run.  The initialization process is largely driven by a World configuration 
- * file or object that points to a Simulator configuration, the various Client 
- * configurations, and specifies how clients are paired with Controllables.  
- * The actual simulator run is controlled by a central run loop.
+ * file or object that points to a Simulator configuration and the various 
+ * Client configurations, and specifies how clients are paired with 
+ * Controllables.  
  * 
  * This class also provides control for the gui if disply is desired by the 
  * user.
@@ -36,7 +36,7 @@ public class World {
 	private final Map<String, Client> mappings;
 
 	/**
-	 * Initialize the simulator, initialize each agent, and bind each
+	 * Initialize the simulator, initialize each client, and bind each
 	 * controllable to its client. Throws an exception if either a controllable
 	 * is initialized without a matching client, or an agent is initialized
 	 * without a matching controllable. If a controllable/agent pair is given
@@ -132,7 +132,8 @@ public class World {
 	 */
 	public void run() {
 		while (simulator.isRunning()) {
-			step(0.0333f, true);
+			step(0.0333f, true);  //TODO:  how should update rate be decided?
+								  //       hardcoding is badhi	
 		}
 	}
 	

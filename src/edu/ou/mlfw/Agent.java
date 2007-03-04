@@ -1,9 +1,7 @@
-package edu.ou.mlfw.deprecated;
+package edu.ou.mlfw;
 
 import java.io.File;
 import java.util.Set;
-
-import edu.ou.mlfw.*;
 
 /**
  * Agent defines the methods that are needed for a generic agent.  The agent is

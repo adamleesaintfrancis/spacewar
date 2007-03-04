@@ -56,7 +56,7 @@ public abstract class ImmutableObject2D {
      *
      * @return A boolean indicating life status.
      */
-    public final boolean getAlive() {
+    public final boolean isAlive() {
         return alive;
     }
 
