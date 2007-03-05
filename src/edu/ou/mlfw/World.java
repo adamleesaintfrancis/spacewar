@@ -135,6 +135,7 @@ public class World {
 			step(0.0333f, true);  //TODO:  how should update rate be decided?
 								  //       hardcoding is badhi	
 		}
+		this.shutdown();
 	}
 	
 	public void runGUI() {
@@ -193,6 +194,7 @@ public class World {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
+		this.shutdown();
 	}	
 	
 	/**
@@ -232,6 +234,16 @@ public class World {
 			Client client = mappings.get(cntrl.getName());
 			client.endAction(state, cntrl);
 		}
+	}
+	
+	/**
+	 * Shutdown the simulator and all the clients.
+	 */
+	private void shutdown() {
+		for(Client c : this.mappings.values()) {
+			c.shutdown();
+		}
+		this.simulator.shutdown();
 	}
 	
 	/**

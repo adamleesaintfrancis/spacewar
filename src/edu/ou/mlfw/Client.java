@@ -18,6 +18,7 @@ public interface Client
 	
 	public void initialize(File config);
 	public void loadData(File data);
+	public void shutdown();
 	
 	public String getDisplayName();
 }

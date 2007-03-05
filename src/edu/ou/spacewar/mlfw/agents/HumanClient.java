@@ -89,4 +89,9 @@ public class HumanClient implements InteractiveClient, KeyListener {
 	public void loadData(File data) {
 		// do nothing
 	}
+
+	public void shutdown() {
+		// do nothing
+		
+	}
 }

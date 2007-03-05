@@ -48,4 +48,5 @@ public interface Environment {
 	Action getControllableAction(Action aa);
 
 	void initialize(File envconfig);
+	void shutdown();
 }

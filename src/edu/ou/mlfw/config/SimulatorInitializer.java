@@ -72,7 +72,7 @@ public class SimulatorInitializer {
 				System.out.println("initialize called!");
 			}
 
-			public void shutdown(OutputStream config) {
+			public void shutdown() {
 				System.out.println("shutdown called!");
 			}
 

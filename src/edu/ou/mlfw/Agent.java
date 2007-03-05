@@ -46,4 +46,5 @@ public interface Agent {
 	void endAction(State state);
 
 	void initialize(File agentconfig);
+	void shutdown();
 }

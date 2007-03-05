@@ -89,10 +89,8 @@ public class SpacewarSimulator implements Simulator {
 		return out;
 	}
 	
-	public void shutdown(OutputStream config) {
+	public void shutdown() {
 		// TODO: game stats get collected here?
-		// TODO: rethink this interface: why would shutdown need to write back to config? 
-		
 	}
 
 	public JComponent getGUI() {
