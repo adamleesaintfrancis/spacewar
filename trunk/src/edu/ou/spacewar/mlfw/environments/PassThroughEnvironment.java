@@ -25,4 +25,8 @@ public class PassThroughEnvironment implements Environment {
 	public void setControllableName(String name) {
 		//do nothing
 	}
+
+	public void shutdown() {
+		// do nothing
+	}
 }

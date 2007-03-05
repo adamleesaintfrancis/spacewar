@@ -199,6 +199,11 @@ public class LegacyBridgeClient implements Client, Drawer {
 		
 	}
 
+	public void shutdown() {
+		this.agent.shutdown();
+		this.env.shutdown();
+	}
+
 	
 	
 }

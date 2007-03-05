@@ -28,5 +28,9 @@ public class RandomAgent implements Agent {
 	public void setControllableName(String name) {
 		// random agent, do nothing.
 	}
+
+	public void shutdown() {
+		// do nothing
+	}
 	
 }

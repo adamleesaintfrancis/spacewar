@@ -23,7 +23,7 @@ import javax.swing.JComponent;
 public interface Simulator 
 {
 	void initialize(File configfile);
-	void shutdown(OutputStream config);  
+	void shutdown();  
 	
 	boolean isRunning();
 	void advance(float seconds);
