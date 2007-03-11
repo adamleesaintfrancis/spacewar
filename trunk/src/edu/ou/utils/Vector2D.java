@@ -33,6 +33,15 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
     }
 
     /**
+     * Create a new vector from an old one;
+     */
+    public Vector2D(Vector2D b){
+    	this.x = b.x;
+    	this.y = b.y;
+    	this.magnitude = b.magnitude;
+    }
+    
+    /**
      * Create the zero vector
      */
     public Vector2D() {

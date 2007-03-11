@@ -145,8 +145,23 @@ public class ShipRecord extends Record {
 	
 	@Override
 	public String toCSV() {
-		// TODO Auto-generated method stub
-		return null;
+		return new String(displayName + "," +
+				Integer.toString(rank) + "," +
+				Integer.toString(totalGames) + "," +
+				Float.toString(avgBeacons)+ "," +
+				Integer.toString(totalBeacons) + "," +
+				Float.toString(avgDeaths)+ "," +
+				Integer.toString(totalDeaths) + "," +
+				Float.toString(avgKills)+ "," +
+				Integer.toString(totalKills) + "," +
+				Float.toString(avgHits)+ "," +
+				Integer.toString(totalHits) + "," +
+				Float.toString(avgShotsFired)+ "," +
+				Integer.toString(totalShotsFired) + "," +
+				Float.toString(avgFlags)+ "," +
+				Integer.toString(totalFlags) + "," +
+				Float.toString(avgCPUTime)+ "," +
+				Long.toString(totalCPUTime) + ",");
 	}
 
 	@Override
@@ -175,7 +190,23 @@ public class ShipRecord extends Record {
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return null;
+		return new String(displayName + "," +
+				Integer.toString(rank) + "," +
+				Integer.toString(totalGames) + "," +
+				Float.toString(avgBeacons)+ "," +
+				Integer.toString(totalBeacons) + "," +
+				Float.toString(avgDeaths)+ "," +
+				Integer.toString(totalDeaths) + "," +
+				Float.toString(avgKills)+ "," +
+				Integer.toString(totalKills) + "," +
+				Float.toString(avgHits)+ "," +
+				Integer.toString(totalHits) + "," +
+				Float.toString(avgShotsFired)+ "," +
+				Integer.toString(totalShotsFired) + "," +
+				Float.toString(avgFlags)+ "," +
+				Integer.toString(totalFlags) + "," +
+				Float.toString(avgCPUTime)+ "," +
+				Long.toString(totalCPUTime) + ",");
 	}
 
 	@Override
@@ -248,4 +279,8 @@ public class ShipRecord extends Record {
 	public long getTotalCPUTime(){
 		return totalCPUTime;
 	}
+	
+	public int hashCode() {
+        return displayName.hashCode();
+    }
 }
