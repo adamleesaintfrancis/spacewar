@@ -90,9 +90,9 @@ public class Ladder {
 							r.setDisplayName(new String("displayName not set"));
 						}
 						if(records.contains(r)){
-							logger.debug("r = " + r.getDisplayName() + "\n");
+							logger.trace("r = " + r.getDisplayName() + "\n");
 							for(Record r2: records){
-								logger.debug("r2 = " + r2.getDisplayName() + "\n");
+								logger.trace("r2 = " + r2.getDisplayName() + "\n");
 								if(r2.equals(r)){
 									r2.addRecord(r);
 									break;
