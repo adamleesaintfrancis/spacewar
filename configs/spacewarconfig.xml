@@ -3,19 +3,17 @@
   <width>800.0</width>
   <height>600.0</height>
   <numberOfShips>1</numberOfShips>
-  <numberOfObstacles>1</numberOfObstacles>
-  <numberOfBeacons>0</numberOfBeacons>
+  <numberOfObstacles>15</numberOfObstacles>
+  <numberOfBeacons>3</numberOfBeacons>
   <numberOfFlags>0</numberOfFlags>
   <numberOfBases>0</numberOfBases>
   <numberOfTeams>0</numberOfTeams>
   <timeLimit>300.0</timeLimit>
   <ships>
     <ShipInformation>
-      <name>Test</name>
+      <name>Me</name>
       <team>0</team>
-      <autoPlacement>false</autoPlacement>
-      <positionX>400.0</positionX>
-      <positionY>400.0</positionY>
+      <autoPlacement>true</autoPlacement>
       <velocityX>0.0</velocityX>
       <velocityY>0.0</velocityY>
       <orientedX>0.0</orientedX>
@@ -24,7 +22,128 @@
       <isControllable>true</isControllable>
     </ShipInformation>
   </ships>
-  <obstacles/>
+  <obstacles>
+    <ObstacleInformation>
+      <name>Asteriod01</name>
+      <radius>50</radius>
+      <positionX>40</positionX>
+      <positionY>100</positionY>
+      <velocityX>2</velocityX>
+      <velocityY>2</velocityY>      
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod02</name>
+      <radius>25</radius>
+      <positionX>400</positionX>
+      <positionY>600</positionY>
+      <velocityX>-2</velocityX>
+      <velocityY>-2</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod03</name>
+      <radius>25</radius>
+      <positionX>600</positionX>
+      <positionY>400</positionY>
+      <velocityX>-2</velocityX>
+      <velocityY>2</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod04</name>
+      <radius>12</radius>
+      <positionX>200</positionX>
+      <positionY>100</positionY>
+      <velocityX>15</velocityX>
+      <velocityY>-15</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod05</name>
+      <radius>12</radius>
+      <positionX>700</positionX>
+      <positionY>400</positionY>
+      <velocityX>20</velocityX>
+      <velocityY>4</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod06</name>
+      <radius>12</radius>
+      <positionX>200</positionX>
+      <positionY>500</positionY>
+      <velocityX>7</velocityX>
+      <velocityY>-2</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod07</name>
+      <radius>12</radius>
+      <positionX>300</positionX>
+      <positionY>400</positionY>
+      <velocityX>2</velocityX>
+      <velocityY>0.0</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod08</name>
+      <radius>30</radius>
+      <positionX>250</positionX>
+      <positionY>300</positionY>
+      <velocityX>15</velocityX>
+      <velocityY>-15</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod09</name>
+      <radius>12</radius>
+      <positionX>550</positionX>
+      <positionY>300</positionY>
+      <velocityX>20</velocityX>
+      <velocityY>16</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod10</name>
+      <radius>50</radius>
+      <positionX>700</positionX>
+      <positionY>550</positionY>
+      <velocityX>7</velocityX>
+      <velocityY>-30</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod11</name>
+      <radius>12</radius>
+      <positionX>500</positionX>
+      <positionY>650</positionY>
+      <velocityX>16</velocityX>
+      <velocityY>12</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod12</name>
+      <radius>12</radius>
+      <positionX>300</positionX>
+      <positionY>450</positionY>
+      <velocityX>20</velocityX>
+      <velocityY>-15</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod13</name>
+      <radius>12</radius>
+      <positionX>650</positionX>
+      <positionY>300</positionY>
+      <velocityX>20</velocityX>
+      <velocityY>15</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod14</name>
+      <radius>12</radius>
+      <positionX>250</positionX>
+      <positionY>100</positionY>
+      <velocityX>7</velocityX>
+      <velocityY>-8</velocityY>
+    </ObstacleInformation>
+    <ObstacleInformation>
+      <name>Asteriod15</name>
+      <radius>30</radius>
+      <positionX>550</positionX>
+      <positionY>700</positionY>
+      <velocityX>10</velocityX>
+      <velocityY>0.0</velocityY>
+    </ObstacleInformation>
+  </obstacles>
   <beacons/>
   <flags/>
   <bases/>
