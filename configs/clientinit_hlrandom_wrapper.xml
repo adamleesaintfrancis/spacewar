@@ -1,0 +1,6 @@
+<ClientInitializer>
+  <clientClass>edu.ou.mlfw.clients.LegacyBridgeClient</clientClass>
+  <configuration>./clientinit.xml</configuration>
+  <!--<data>./knowledge.txt</data>-->
+  <displayName>Bridged!</displayName>
+</ClientInitializer>
