@@ -15,6 +15,7 @@
     <pathelement location="./lib/xstream.jar"/>
     <pathelement location="./lib/xpp3.jar"/>
     <pathelement location="./lib/jargs.jar"/>
+	<pathelement location="./lib/log4j-1.2.14.jar"/>
 </path>
 
 <target name="init">
@@ -56,7 +57,7 @@
     <jar jarfile="${dist}/main.jar">
         <manifest>
             <attribute name="Main-class" value="edu.ou.mlfw.World"/>
-            <attribute name="Class-path" value="lib/utils.jar lib/spacewar.jar lib/mlfw.jar lib/xpp3.jar lib/xstream.jar lib/jargs.jar lib/useragent.jar ."/>
+            <attribute name="Class-path" value="lib/utils.jar lib/spacewar.jar lib/mlfw.jar lib/xpp3.jar lib/xstream.jar lib/jargs.jar lib/log4j-1.2.14.jar lib/useragent.jar ."/>
         </manifest>
     </jar>
     <copy todir="${dist}">
@@ -65,6 +66,7 @@
     <copy file="lib/xstream.jar" tofile="${dist}/lib/xstream.jar"/>
     <copy file="lib/xpp3.jar" tofile="${dist}/lib/xpp3.jar"/>
     <copy file="lib/jargs.jar" tofile="${dist}/lib/jargs.jar"/>
+	<copy file="lib/log4j-1.2.14.jar" tofile="${dist}/lib/log4j-1.2.14.jar"/>
 </target>
 <target name="dist" depends="separated">
 </target>
@@ -80,6 +82,19 @@
     	<jvmarg value="-Djava.awt.headless=true"/>
     </java>
 </target>
+
+<target name="ladder-run" depends="separated">
+	<jar jarfile="${dist}/ladder.jar">
+	        <manifest>
+	            <attribute name="Main-class" value="edu.ou.mlfw.Ladder"/>
+	            <attribute name="Class-path" value="lib/utils.jar lib/spacewar.jar lib/mlfw.jar lib/xpp3.jar lib/xstream.jar lib/jargs.jar lib/log4j-1.2.14.jar lib/useragent.jar ."/>
+	        </manifest>
+	 </jar>
+	 <java jar="${dist}/ladder.jar" fork="true" dir="${dist}">
+	   	<jvmarg value="-Djava.awt.headless=true"/>
+	 	<jvmarg value="-Xmx256M"/>
+	 </java>
+</target>	
 	
 <target name="gui" depends="separated">
     <java jar="${dist}/main.jar" fork="true" dir="${dist}">
