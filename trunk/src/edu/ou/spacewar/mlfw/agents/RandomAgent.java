@@ -25,6 +25,10 @@ public class RandomAgent implements Agent {
 		//no configuration necessary
 	}
 
+	public void loadData(File datafile) {
+		// do nothing
+	}
+	
 	public void setControllableName(String name) {
 		// random agent, do nothing.
 	}

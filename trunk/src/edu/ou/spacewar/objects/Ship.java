@@ -1,11 +1,13 @@
 package edu.ou.spacewar.objects;
 
 
+import java.util.Random;
 import java.util.Stack;
 
 import edu.ou.mlfw.*;
 import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.SpacewarGame;
+import edu.ou.spacewar.exceptions.NoOpenPositionException;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
 import edu.ou.spacewar.objects.shadows.ShipShadow;
 import edu.ou.spacewar.simulator.Object2D;
@@ -71,12 +73,27 @@ public class Ship extends Object2D {
     public void reset() {
         super.reset();
 
+        findNewPosition();
         this.energy = MAX_ENERGY;
         this.flag = null;
         this.activeCommand = ShipCommand.DoNothing;
         this.fireDelay = 0;
     }
 
+    private void findNewPosition() {
+        while(true) {
+            try {
+                Random rand = ((SpacewarGame)space).getRandom();
+                setPosition(space.findOpenPosition(getRadius(), SpacewarGame.BUFFER_DIST, rand, SpacewarGame.ATTEMPTS));
+                break;
+            } catch(NoOpenPositionException e) {
+                e.printStackTrace();
+            }
+        }
+        setVelocity(Vector2D.ZERO_VECTOR);
+        setAlive(true);
+    }
+    
     public final void setActiveCommand(ShipCommand command) {
         if(command != null) {
             this.activeCommand = command;

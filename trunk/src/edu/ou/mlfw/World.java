@@ -342,8 +342,7 @@ public class World {
 		final CmdLineParser parser = new CmdLineParser();
 		final CmdLineParser.Option help = parser.addBooleanOption('h', "help");
 		final CmdLineParser.Option gui = parser.addBooleanOption('g', "gui");
-		final CmdLineParser.Option config = parser.addStringOption('c',
-				"config");
+		final CmdLineParser.Option config = parser.addStringOption('c',	"config");
 
 		try {
 			parser.parse(args);

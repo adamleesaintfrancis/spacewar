@@ -388,7 +388,8 @@ public final class SpacewarGame extends Space {
         }
         if( isRunning() ) {
         	while(!respawnQ.isEmpty() && respawnQ.peek().t <= getTimestamp()) {
-        		respawnQ.poll().obj.reset();
+        		Object2D respawn = respawnQ.poll().obj;
+        		respawn.reset();
         	}
         	super.advanceTime(timestep);
         }
