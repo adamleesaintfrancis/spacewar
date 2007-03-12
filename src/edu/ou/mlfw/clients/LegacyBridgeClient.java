@@ -169,6 +169,12 @@ public class LegacyBridgeClient implements Client, Drawer {
 				+ aconfig.getAbsolutePath() + ")...\n");
 		agent.initialize(aconfig);
 		logger.info("Done\n");
+		
+		File adata = ae.getKnowledge();
+		logger.info("Loading agent knowledge ("
+				+ adata.getAbsolutePath() + ")...\n");
+		agent.loadData(adata);
+		logger.info("Done\n");
 		return agent;
 	}
 	

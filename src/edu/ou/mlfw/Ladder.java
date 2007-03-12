@@ -31,6 +31,7 @@ public class Ladder {
 	private final int numMatchRepeats;
 	private final ClientMappingEntry[] variableClientMappingInformation;
 	private final ClientMappingEntry[] staticClientMappingInformation;
+	private static boolean gui = false;
 	private List<Record> records;
 	
 	public Ladder(LadderConfiguration ladderconfig){
@@ -57,7 +58,12 @@ public class Ladder {
 				List<Record> recordTemp = null;
 				try{
 					World world = new World(worldconfig);
-					world.run();
+					if(gui){
+						world.runGUI();
+					}
+					else{
+						world.run();
+					}
 					recordTemp = world.getRecords();
 				}
 				catch(java.lang.ClassNotFoundException e){
@@ -84,9 +90,12 @@ public class Ladder {
 							r.setDisplayName(new String("displayName not set"));
 						}
 						if(records.contains(r)){
+							logger.debug("r = " + r.getDisplayName() + "\n");
 							for(Record r2: records){
+								logger.debug("r2 = " + r2.getDisplayName() + "\n");
 								if(r2.equals(r)){
 									r2.addRecord(r);
+									break;
 								}
 							}
 						}
@@ -145,7 +154,7 @@ public class Ladder {
 	public static void main(String[] args){
 		BasicConfigurator.configure();
 
-		Logger.getRootLogger().setLevel(Level.INFO);
+		Logger.getRootLogger().setLevel(Level.DEBUG);
 		Arguments arguments = parseArgs(args);
 		logger.info("Loading ladder configuration...\n");
 		try {
@@ -178,6 +187,7 @@ public class Ladder {
 	{
 		final CmdLineParser parser = new CmdLineParser();
         final CmdLineParser.Option help   = parser.addBooleanOption('h', "help");
+        final CmdLineParser.Option gui = parser.addBooleanOption('g', "gui");
         final CmdLineParser.Option config = parser.addStringOption('c', "config");
         
         try {
@@ -189,6 +199,10 @@ public class Ladder {
         if (parser.getOptionValue(help) != null) {
             exit("Displaying help");  //exit prints the help string.
         }
+        
+        
+        Ladder.gui = (Boolean) parser.getOptionValue(gui, false);
+        
         
         //store the file indicated by the config argument, or the default 
         //location if the config argument is not specified.
@@ -244,14 +258,21 @@ public class Ladder {
      */
     public static void exit(String exitMessage) {
         logger.error(
-        	exitMessage + "\n\n" +
-        	"Usage: SpacewarSim [-h] [-g] [-c /path/to/configfile] \n\n" +
-        		"-h display this help screen and exit.\n\n" +
+        	exitMessage + "\n\n"
+        		+"Usage: SpacewarSim [-h] [-g] [-c /path/to/configfile] \n\n"
+        		+
+        	
+        		"-h display this help screen and exit.\n\n"
+        		+
 
-        		"-c indicates the path to the ladder configuration file.\n" +
-        		"   If -c is not set, the program will attempt to find\n" +
-        		"   and load \"" + DEFAULT_CONFIG + "\" in the working " +
-        		"   directory.\n\n"
+        		"-g indicates the gui should be shown.  If this flag\n"
+				+ "   is not set, the program will run in graphical mode.\n\n"
+				+
+        		
+        		"-c indicates the path to the ladder configuration file.\n"
+        		+"   If -c is not set, the program will attempt to find\n"
+        		+"   and load \"" + DEFAULT_CONFIG + "\" in the working "
+        		+"   directory.\n\n"
         );
         System.exit(-1);
     }

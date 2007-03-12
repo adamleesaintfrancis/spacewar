@@ -121,6 +121,18 @@ public abstract class Object2D {
      * Soft reset returns the object to its starting position and sets it back
      * to its starting life condition...
      */
+    public void reset(Vector2D pos) {
+        assert(initialized);
+        this.alive = this.startalive;
+        this.orientation = this.startorientation;
+        this.position = pos;
+        this.velocity = this.startvelocity;
+    }
+    
+    /**
+     * Soft reset returns the object to its starting position and sets it back
+     * to its starting life condition...
+     */
     public void reset() {
         assert(initialized);
         this.alive = this.startalive;

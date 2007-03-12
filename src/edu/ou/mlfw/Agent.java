@@ -45,6 +45,21 @@ public interface Agent {
 	 */
 	void endAction(State state);
 
+	/**
+	 * initialize() is call as part of agent setup. It is used to pass a configuration
+	 * file to the agent.
+	 * 
+	 * @param agentconfig
+	 */
 	void initialize(File agentconfig);
+	
+	/**
+	 * loadData() is called after initialize as part of agent setup. It is used
+	 * to pass "knowledge" or other forms of stored previous state information.
+	 * 
+	 * @param agentdata
+	 */
+	void loadData(File agentdata);
+	
 	void shutdown();
 }

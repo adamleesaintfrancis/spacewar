@@ -21,6 +21,7 @@ public class HighLevelEnvironment implements Environment {
   private ImmutableSpacewarState envState = null;
   // Store the current action being executed over multiple timesteps
   private ShipNavigationActions currentAction = null;
+  private String myName;
   
   /**
    * This receives the set of legal actions from the world. For us, 
@@ -79,7 +80,7 @@ public class HighLevelEnvironment implements Environment {
      * Here we assume only one ship, and that it is ours. Later we will use 
      * attributes of the ships to identify which we are able to control.
      */
-    ImmutableShip myShip = state.getShips()[0];
+    ImmutableShip myShip = findMyShip(state);
     Vector2D currentPosition = myShip.getPosition();
     Vector2D pathToGoal = Space.findShortestDistance(currentPosition, goalPosition, state.getWidth(), state.getHeight());
  
@@ -162,11 +163,23 @@ public class HighLevelEnvironment implements Environment {
 
 
 	public void setControllableName(String name) {
-		// nothing needs to be done here...
+		myName = name;
 	}
 
 
 	public void shutdown() {
 		// do nothing
+	}
+	
+	private ImmutableShip findMyShip(ImmutableSpacewarState state){
+		if(myName == null){
+			return null;
+		}
+		for(ImmutableShip s: state.getShips()){
+			if(s.getName().equals(myName)){
+				return s;
+			}
+		}
+		return null;
 	}
 }
