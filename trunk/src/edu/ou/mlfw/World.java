@@ -308,21 +308,21 @@ public class World {
 
 		Logger.getRootLogger().setLevel(Level.INFO);
 		Arguments arguments = parseArgs(args);
-		System.out.print("Loading world configuration...");
+		logger.info("Loading world configuration...\n");
 		try {
 			WorldConfiguration worldconfig 
 				= WorldConfiguration.fromXMLFile(arguments.configLocation);
-			System.out.println("Done");
-			System.out.println("Initializing World: ");
+			logger.info("Done\n");
+			logger.info("Initializing World: \n");
 			World world = new World(worldconfig);
-			System.out.println("World initialized");
-			System.out.println("Starting simulation");
+			logger.info("World initialized\n");
+			logger.info("Starting simulation\n");
 			if(arguments.gui) {
 				world.runGUI();
 			} else {
 				world.run();
 			}
-			System.out.println("Simulation completed successfully");
+			logger.info("Simulation completed successfully\n");
 		} catch (Exception e) {
 			e.printStackTrace();
 			exit("Error instantiating World");
