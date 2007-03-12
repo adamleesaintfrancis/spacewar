@@ -13,6 +13,8 @@ import edu.ou.mlfw.config.*;
 import edu.ou.mlfw.exceptions.*;
 import edu.ou.mlfw.gui.*;
 
+import org.apache.log4j.*;
+
 /**
  * World is where a Simulator, that simulator's Controllables, and a set of 
  * Clients are all brought together, and an instance of the simulator is 
@@ -25,7 +27,7 @@ import edu.ou.mlfw.gui.*;
  * user.
  */
 public class World {
-	//	TODO: Replace System.out.println with logging.
+	private static final Logger logger = Logger.getLogger(World.class);
 	
 	// By default, we want to look in the current working directory for this
 	// file in order to configure the world. This file should conform to the
@@ -57,15 +59,15 @@ public class World {
 			UnboundControllableException, ClassNotFoundException,
 			FileNotFoundException, IOException 
 	{
-		System.out.print("Initializing Simulator...");
+		logger.info("Initializing Simulator...\n");
 		final SimulatorInitializer siminit 
 			= SimulatorInitializer.fromXMLFile(
 					worldconfig.getSimulatorInitializerFile());		
 		final Simulator simulator = siminit.getSimulatorClass().newInstance();
 		simulator.initialize(siminit.getConfiguration());
-		System.out.println("Done");
+		logger.info("Done\n");
 
-		System.out.print("Extracting controllables...");
+		logger.info("Extracting controllables...\n");
 		final Set<String> controllables = new HashSet<String>();
 		for (final Controllable c : simulator.getControllables()) {
 			if (controllables.contains(c.getName())) {
@@ -74,9 +76,9 @@ public class World {
 			// Client will be associated later
 			controllables.add(c.getName());
 		}
-		System.out.println("Done");
+		logger.info("Done\n");
 
-		System.out.println("Initializing clients:");
+		logger.info("Initializing clients:\n");
 		final Map<String, Client> mappings = new HashMap<String, Client>();
 		for (final ClientMappingEntry mapping : 
 				worldconfig.getMappingInformation()) 
@@ -97,7 +99,7 @@ public class World {
 			controllables.remove(controllableName); 
 			mappings.put(controllableName, client);
 		}
-		System.out.println("Clients Initialized");
+		logger.info("Clients Initialized\n");
 
 		if (!controllables.isEmpty()) {
 			throw new UnboundControllableException();
@@ -145,8 +147,8 @@ public class World {
 		final Set<KeyListener> keylisteners = new HashSet<KeyListener>();
 		for(Client c : this.mappings.values()) {
 			if (c instanceof InteractiveClient) {
-				System.out.println("Adding interactive client for " + 
-						c.getDisplayName());
+				logger.info("Adding interactive client for " + 
+						c.getDisplayName() + "\n");
 				keylisteners.add(((InteractiveClient)c).getKeyListener());
 			}
 		}

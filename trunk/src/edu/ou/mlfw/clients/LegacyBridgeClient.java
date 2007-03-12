@@ -8,21 +8,25 @@ import edu.ou.mlfw.*;
 import edu.ou.mlfw.config.*;
 import edu.ou.mlfw.gui.*;
 
+import org.apache.log4j.*;
+
 /**
  * Lets old-style Environment/Agent pairs work without any changes.  This is 
  * basically a transfer of the old World code
  */
 public class LegacyBridgeClient implements Client, Drawer {
+	private static final Logger logger = Logger.getLogger(LegacyBridgeClient.class);
+	
 	private Environment env;
 	private Agent agent;
 	private String displayName;
 	
 	public void initialize(File config) {
 		try {
-			System.out.print("Loading ClientInitializer for " + config + "...");
+			logger.info("Loading ClientInitializer for " + config + "...\n");
 			final LegacyClientInitializer clientinit 
 				= LegacyClientInitializer.fromXMLFile(config);
-			System.out.println("Done");
+			logger.info("Done\n");
 
 			EnvironmentEntry ee = clientinit.getEnvironmentEntry();
 			this.env = initClientEnv(ee);
@@ -127,17 +131,17 @@ public class LegacyBridgeClient implements Client, Drawer {
 		throws InstantiationException, IllegalAccessException 
 	{
 		Class<?> envclass = ee.getEnvironmentClass();
-		System.out.print("Instantiating client environment ("
-				+ envclass.getCanonicalName() + ")...");
+		logger.info("Instantiating client environment ("
+				+ envclass.getCanonicalName() + ")...\n");
 		Environment env = ee.getEnvironmentClass().newInstance();
 		
-		System.out.println("Done");
+		logger.info("Done\n");
 
 		File envconfig = ee.getConfiguration();
-		System.out.print("Initializing client environment ("
-				+ envconfig.getAbsolutePath() + ")...");
+		logger.info("Initializing client environment ("
+				+ envconfig.getAbsolutePath() + ")...\n");
 		env.initialize(envconfig);
-		System.out.println("Done");
+		logger.info("Done\n");
 		return env;
 	}
 
@@ -155,16 +159,16 @@ public class LegacyBridgeClient implements Client, Drawer {
 		throws InstantiationException, IllegalAccessException
 	{
 		Class<?> aclass = ae.getAgentClass();
-		System.out.print("Instantiating client agent ("
-				+ aclass.getCanonicalName() + ")...");
+		logger.info("Instantiating client agent ("
+				+ aclass.getCanonicalName() + ")...\n");
 		Agent agent = ae.getAgentClass().newInstance();
-		System.out.println("Done");
+		logger.info("Done\n");
 
 		File aconfig = ae.getConfiguration();
-		System.out.print("Initializing client agent ("
-				+ aconfig.getAbsolutePath() + ")...");
+		logger.info("Initializing client agent ("
+				+ aconfig.getAbsolutePath() + ")...\n");
 		agent.initialize(aconfig);
-		System.out.println("Done");
+		logger.info("Done\n");
 		return agent;
 	}
 	
@@ -192,8 +196,6 @@ public class LegacyBridgeClient implements Client, Drawer {
 		return this.displayName;
 	}
 
-
-
 	public void loadData(File data) {
 		// TODO Auto-generated method stub
 		
@@ -202,8 +204,5 @@ public class LegacyBridgeClient implements Client, Drawer {
 	public void shutdown() {
 		this.agent.shutdown();
 		this.env.shutdown();
-	}
-
-	
-	
+	}	
 }
