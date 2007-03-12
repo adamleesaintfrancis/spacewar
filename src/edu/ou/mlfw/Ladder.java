@@ -14,11 +14,16 @@ import edu.ou.mlfw.config.LadderConfiguration;
 import edu.ou.mlfw.config.WorldConfiguration;
 import edu.ou.mlfw.Record;
 import edu.ou.mlfw.World;
+
 import jargs.gnu.CmdLineParser;
+
+import org.apache.log4j.*;
 
 public class Ladder {
 
 	public static final String DEFAULT_CONFIG = "ladderconfig.xml";
+
+	private static final Logger logger = Logger.getLogger(Ladder.class);
 	
 	private final File simulatorInitializerFile;
 	private final File outputHTML;
@@ -40,7 +45,7 @@ public class Ladder {
 	public void run() {
 		ClientMappingEntry[] a = new ClientMappingEntry[numVariableAgentsPerGame + staticClientMappingInformation.length];
 		for(int i = 0; i < staticClientMappingInformation.length; i++){
-			a[i+1] = staticClientMappingInformation[i];
+			a[i+numVariableAgentsPerGame] = staticClientMappingInformation[i];
 		}
 		//main ladder loop
 		for(int i = 0; i < variableClientMappingInformation.length; i++){
@@ -57,11 +62,11 @@ public class Ladder {
 				}
 				catch(java.lang.ClassNotFoundException e){
 					e.printStackTrace();
-					System.err.println("An agent required a class that could not be found");
+					logger.error("An agent required a class that could not be found");
 				}
 				catch(NullPointerException e){
 					e.printStackTrace();
-					System.err.println("An agent had a null pointer exception");
+					logger.error("An agent had a null pointer exception");
 				}
 				catch(Exception e){
 					e.printStackTrace();
@@ -139,20 +144,23 @@ public class Ladder {
 	
 	public static void main(String[] args) 
 	{
+		BasicConfigurator.configure();
+
+		Logger.getRootLogger().setLevel(Level.INFO);
 		Arguments arguments = parseArgs(args);
-		System.out.print("Loading ladder configuration...");
+		logger.info("Loading ladder configuration...\n");
 		try {
 			LadderConfiguration ladderconfig = (LadderConfiguration)fromXML(
 				LadderConfiguration.getXStream(),
 				arguments.configLocation);
-			System.out.println("Done");
-			System.out.println("Initializing Ladder: ");
+			logger.info("Done\n");
+			logger.info("Initializing Ladder: \n");
 			Ladder ladder = new Ladder(ladderconfig);
-			System.out.println("Ladder initialized");
-			System.out.println("Starting ladder");
+			logger.info("Ladder initialized\n");
+			logger.info("Starting ladder\n");
 			ladder.run();
 			ladder.writeHTML();
-			System.out.println("Ladder completed successfully");
+			logger.info("Ladder completed successfully\n");
 		} catch(Exception e) {
 			e.printStackTrace();
 			exit("Error instantiating Ladder");
@@ -236,7 +244,7 @@ public class Ladder {
      * Exits the program with usage instructions.
      */
     public static void exit(String exitMessage) {
-        System.out.println(
+        logger.error(
         	exitMessage + "\n\n" +
         	"Usage: SpacewarSim [-h] [-g] [-c /path/to/configfile] \n\n" +
         		"-h display this help screen and exit.\n\n" +
