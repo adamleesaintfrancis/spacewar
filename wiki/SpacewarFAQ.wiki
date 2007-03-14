@@ -21,9 +21,8 @@ Not at all, dive right in!  We are not currently using point releases; instead y
   # The team system is being completely overhauled, and is not currently in the codebase.  The design has been finalized, and the implementation will be in place very soon (as we are about to assign the team project!)
   # At the moment, we do not mark point releases, and are developing out of subversion.  This will change as we settle into maintenance mode!
   # Right now, statistics and reporting is done in a fairly ad hoc manner.  We're working on a way to make this more accessible, and to expose custom stats tracking for clients.
-  # Good practices: logging over println, regression tests, javadocs.
+  # Good practices: logging, regression and unit testing, javadocs.
   # Parallelization, and maybe distributed processing; these are fairly low priority at this point.
-
 
 
 
