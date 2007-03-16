@@ -1,12 +1,12 @@
 <ClientInitializer>
   <environmentEntry>
     <environmentClass>edu.ou.spacewar.mlfw.environments.PassThroughEnvironment</environmentClass>
-    <configuration>env1.xml</configuration>
+    <configuration/>
   </environmentEntry>
   <agentEntry>
     <agentClass>edu.ou.spacewar.mlfw.agents.RandomAgent</agentClass>
-    <configuration>agent1.xml</configuration>
-    <knowledge>knowledge.txt</knowledge>
+    <configuration/>
+    <knowledge/>
   </agentEntry>
   <displayName>Random Agent</displayName>
 </ClientInitializer>
