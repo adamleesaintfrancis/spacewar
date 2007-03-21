@@ -5,21 +5,30 @@
   <numMatchRepeats>1</numMatchRepeats>
   <variableClientMappingInformation>
     <ClientMappingEntry>
-      <controllableName>Test</controllableName>
-      <clientInitializerFile>clientinit.xml</clientInitializerFile>
+      <controllableName>Player</controllableName>
+      <clientInitializerFile>newstyle_clientinit_bridge.xml</clientInitializerFile>
     </ClientMappingEntry>
     <ClientMappingEntry>
-      <controllableName>Test</controllableName>
-      <clientInitializerFile>clientinit.xml</clientInitializerFile>
+      <controllableName>Player</controllableName>
+      <clientInitializerFile>newstyle_clientinit_bridge.xml</clientInitializerFile>
     </ClientMappingEntry>
     <ClientMappingEntry>
-      <controllableName>Test</controllableName>
-      <clientInitializerFile>clientinit.xml</clientInitializerFile>
+      <controllableName>Player</controllableName>
+      <clientInitializerFile>newstyle_clientinit_bridge.xml</clientInitializerFile>
     </ClientMappingEntry>
     <ClientMappingEntry>
-      <controllableName>Test</controllableName>
-      <clientInitializerFile>clientinit.xml</clientInitializerFile>
+      <controllableName>Player</controllableName>
+      <clientInitializerFile>newstyle_clientinit_bridge.xml</clientInitializerFile>
     </ClientMappingEntry>
   </variableClientMappingInformation>
-  <staticClientMappingInformation/>
+  <staticClientMappingInformation>
+    <ClientMappingEntry>
+      <controllableName>HLRandom</controllableName>
+      <clientInitializerFile>clientinit_hlrandom_wrapper.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Random</controllableName>
+      <clientInitializerFile>clientinit_random_wrapper.xml</clientInitializerFile>
+    </ClientMappingEntry>
+  </staticClientMappingInformation>
 </LadderConfiguration>

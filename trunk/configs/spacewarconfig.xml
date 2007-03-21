@@ -2,7 +2,7 @@
   <seed>0</seed>
   <width>800.0</width>
   <height>600.0</height>
-  <numberOfShips>1</numberOfShips>
+  <numberOfShips>3</numberOfShips>
   <numberOfObstacles>15</numberOfObstacles>
   <numberOfBeacons>3</numberOfBeacons>
   <numberOfFlags>0</numberOfFlags>
@@ -11,7 +11,29 @@
   <timeLimit>300.0</timeLimit>
   <ships>
     <ShipInformation>
-      <name>Me</name>
+      <name>Player0</name>
+      <team>0</team>
+      <autoPlacement>true</autoPlacement>
+      <velocityX>0.0</velocityX>
+      <velocityY>0.0</velocityY>
+      <orientedX>0.0</orientedX>
+      <orientedY>0.0</orientedY>
+      <agentRecord>true</agentRecord>
+      <isControllable>true</isControllable>
+    </ShipInformation>
+    <ShipInformation>
+      <name>HLRandom</name>
+      <team>0</team>
+      <autoPlacement>true</autoPlacement>
+      <velocityX>0.0</velocityX>
+      <velocityY>0.0</velocityY>
+      <orientedX>0.0</orientedX>
+      <orientedY>0.0</orientedY>
+      <agentRecord>true</agentRecord>
+      <isControllable>true</isControllable>
+    </ShipInformation>
+    <ShipInformation>
+      <name>Random</name>
       <team>0</team>
       <autoPlacement>true</autoPlacement>
       <velocityX>0.0</velocityX>
