@@ -85,6 +85,7 @@ public class World {
 		{
 			final String controllableName = mapping.getControllableName();
 			if (!controllables.contains(controllableName)) {
+				logger.debug(controllableName);
 				throw new UnboundAgentException();
 			}
 			final NewClientInitializer clientinit 
