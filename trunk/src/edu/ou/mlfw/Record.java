@@ -1,6 +1,7 @@
 package edu.ou.mlfw;
 
 public abstract class Record implements Comparable<Record> {
+	protected static int sortMethod = 0;
 	protected String displayName;
 	protected int rank;
 	
@@ -40,6 +41,10 @@ public abstract class Record implements Comparable<Record> {
 		else{
 			return false;
 		}
+	}
+	
+	public static void setSortMethod(int sMethod){
+		sortMethod = sMethod;
 	}
 	
 	public abstract String toString();

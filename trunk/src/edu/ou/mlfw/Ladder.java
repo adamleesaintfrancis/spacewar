@@ -45,13 +45,25 @@ public class Ladder {
 	
 	public void run() {
 		ClientMappingEntry[] a = new ClientMappingEntry[numVariableAgentsPerGame + staticClientMappingInformation.length];
+		
+		//Assign static clients
 		for(int i = 0; i < staticClientMappingInformation.length; i++){
 			a[i+numVariableAgentsPerGame] = staticClientMappingInformation[i];
 		}
+		
+		int agentsPerGame = numVariableAgentsPerGame;
+		if(agentsPerGame > variableClientMappingInformation.length){
+			agentsPerGame = variableClientMappingInformation.length;
+		}
+		
+		CombinationGenerator matchGen = new CombinationGenerator(variableClientMappingInformation.length, agentsPerGame);
 		//main ladder loop
-		for(int i = 0; i < variableClientMappingInformation.length; i++){
-			for(int j = 0; j < numVariableAgentsPerGame; j++){
-				a[j] = variableClientMappingInformation[i+j];
+		while(matchGen.hasMore()){
+			int matches[] = matchGen.getNext(); 
+			for(int j = 0; j < matches.length; j++){
+				ClientMappingEntry clientTemp = variableClientMappingInformation[matches[j]]; 
+				a[j] = new ClientMappingEntry(clientTemp.getControllableName()+j, clientTemp.getClientInitializerFile());
+				logger.debug(a[j].getControllableName());
 			}
 			for(int k = 0; k < numMatchRepeats; k++){
 				WorldConfiguration worldconfig = new WorldConfiguration(simulatorInitializerFile, a);
@@ -118,6 +130,7 @@ public class Ladder {
 			exit("Error opening output file");
 		}
 		try{
+			Record.setSortMethod(1);
 			Collections.sort(records);
 			for(int i = 0; i < records.size(); i++){
 				records.get(i).setRank(i+1);
