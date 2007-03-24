@@ -27,11 +27,10 @@
 <target name="compile" depends="init"> 
     <javac srcdir="${src}" destdir="${build}" debug="on" debuglevel="lines,vars,source">
         <classpath refid="spacewar.classpath"/>
+    	<compilerarg value="-Xlint"/>
 	<src refid="spacewar.sourcepath"/>
     </javac>
-    <copy todir="${build}">    
-    	<fileset file="${src}/log4j.properties"/>
-    </copy>
+    <copy file="${src}/log4j.properties" todir="${build}"/>    
 </target>
 <target name="combined" depends="compile">
     <unzip dest="${build}">
