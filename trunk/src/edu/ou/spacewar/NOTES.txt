@@ -1,0 +1,18 @@
+General todos, miscellany, and etc.
+
++ indicates that this line item is a todo
+* indicates that it has been completed
+# indicates a comment
+
+# The merge continues, with a priority on bringing in the class code since that is the code
+  that's written up in the SIGCSE paper.  
++ Refactor items into a more sensible package structure, with edu.ou as root.  This structure
+  should reflect the basic functionality of the individual components.  I see this as breaking
+  down into the following:
+  - Basic generic utilities that could see broad reuse in a variety of places (not Spacewar specific)
+  - The basic physics of the Spacewar simulator
+  - The different types of objects that populate the Spacewar world
+  - The immutable counterparts to the object types (that are sent to the ai clients)
+  - The spacewar GUI backend
+  - The GUI components counterpart for each object type
+  - The ai infrastructure
