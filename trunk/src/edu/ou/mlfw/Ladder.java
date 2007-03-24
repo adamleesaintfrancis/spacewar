@@ -33,6 +33,7 @@ public class Ladder {
 	private final ClientMappingEntry[] staticClientMappingInformation;
 	private static boolean gui = false;
 	private List<Record> records;
+	private int gameCnt = 0;
 	
 	public Ladder(LadderConfiguration ladderconfig){
 		this.simulatorInitializerFile = ladderconfig.getSimulatorInitializerFile();
@@ -59,6 +60,8 @@ public class Ladder {
 		CombinationGenerator matchGen = new CombinationGenerator(variableClientMappingInformation.length, agentsPerGame);
 		//main ladder loop
 		while(matchGen.hasMore()){
+			gameCnt++;
+			logger.info("Starting game " + gameCnt);
 			int matches[] = matchGen.getNext(); 
 			for(int j = 0; j < matches.length; j++){
 				ClientMappingEntry clientTemp = variableClientMappingInformation[matches[j]]; 
@@ -68,6 +71,7 @@ public class Ladder {
 			for(int k = 0; k < numMatchRepeats; k++){
 				WorldConfiguration worldconfig = new WorldConfiguration(simulatorInitializerFile, a);
 				List<Record> recordTemp = null;
+				long gameStartTime = new Date().getTime();
 				try{
 					World world = new World(worldconfig);
 					if(gui){
@@ -90,6 +94,8 @@ public class Ladder {
 					e.printStackTrace();
 					//exit("Error instantiating World");
 				}
+				long gameTimeElapsed = new Date().getTime() - gameStartTime;
+				logger.info("Game " + gameCnt + " took " + gameTimeElapsed/60000 + " minutes.\n");
 				if(records == null){
 					records = recordTemp;
 				}
