@@ -60,8 +60,6 @@ public class Ladder {
 		CombinationGenerator matchGen = new CombinationGenerator(variableClientMappingInformation.length, agentsPerGame);
 		//main ladder loop
 		while(matchGen.hasMore()){
-			gameCnt++;
-			logger.info("Starting game " + gameCnt);
 			int matches[] = matchGen.getNext(); 
 			for(int j = 0; j < matches.length; j++){
 				ClientMappingEntry clientTemp = variableClientMappingInformation[matches[j]]; 
@@ -69,6 +67,8 @@ public class Ladder {
 				logger.info(a[j].getControllableName() + ": " + a[j].getClientInitializerFile());
 			}
 			for(int k = 0; k < numMatchRepeats; k++){
+				gameCnt++;
+				logger.info("Starting game " + gameCnt);
 				WorldConfiguration worldconfig = new WorldConfiguration(simulatorInitializerFile, a);
 				List<Record> recordTemp = null;
 				long gameStartTime = new Date().getTime();
