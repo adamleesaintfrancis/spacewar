@@ -59,15 +59,15 @@ public class World {
 			UnboundControllableException, ClassNotFoundException,
 			FileNotFoundException, IOException 
 	{
-		logger.info("Initializing Simulator...\n");
+		logger.debug("Initializing Simulator...\n");
 		final SimulatorInitializer siminit 
 			= SimulatorInitializer.fromXMLFile(
 					worldconfig.getSimulatorInitializerFile());		
 		final Simulator simulator = siminit.getSimulatorClass().newInstance();
 		simulator.initialize(siminit.getConfiguration());
-		logger.info("Done\n");
+		logger.debug("Done\n");
 
-		logger.info("Extracting controllables...\n");
+		logger.debug("Extracting controllables...\n");
 		final Set<String> controllables = new HashSet<String>();
 		for (final Controllable c : simulator.getControllables()) {
 			if (controllables.contains(c.getName())) {
@@ -76,9 +76,9 @@ public class World {
 			// Client will be associated later
 			controllables.add(c.getName());
 		}
-		logger.info("Done\n");
+		logger.debug("Done\n");
 
-		logger.info("Initializing clients:\n");
+		logger.debug("Initializing clients:\n");
 		final Map<String, Client> mappings = new HashMap<String, Client>();
 		for (final ClientMappingEntry mapping : 
 				worldconfig.getMappingInformation()) 
@@ -100,7 +100,7 @@ public class World {
 			controllables.remove(controllableName); 
 			mappings.put(controllableName, client);
 		}
-		logger.info("Clients Initialized\n");
+		logger.debug("Clients Initialized\n");
 
 		if (!controllables.isEmpty()) {
 			throw new UnboundControllableException();
@@ -148,7 +148,7 @@ public class World {
 		final Set<KeyListener> keylisteners = new HashSet<KeyListener>();
 		for(Client c : this.mappings.values()) {
 			if (c instanceof InteractiveClient) {
-				logger.info("Adding interactive client for " + 
+				logger.debug("Adding interactive client for " + 
 						c.getDisplayName() + "\n");
 				keylisteners.add(((InteractiveClient)c).getKeyListener());
 			}
@@ -313,10 +313,10 @@ public class World {
 		try {
 			WorldConfiguration worldconfig 
 				= WorldConfiguration.fromXMLFile(arguments.configLocation);
-			logger.info("Done\n");
+			logger.debug("Done\n");
 			logger.info("Initializing World: \n");
 			World world = new World(worldconfig);
-			logger.info("World initialized\n");
+			logger.debug("World initialized\n");
 			logger.info("Starting simulation\n");
 			if(arguments.gui) {
 				world.runGUI();
@@ -386,7 +386,7 @@ public class World {
 	 * Exits the program with usage instructions.
 	 */
 	public static void exit(String exitMessage) {
-		System.out.println(exitMessage + "\n\n"
+		logger.error(exitMessage + "\n\n"
 				+ "Usage: SpacewarSim [-h] [-g] [-c /path/to/configfile] \n\n"
 				+ "-h display this help screen and exit.\n\n" +
 
