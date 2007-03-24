@@ -143,18 +143,7 @@ public class Ladder {
 					out.write("\n");
 				}
 				out.write((((ArrayList<Record>) records).get(0)).getHTMLFooter());
-			
-				GregorianCalendar calendar = new GregorianCalendar();
-				out.write("<p>Ladder updated as of ");
-				out.write(Integer.toString(calendar.get(Calendar.MONTH)+1) + "/" + 
-						Integer.toString(calendar.get(Calendar.DATE)) + "/" + 
-						Integer.toString(calendar.get(Calendar.YEAR)));
-				out.write(" at ");
-				out.write(Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + 
-						Integer.toString(calendar.get(Calendar.MINUTE)) + ":" + 
-						Integer.toString(calendar.get(Calendar.SECOND)) + " " + 
-						TimeZone.getDefault().getDisplayName() + "</p>");
-				out.write("</body>\n");
+				out.write("\n");
 			}
 			out.close();
 		}
@@ -165,19 +154,16 @@ public class Ladder {
 	}
 	
 	public static void main(String[] args){
-		BasicConfigurator.configure();
-
-		Logger.getRootLogger().setLevel(Level.DEBUG);
 		Arguments arguments = parseArgs(args);
 		logger.info("Loading ladder configuration...\n");
 		try {
 			LadderConfiguration ladderconfig = (LadderConfiguration)fromXML(
 				LadderConfiguration.getXStream(),
 				arguments.configLocation);
-			logger.info("Done\n");
+			logger.debug("Done\n");
 			logger.info("Initializing Ladder: \n");
 			Ladder ladder = new Ladder(ladderconfig);
-			logger.info("Ladder initialized\n");
+			logger.debug("Ladder initialized\n");
 			logger.info("Starting ladder\n");
 			ladder.run();
 			ladder.writeHTML();

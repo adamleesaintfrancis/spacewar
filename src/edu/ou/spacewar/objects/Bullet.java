@@ -7,8 +7,8 @@ import edu.ou.spacewar.simulator.Object2D;
 public class Bullet extends Object2D {
     public static final float BULLET_RADIUS = 2;
     public static final float BULLET_MASS = 1000;
-    public static final int   BULLET_LIFETIME = 3;
-    public static final float BULLET_VELOCITY = 150f;
+    public static final int   BULLET_LIFETIME = 2;
+    public static final float BULLET_VELOCITY = 225f;
 
     private final Ship ship;
 

@@ -2,6 +2,9 @@ package edu.ou.spacewar.objects;
 
 import edu.ou.mlfw.Record;
 import java.lang.ClassCastException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class ShipRecord extends Record {
 	private float avgBeacons;
@@ -186,7 +189,18 @@ public class ShipRecord extends Record {
 
 	@Override
 	public String getHTMLFooter(){
-		return new String("</table>" + "\n");
+		GregorianCalendar calendar = new GregorianCalendar();
+		return new String("</table>" + "\n" +
+				"<p>Ladder updated as of " +
+				Integer.toString(calendar.get(Calendar.MONTH)+1) + "/" + 
+				Integer.toString(calendar.get(Calendar.DATE)) + "/" + 
+				Integer.toString(calendar.get(Calendar.YEAR)) +
+				" at "+
+				Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + ":" + 
+				Integer.toString(calendar.get(Calendar.MINUTE)) + ":" + 
+				Integer.toString(calendar.get(Calendar.SECOND)) + " " + 
+				TimeZone.getDefault().getDisplayName() + "</p>" +
+		"</body>\n");
 	}
 
 	@Override
