@@ -94,8 +94,9 @@ public class Ladder {
 					e.printStackTrace();
 					//exit("Error instantiating World");
 				}
-				long gameTimeElapsed = new Date().getTime() - gameStartTime;
-				logger.info("Game " + gameCnt + " took " + gameTimeElapsed/60000 + " minutes.\n");
+				float gameTimeElapsed = (new Date().getTime() - gameStartTime);
+				gameTimeElapsed /= 60000.0f;
+				logger.info("Game " + gameCnt + " took " + gameTimeElapsed + " minutes.\n");
 				if(records == null){
 					records = recordTemp;
 				}
