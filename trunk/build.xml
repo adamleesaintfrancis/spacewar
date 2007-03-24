@@ -29,6 +29,9 @@
         <classpath refid="spacewar.classpath"/>
 	<src refid="spacewar.sourcepath"/>
     </javac>
+    <copy todir="${build}">    
+    	<fileset file="${src}/log4j.properties"/>
+    </copy>
 </target>
 <target name="combined" depends="compile">
     <unzip dest="${build}">
