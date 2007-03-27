@@ -305,9 +305,6 @@ public class World {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		BasicConfigurator.configure();
-
-		Logger.getRootLogger().setLevel(Level.INFO);
 		Arguments arguments = parseArgs(args);
 		logger.info("Loading world configuration...\n");
 		try {
