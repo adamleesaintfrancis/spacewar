@@ -100,7 +100,8 @@ public class LadderServer {
 					GameResult result = (GameResult)mesg;
 					List<Record> recordTemp = result.getRecords();					
 					addRecords(recordTemp);
-					logger.info("Game " + result.getGameID() + " took " + result.getGameRunTime() + " seconds.");
+					float tmp = result.getGameRunTime()/60000.0f;
+					logger.info("Game " + result.getGameID() + " took " + tmp + " minutes.");
 					currentGames.remove(socket.getInetAddress());
 				}
 				else{
@@ -167,6 +168,8 @@ public class LadderServer {
 				GameResult result = (GameResult)mesg;
 				List<Record> recordTemp = result.getRecords();					
 				addRecords(recordTemp);
+				float tmp = result.getGameRunTime()/60000.0f;
+				logger.info("Game " + result.getGameID() + " took " + tmp + " minutes.");
 				currentGames.remove(socket.getInetAddress());
 			}
 			else{
