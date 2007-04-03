@@ -12,8 +12,6 @@ import com.thoughtworks.xstream.XStream;
 import edu.ou.mlfw.config.ClientMappingEntry;
 import edu.ou.mlfw.config.LadderConfiguration;
 import edu.ou.mlfw.config.WorldConfiguration;
-import edu.ou.mlfw.Record;
-import edu.ou.mlfw.World;
 
 import jargs.gnu.CmdLineParser;
 
