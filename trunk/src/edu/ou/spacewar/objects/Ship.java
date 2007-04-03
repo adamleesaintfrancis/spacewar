@@ -27,8 +27,8 @@ public class Ship extends Object2D {
     public static final int FLAG_COST = 100;
     public static final float COLLISION_RATE = 2.0f;
 
-    public static final int MAX_AMMO = 5;
-    public static final float FIRE_DELAY = 1f / 2;
+    public static final int MAX_AMMO = 10;
+    public static final float FIRE_DELAY = 1f / 4;
     public static final float THRUST_ACCELERATION = 80;
     public static final float TURN_SPEED = (float) (150 * Math.PI / 180);
 
