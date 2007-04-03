@@ -100,10 +100,19 @@ public class LadderServer {
 					GameResult result = (GameResult)mesg;
 					List<Record> recordTemp = result.getRecords();					
 					addRecords(recordTemp);
+					logger.info("Game " + result.getGameID() + " took " + result.getGameRunTime() + " seconds.");
 					currentGames.remove(socket.getInetAddress());
 				}
 				else{
 					logger.error("Unknown message recieved");
+					try{
+						socket.close();
+					}
+					catch(Exception e){
+						logger.error("Unable to close socket.");
+					}
+					k--;
+					continue;
 					//error condition					
 				}
 				
