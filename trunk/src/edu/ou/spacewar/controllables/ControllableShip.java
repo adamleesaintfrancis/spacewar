@@ -1,8 +1,9 @@
-package edu.ou.spacewar.objects;
+package edu.ou.spacewar.controllables;
 
 import java.util.*;
 
 import edu.ou.mlfw.*;
+import edu.ou.spacewar.objects.ShipCommand;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
 
 /**

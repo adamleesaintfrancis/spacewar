@@ -17,7 +17,8 @@ public class Flag extends Object2D {
     public static final float FLAG_RADIUS = 10;
     public static final float FLAG_MASS = 100000;
 
-    int team, posc;
+    int posc;
+    String team;
     Vector2D[] startpositions;
 
     public Flag(Space space, int id) {
@@ -28,11 +29,11 @@ public class Flag extends Object2D {
         return new FlagShadow(this);
     }
 
-    public void setTeam(int team) {
+    public void setTeam(String team) {
         this.team = team;
     }
 
-    public int getTeam() {
+    public String getTeam() {
         return this.team;
     }
 

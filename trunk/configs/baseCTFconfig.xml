@@ -1,101 +1,86 @@
 <SpacewarConfiguration>
-	<!-- This file is probably no longer valid; however, we should keep it 
-		 around for now as reference for a future similar config. -->
-
     <!--Specify the random seed (used for replay abilities)-->
     <seed>1</seed>
 
     <!--Specify the dimensions of the SpacewarGame-->
     <width>800.0</width>
     <height>600.0</height>
+    
+    <!-- Specify the duration of the game -->
+    <timeLimit>300.0</timeLimit>
 
-    <!--Specify the max initial starting speed for any ships or obstacles-->
-    <maxInitialSpeed>30.0</maxInitialSpeed>
-
-    <!--Specify the number of teams that will be in the environment-->
-    <numberOfTeams>2</numberOfTeams>
-
-    <!--Manually specify the parameters of each team-->
-    <teams>
-        <TeamInformation>
-            <name>Team1</name>
-            <isControllable>true</isControllable>
-        </TeamInformation>
-        <TeamInformation>
-            <name>Team2</name>
-         	<isControllable>false</Controllable>
-        </TeamInformation>
-    </teams>
-
-    <!--Manually specify any specific ships that are wanted in the environment.
-        Note that any fields left unitialized will default to 0.  An agentClass
-        must be specified for each manually added ship.  Also, specify whether
-        or not the agent's data should be recorded (if recording is available).
-    <ships>
-        <ShipInformation>
-            <name>Red1</name>
-            <team>1</team>
-            <positionX>300.0</positionX>
-            <positionY>250.0</positionY>
-            <orientedX>-1.0</orientedX>
-            <orientedY>0.0</orientedY>
-            <agentClass>OurSpacewarAgent</agentClass>					
-            <agentRecord>false</agentRecord>
-        </ShipInformation>
+	<teams>
+  		<TeamInformation>
+  			<name>Team1</name>
+  			<isControllable>true</isControllable>
+  		</TeamInformation>
+  		<TeamInformation>
+  			<name>Team2</name>  	  	
+  			<isControllable>true</isControllable>
+  		</TeamInformation>
+  	</teams>
+  	<ships>
+     	   <ShipInformation>
+        	    <name>Red1</name>
+           		<team>Team1</team>
+            	<positionX>300.0</positionX>
+            	<positionY>250.0</positionY>
+            	<orientedX>-1.0</orientedX>
+            	<orientedY>0.0</orientedY>
+            	<agentRecord>false</agentRecord>
+            	<isControllable>false</isControllable>
+        	</ShipInformation>
         <ShipInformation>
             <name>Red2</name>
-            <team>1</team>
+            <team>Team1</team>
             <positionX>300.0</positionX>
             <positionY>300.0</positionY>
             <orientedX>-1.0</orientedX>
             <orientedY>0.0</orientedY>
-            <agentClass>OurSpacewarAgent</agentClass>
+            <isControllable>false</isControllable>
             <agentRecord>false</agentRecord>
         </ShipInformation>
         <ShipInformation>
             <name>Red3</name>
-            <team>1</team>
+            <team>Team1</team>
             <positionX>300.0</positionX>
             <positionY>350.0</positionY>
             <orientedX>-1.0</orientedX>
             <orientedY>0.0</orientedY>
-            <agentClass>OurSpacewarAgent</agentClass>
+            <isControllable>false</isControllable>
             <agentRecord>false</agentRecord>
         </ShipInformation>
         <ShipInformation>
             <name>Blue1</name>
-            <team>2</team>
+            <team>Team2</team>
             <positionX>500.0</positionX>
             <positionY>250.0</positionY>
             <orientedX>1.0</orientedX>
             <orientedY>0.0</orientedY>
-            <agentClass>OurSpacewarAgent</agentClass>
             <agentRecord>false</agentRecord>
+            <isControllable>false</isControllable>
         </ShipInformation>
         <ShipInformation>
             <name>Blue2</name>
-            <team>2</team>
+            <team>Team2</team>
             <positionX>500.0</positionX>
             <positionY>300.0</positionY>
             <orientedX>1.0</orientedX>
             <orientedY>0.0</orientedY>
-            <agentClass>OurSpacewarAgent</agentClass>
             <agentRecord>false</agentRecord>
+            <isControllable>false</isControllable>
         </ShipInformation>
         <ShipInformation>
             <name>Blue3</name>
-            <team>2</team>
+            <team>Team2</team>
             <positionX>500.0</positionX>
             <positionY>350.0</positionY>
             <orientedX>1.0</orientedX>
             <orientedY>0.0</orientedY>
-            <agentClass>OurSpacewarAgent</agentClass>
             <agentRecord>false</agentRecord>
+            <isControllable>false</isControllable>
         </ShipInformation>
     </ships>
-
-    <!--Specify the number of Obstacles that will be in the environment.-->
-    <numberOfObstacles>38</numberOfObstacles>
 
     <!--Manually specify any obstacles that are wanted in the environment.
         Note that any fields left unitialized will default to 0.
@@ -345,31 +330,14 @@
         </ObstacleInformation>
     </obstacles>
 
-    <!--Specify the number of Beacons that will be in the environment.-->
-    <numberOfBeacons>3</numberOfBeacons>
-
-    <!--Manually specify any beacons that are wanted in the environment.
-        Note that any fields left unitialized will default to 0.
-
-        If fewer than numberOfBeacons beacons are specified, then the
-        remaining beacons will be randomly placed under the constraints
-        given by preferredBuffer, minBuffer, and maxInitialSpeed-->
     <beacons>
     </beacons>
 
-    <!--Specify the number of Flags that will be in the environment.-->
-    <numberOfFlags>2</numberOfFlags>
-
-    <!--Manually specify any flags that are wanted in the environment.
-
-        If fewer than numberOfFlags flags are specified, then the
-        remaining flags will be randomly placed under the constraints
-        given by preferredBuffer and minBuffer, and will have only one
-        starting location -->
+    <!--Manually specify any flags that are wanted in the environment. -->
     <flags>
         <FlagInformation>
             <name>RedFlag</name>
-            <team>1</team>
+            <team>Team1</team>
             <startpos>
                 <float-array>
                     <float>180.0</float>
@@ -383,7 +351,7 @@
         </FlagInformation>
         <FlagInformation>
             <name>BlueFlag</name>
-            <team>2</team>
+            <team>Team2</team>
             <startpos>
                 <float-array>
                     <float>620.0</float>
@@ -397,28 +365,20 @@
         </FlagInformation>
     </flags>
 
-    <!--Specify the number of Bases that will be in the environment.-->
-    <numberOfBases>2</numberOfBases>
-
-    <!--Manually specify any bases that are wanted in the environment.
-
-        If fewer than numberOfBases bases are specified, then the
-        remaining bases will be randomly placed under the constraints
-        given by preferredBuffer and minBuffer -->
+    <!--Manually specify any bases that are wanted in the environment.-->
     <bases>
         <BaseInformation>
             <name>RedBase</name>
-            <team>1</team>
+            <team>Team1</team>
             <positionX>350.0</positionX>
             <positionY>300.0</positionY>
         </BaseInformation>
         <BaseInformation>
             <name>BlueBase</name>
-            <team>2</team>
+            <team>Team2</team>
             <positionX>450.0</positionX>
             <positionY>300.0</positionY>
         </BaseInformation>
     </bases>
-
-
 </SpacewarConfiguration>
+

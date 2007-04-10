@@ -11,7 +11,7 @@ import edu.ou.spacewar.objects.Base;
  */
 public class ImmutableBase extends ImmutableObject2D {
     public final int id;
-    public final int team;
+    public final String team;
 
     public ImmutableBase(Base base) {
         super(base);
@@ -33,7 +33,7 @@ public class ImmutableBase extends ImmutableObject2D {
      *
      * @return The team id.
      */
-    public final int getTeam() {
+    public final String getTeam() {
         return team;
     }
 

@@ -29,7 +29,18 @@ public interface Simulator
 	void advance(float seconds);
 
 	State getState();
+	
+	/**
+	 * Return the simulator's currently active controllables
+	 * @return
+	 */
 	Collection<Controllable> getControllables();
+	
+	/**
+	 * Return all of the simulator's controllables, even those that are not 
+	 * currently active.
+	 * @return
+	 */
 	Collection<Controllable> getAllControllables();
 	
 	JComponent getGUI();

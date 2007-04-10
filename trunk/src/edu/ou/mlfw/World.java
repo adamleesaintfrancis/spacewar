@@ -63,6 +63,7 @@ public class World {
 		final SimulatorInitializer siminit 
 			= SimulatorInitializer.fromXMLFile(
 					worldconfig.getSimulatorInitializerFile());		
+		logger.debug("Instantiating Simulator object...\n");
 		final Simulator simulator = siminit.getSimulatorClass().newInstance();
 		simulator.initialize(siminit.getConfiguration());
 		logger.debug("Done\n");

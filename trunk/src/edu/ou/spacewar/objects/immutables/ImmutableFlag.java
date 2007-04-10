@@ -13,7 +13,7 @@ import edu.ou.utils.Vector2D;
  */
 public class ImmutableFlag extends ImmutableObject2D {
     public final int id;
-    public final int team;
+    public final String team;
     public final Vector2D[] positions;
 
     public ImmutableFlag(Flag flag) {
@@ -61,7 +61,7 @@ public class ImmutableFlag extends ImmutableObject2D {
      *
      * @return The team id.
      */
-    public final int getTeam() {
+    public final String getTeam() {
         return team;
     }
 

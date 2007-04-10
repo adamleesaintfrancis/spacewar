@@ -13,14 +13,15 @@ import edu.ou.spacewar.simulator.*;
 import edu.ou.utils.Vector2D;
 
 /**
- * This is the main class for storing the information relevant to a game of Spacewar.  Instances of this class
- * are responsible for keeping track of the ships, obstacles, beacons, bullets, flags, and
- * bases associated with a given game.
+ * This is the main class for storing the information relevant to a game of 
+ * Spacewar.  Instances of this class are responsible for keeping track of the 
+ * ships, obstacles, beacons, bullets, flags, and bases associated with a given 
+ * game.
  * <p/>
- * The most useful public features of this class are the methods it provides for setting up a game scenario.  After a
- * SpacewarGame is instantiated, Ships, Obstacles, and Beacons can be added at specified positions, or the Game can
- * find open positions for these objects automatically.
- *
+ * The most useful public features of this class are the methods it provides 
+ * for setting up a game scenario.  After a SpacewarGame is instantiated, 
+ * Ships, Obstacles, and Beacons can be added at specified positions, or the 
+ * Game can find open positions for these objects automatically.
  */
 public final class SpacewarGame extends Space {
 	private static final Logger logger = Logger.getLogger(SpacewarGame.class);
@@ -30,6 +31,7 @@ public final class SpacewarGame extends Space {
 	private final long seed;
 	private final Random rand;
 	private final float timeLimit;
+	private final Collection<Team> teams;
 
 	static class Span {
 		public final int start, length;
@@ -58,22 +60,25 @@ public final class SpacewarGame extends Space {
 	/**
 	 * @param width The width of the space.
 	 * @param height The height of the space.
-	 * @param ships The total number of ships in the game.
-	 * @param obstacles The total number of obstacles in the game.
-	 * @param beacons The total number of beacons in the game.
+	 * @param bufferinfo A map from classes to the number of instances of those
+	 *                   classed that will be used in the game.
+	 * @param buffertotal The total number of objects (sum of bufferinfo)
+	 * @param timeLimit How long the game will run for. 
 	 */
 	public SpacewarGame(long seed,
 			float width,
 			float height,
 			Map<Class<? extends Object2D>, Integer> bufferinfo,
 			int buffertotal, //needed for call to super()
-	float timeLimit) {
+			float timeLimit)
+	{
 		super(width, height, new SpacewarCollisionHandler(), buffertotal);
 
 		this.seed = seed;
 		this.rand = new Random(seed);
 		this.timeLimit = timeLimit;
 		this.buffers = new HashMap<Class<?>, Span>();
+		this.teams = new ArrayList<Team>();
 
 		int i = 0;
 		for(Entry<Class<? extends Object2D>, Integer> e: bufferinfo.entrySet()) {
@@ -90,6 +95,14 @@ public final class SpacewarGame extends Space {
 	 */
 	public Random getRandom() {
 		return rand;
+	}
+	
+	public Collection<Team> getTeams() {
+		return this.teams;
+	}
+	
+	public void addTeam(Team team) {
+		this.teams.add(team);
 	}
 
 	/**
@@ -144,85 +157,7 @@ public final class SpacewarGame extends Space {
 		return out;
 	}
 
-	/**
-	 * Prints the current game state.
-	 */
-	public void print() {
-		System.out.println("-----------------------------------------");
-		System.out.println("Space Dimensions: " + Float.toString(getWidth())
-				+ "x" + Float.toString(getHeight()));
-		System.out.println("Player List:");
-		for (Ship ship : getAll(Ship.class)) {
-			if(ship != null) {
-				System.out.println(ship.getId() + ": " + ship.getName());
-				System.out.println("\t Alive: " + ship.isAlive());
-				System.out.println("\t Energy: " + ship.getEnergy());
-				System.out.println("\t Ammo: " + ship.getAmmo());
 
-				System.out.print("\t Command: (");
-				ShipCommand command = ship.getActiveCommand();
-				System.out
-				.print((command.left || command.right) ? (command.left) ? "L"
-						: "R"
-							: "0");
-				System.out.print(",");
-				System.out.print(command.fire ? "F" : "0");
-				System.out.print(",");
-				System.out.print(command.thrust ? "T" : "0");
-				System.out.println(")");
-
-				System.out.println("\t Position: ("
-						+ ship.getPosition().getX() + ", "
-						+ ship.getPosition().getY() + ")");
-				System.out.println("\t Velocity: ("
-						+ ship.getVelocity().getX() + ", "
-						+ ship.getVelocity().getY() + ")");
-			}
-		}
-
-		System.out.println("Bullet List:");
-		for (Bullet bullet : getAll(Bullet.class)) {
-			if(bullet != null) {
-				System.out.println(bullet.getId() + ": belongs to " + bullet.getShip().getId());
-				System.out.println("\t Alive: " + bullet.isAlive());
-				System.out.println("\t Lifetime: " + bullet.getLifetime());
-				System.out.println("\t Position: ("
-						+ bullet.getPosition().getX() + ", "
-						+ bullet.getPosition().getY() + ")");
-				System.out.println("\t Velocity: ("
-						+ bullet.getVelocity().getX() + ", "
-						+ bullet.getVelocity().getY() + ")");
-			}
-		}
-
-		System.out.println("Obstacle List:");
-		for (Obstacle obst : getAll(Obstacle.class)) {
-			if(obst != null) {
-				System.out.println(obst.getId() + ": ");
-				System.out.println("\t Alive: " + obst.isAlive());
-				System.out.println("\t Position: ("
-						+ obst.getPosition().getX() + ", "
-						+ obst.getPosition().getY() + ")");
-				System.out.println("\t Velocity: ("
-						+ obst.getVelocity().getX() + ", "
-						+ obst.getVelocity().getY() + ")");
-			}
-		}
-
-		System.out.println("Beacon List:");
-		for (Beacon bcon : getAll(Beacon.class)) {
-			if(bcon != null) {
-				System.out.println(bcon.getId() + ": ");
-				System.out.println("\t Alive: " + bcon.isAlive());
-				System.out.println("\t Position: ("
-						+ bcon.getPosition().getX() + ", "
-						+ bcon.getPosition().getY() + ")");
-				System.out.println("\t Velocity: ("
-						+ bcon.getVelocity().getX() + ", "
-						+ bcon.getVelocity().getY() + ")");
-			}
-		}
-	}
 
 	public void autoAdd(Object2D obj)
 	throws IdCollisionException, NoOpenPositionException, 
@@ -328,7 +263,7 @@ public final class SpacewarGame extends Space {
 
 	public Collection<Shadow2D> getShadows() {
 		final Collection<Shadow2D> out 
-		= new ArrayList<Shadow2D>(objects.length);
+			= new ArrayList<Shadow2D>(objects.length);
 		for(Object2D obj: objects) {
 			if(obj != null) {
 				Shadow2D shadow = obj.getShadow();
@@ -395,7 +330,92 @@ public final class SpacewarGame extends Space {
 				 Object2D respawn = respawnQ.poll().obj;
 				 respawn.reset();
 			 }
+			 //do teams first
+			 for(Team t: this.teams) {
+				 t.advanceTime(timestep);
+			 }
 			 super.advanceTime(timestep);
+			 
 		 }
 	 }
+	 
+	/**
+	 * Prints the current game state.
+	 */
+	public void print() {
+		System.out.println("-----------------------------------------");
+		System.out.println("Space Dimensions: " + Float.toString(getWidth())
+				+ "x" + Float.toString(getHeight()));
+		System.out.println("Player List:");
+		for (Ship ship : getAll(Ship.class)) {
+			if(ship != null) {
+				System.out.println(ship.getId() + ": " + ship.getName());
+				System.out.println("\t Alive: " + ship.isAlive());
+				System.out.println("\t Energy: " + ship.getEnergy());
+				System.out.println("\t Ammo: " + ship.getAmmo());
+
+				System.out.print("\t Command: (");
+				ShipCommand command = ship.getActiveCommand();
+				System.out
+				.print((command.left || command.right) ? (command.left) ? "L"
+						: "R"
+							: "0");
+				System.out.print(",");
+				System.out.print(command.fire ? "F" : "0");
+				System.out.print(",");
+				System.out.print(command.thrust ? "T" : "0");
+				System.out.println(")");
+
+				System.out.println("\t Position: ("
+						+ ship.getPosition().getX() + ", "
+						+ ship.getPosition().getY() + ")");
+				System.out.println("\t Velocity: ("
+						+ ship.getVelocity().getX() + ", "
+						+ ship.getVelocity().getY() + ")");
+			}
+		}
+
+		System.out.println("Bullet List:");
+		for (Bullet bullet : getAll(Bullet.class)) {
+			if(bullet != null) {
+				System.out.println(bullet.getId() + ": belongs to " + bullet.getShip().getId());
+				System.out.println("\t Alive: " + bullet.isAlive());
+				System.out.println("\t Lifetime: " + bullet.getLifetime());
+				System.out.println("\t Position: ("
+						+ bullet.getPosition().getX() + ", "
+						+ bullet.getPosition().getY() + ")");
+				System.out.println("\t Velocity: ("
+						+ bullet.getVelocity().getX() + ", "
+						+ bullet.getVelocity().getY() + ")");
+			}
+		}
+
+		System.out.println("Obstacle List:");
+		for (Obstacle obst : getAll(Obstacle.class)) {
+			if(obst != null) {
+				System.out.println(obst.getId() + ": ");
+				System.out.println("\t Alive: " + obst.isAlive());
+				System.out.println("\t Position: ("
+						+ obst.getPosition().getX() + ", "
+						+ obst.getPosition().getY() + ")");
+				System.out.println("\t Velocity: ("
+						+ obst.getVelocity().getX() + ", "
+						+ obst.getVelocity().getY() + ")");
+			}
+		}
+
+		System.out.println("Beacon List:");
+		for (Beacon bcon : getAll(Beacon.class)) {
+			if(bcon != null) {
+				System.out.println(bcon.getId() + ": ");
+				System.out.println("\t Alive: " + bcon.isAlive());
+				System.out.println("\t Position: ("
+						+ bcon.getPosition().getX() + ", "
+						+ bcon.getPosition().getY() + ")");
+				System.out.println("\t Velocity: ("
+						+ bcon.getVelocity().getX() + ", "
+						+ bcon.getVelocity().getY() + ")");
+			}
+		}
+	}
 }

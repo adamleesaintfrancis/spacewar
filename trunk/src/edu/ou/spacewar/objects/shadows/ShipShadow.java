@@ -2,6 +2,7 @@ package edu.ou.spacewar.objects.shadows;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.*;
 
 import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.gui.JSpacewarComponent;
@@ -22,6 +23,11 @@ public class ShipShadow extends Shadow2D {
     public static final Shape THRUST_SPUTTER_SHAPE = new Polygon(new int[]{30, -30, 0}, new int[]{65, 65, 170}, 3);
 
     private final Ship ship;
+    
+    public static final Map<String, Color> teamcolors = new HashMap<String, Color>();
+    
+    private static final Iterator<Color> colorwheel 
+    	= Arrays.asList(new Color[]{Color.RED, Color.BLUE, Color.YELLOW}).iterator();
 
     private Color shipcolor = new Color(109, 192, 255);
 
@@ -59,24 +65,27 @@ public class ShipShadow extends Shadow2D {
         }
 
         Shape newShipShape = transform.createTransformedShape(SHIP_SHAPE);
-        if(ship.getTeam() == Ship.RED_TEAM) {
-            g.setPaint(Color.RED);
-        } else if(ship.getTeam() == Ship.BLUE_TEAM) {
-            g.setPaint(Color.BLUE);
+        
+        //TODO: this is fairly ridiculous, we should probably have a better way
+        //to specify colors for teams.
+        String team = ship.getTeam();
+        if(team == null) {
+        	g.setPaint(shipcolor);
+        } else if (teamcolors.containsKey(team)) {
+        	g.setPaint(teamcolors.get(team));
+        } else if (colorwheel.hasNext()) {
+        	Color c = colorwheel.next();
+        	teamcolors.put(team, c);
+        	g.setPaint(c);
         } else {
-            g.setPaint(shipcolor);
+        	g.setPaint(shipcolor);
         }
+        
         g.fill(newShipShape);
 
         if(ship.hasFlag()) {
-            int fteam = ship.getFlag().getTeam();
-            if(fteam == Ship.RED_TEAM) {
-                g.setPaint(Color.RED);
-            } else if(fteam == Ship.BLUE_TEAM) {
-                g.setPaint(Color.BLUE);
-            } else {
-                g.setPaint(shipcolor);
-            }
+            String fteam = ship.getFlag().getTeam();
+           	g.setPaint(teamcolors.get(fteam));
             float x = ship.getPosition().getX();
             float y = ship.getPosition().getY();
             float r = ship.getRadius();

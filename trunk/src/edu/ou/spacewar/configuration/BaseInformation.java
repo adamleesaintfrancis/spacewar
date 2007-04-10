@@ -9,10 +9,10 @@ package edu.ou.spacewar.configuration;
  */
 public class BaseInformation {
     public String name;
-    public int team;
+    public String team;
     public float positionX, positionY;
 
-    public BaseInformation(String name, int team, float posX, float posY) {
+    public BaseInformation(String name, String team, float posX, float posY) {
         this.name = name;
         this.team = team;
         this.positionX = posX;

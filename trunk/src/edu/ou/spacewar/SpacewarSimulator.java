@@ -10,8 +10,10 @@ import com.thoughtworks.xstream.XStream;
 import edu.ou.mlfw.*;
 import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.configuration.SpacewarConfiguration;
+import edu.ou.spacewar.controllables.SWControllable;
 import edu.ou.spacewar.gui.*;
-import edu.ou.spacewar.objects.Ship;
+import edu.ou.spacewar.objects.*;
+import edu.ou.spacewar.simulator.Object2D;
 
 /**
  * SpacewarSimulator implements the Simulator interface to allow the use 
@@ -21,7 +23,9 @@ import edu.ou.spacewar.objects.Ship;
  */
 public class SpacewarSimulator implements Simulator {
 	private SpacewarGame game;
+	private Collection<Controllable> controllables;
 	private JSpacewarComponent gui = null;
+	
 
 	public void initialize(File configfile) {
 		XStream xstream = SpacewarConfiguration.getXStream();
@@ -44,10 +48,30 @@ public class SpacewarSimulator implements Simulator {
     {
     	try {
 			this.game = swconfig.newGame();
+			this.controllables = extractControllables( this.game );
 		} catch (Exception e) {
 			//TODO: replace stack trace printouts with logging
 			e.printStackTrace();
 		}
+    }
+    
+    public static Collection<Controllable> extractControllables( SpacewarGame game ) {
+    	Collection<Controllable> out = new LinkedList<Controllable>();
+    	for(Object2D obj : game.getObjects()) {
+    		if (obj instanceof SWControllable) {
+    			SWControllable swc = (SWControllable)obj;
+    			if( swc.isControllable() ) {
+    				out.add(swc.getControllable());
+    			}
+    		}
+    	}
+    	//Teams aren't Object2Ds, so need to handle separately
+    	for(Team t : game.getTeams()) {
+    		if( t.isControllable() ) {
+    			out.add( t.getControllable() );
+    		}
+    	}
+    	return out;
     }
     
     public boolean isRunning() {
@@ -64,29 +88,11 @@ public class SpacewarSimulator implements Simulator {
 	}
 	
 	public Collection<Controllable> getControllables() {
-		//only ships are controllable
-		Ship[] ships = this.game.getAll(Ship.class);
-		Collection<Controllable> out 
-			= new ArrayList<Controllable>(ships.length);		
-		for(Ship s : ships) {
-			if(s.isControllable()) {
-				out.add(s.getControllableShip());
-			}
-		}
-		return out;
+		return this.controllables;
 	}
 
 	public Collection<Controllable> getAllControllables() {
-		//only ships are controllable
-		Ship[] ships = this.game.getAll(Ship.class);
-		Collection<Controllable> out 
-			= new ArrayList<Controllable>(ships.length);		
-		for(Ship s : ships) {
-			if(s.isControllable()) {
-				out.add(s.getControllableShip());
-			}
-		}
-		return out;
+		return this.controllables;
 	}
 	
 	public void shutdown() {

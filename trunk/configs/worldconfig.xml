@@ -1,20 +1,17 @@
 <WorldConfiguration>
   <simulatorInitializerFile>siminit.xml</simulatorInitializerFile>
   <mappingInformation>
+   <!--<ClientMappingEntry>
+      <controllableName>Human</controllableName>
+      <clientInitializerFile>interactiveclientinit.xml</clientInitializerFile>
+    </ClientMappingEntry>-->
     <ClientMappingEntry>
-      <controllableName>Player0</controllableName>
-      <clientInitializerFile>newstyle_clientinit_bridge.xml</clientInitializerFile>
-      <!-- <clientInitializerFile>interactiveclientinit.xml</clientInitializerFile>-->
+      <controllableName>Team1</controllableName>
+      <clientInitializerFile>teamclientinit.xml</clientInitializerFile>      
     </ClientMappingEntry>
     <ClientMappingEntry>
-      <controllableName>HLRandom</controllableName>
-      <clientInitializerFile>clientinit_hlrandom_wrapper.xml</clientInitializerFile>
-      <!-- <clientInitializerFile>interactiveclientinit.xml</clientInitializerFile>-->
-    </ClientMappingEntry>
-    <ClientMappingEntry>
-      <controllableName>Random</controllableName>
-      <clientInitializerFile>clientinit_random_wrapper.xml</clientInitializerFile>
-      <!-- <clientInitializerFile>interactiveclientinit.xml</clientInitializerFile>-->
+      <controllableName>Team2</controllableName>
+      <clientInitializerFile>teamclientinit.xml</clientInitializerFile>      
     </ClientMappingEntry>
   </mappingInformation>
 </WorldConfiguration>

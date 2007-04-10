@@ -5,8 +5,7 @@ package edu.ou.spacewar.configuration;
  */
 public class ShipInformation {
     public String name;  //the name of the ship
-    public int team;     //the ship's team number
-    public boolean autoPlacement;   //whether the ship should be placed automatically.
+    public String team;     //the ship's team name
     public float positionX, positionY;    //if autoPlacement is false, specify the position
     public float velocityX, velocityY;    //if autoPlacement is false, specify the velocity
     public float orientedX, orientedY;    //if autoplacement is false, specify the orientation
@@ -18,38 +17,34 @@ public class ShipInformation {
                            float posX, float posY,
                            float velX, float velY,
                            float oriX, float oriY,
-                           String agent, boolean agentRecord, boolean isControllable) {
-        this(name, -1, posX, posY, velX, velY, oriX, oriY, agent, agentRecord, isControllable);
+                           String agent, boolean agentRecord, 
+                           boolean isControllable) 
+    {
+        this(name, null, posX, posY, velX, velY, oriX, oriY, agent, agentRecord, isControllable);
     }
 
     public ShipInformation(String name, String agent, boolean agentRecord, 
-    		boolean isControllable) {
-        this(name, -1, agent, agentRecord, isControllable);
+    		boolean isControllable) 
+    {
+        this(name, null, agent, agentRecord, isControllable);
     }
 
-    public ShipInformation(String name, int team,
-                           float posX, float posY,
-                           float velX, float velY,
-                           float oriX, float oriY,
-                           String agent, boolean agentRecord, boolean isControllable) {
-        this(name, team, false, posX, posY, velX, velY, oriX, oriY, agent, 
-        		agentRecord, isControllable);
+    public ShipInformation(String name, String team, String agent, 
+    						boolean agentRecord, 
+    						boolean isControllable) 
+    {
+        this(name, team, -1, -1, -1, -1, -1, -1, agent, agentRecord, isControllable);
     }
 
-    public ShipInformation(String name, int team, String agent, boolean agentRecord, 
-    		boolean isControllable) {
-        this(name, team, true, -1, -1, -1, -1, -1, -1, agent, agentRecord, isControllable);
-    }
-
-    private ShipInformation(String name, int team,
-                            boolean autoPlacement,
-                            float posX, float posY,
+    ShipInformation(String name, String team,
+    						float posX, float posY,
                             float velX, float velY,
                             float oriX, float oriY,
-                            String agent, boolean agentRecord, boolean isControllable) {
+                            String agent, boolean agentRecord, 
+                            boolean isControllable) 
+    {
         this.name = name;
         this.team = team;
-        this.autoPlacement = autoPlacement;
         this.positionX = posX;
         this.positionY = posY;
         this.velocityX = velX;

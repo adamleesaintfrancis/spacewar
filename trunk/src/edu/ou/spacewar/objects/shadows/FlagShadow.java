@@ -4,7 +4,6 @@ import java.awt.*;
 
 import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.objects.Flag;
-import edu.ou.spacewar.objects.Ship;
 import edu.ou.utils.Vector2D;
 
 /**
@@ -45,15 +44,12 @@ public class FlagShadow extends Shadow2D {
         trianglexs[2] = (int)(drawposition.getX() + radius);
         triangleys[2] = (triangleys[0] + triangleys[1]) / 2;
 
-        if(flag.getTeam() == Ship.BLUE_TEAM) {
-            g.setColor(Color.BLUE);
-        } else if(flag.getTeam() == Ship.RED_TEAM) {
-            g.setColor(Color.RED);
-        } else {
-            g.setColor(Color.WHITE);
+        String team = flag.getTeam();
+        if(ShipShadow.teamcolors.containsKey(team)) {
+        	Color c = ShipShadow.teamcolors.get(team);
+        	g.setColor(c);
+        	g.fillPolygon(trianglexs, triangleys, 3);
         }
-
-        g.fillPolygon(trianglexs, triangleys, 3);
     }
 
     public void cleanUp() {

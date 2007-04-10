@@ -5,7 +5,6 @@ import java.awt.geom.Ellipse2D;
 
 import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.objects.Base;
-import edu.ou.spacewar.objects.Ship;
 import edu.ou.utils.Vector2D;
 
 /**
@@ -38,15 +37,12 @@ public class BaseShadow extends Shadow2D {
         Ellipse2D.Float shape = new Ellipse2D.Float(drawposition.getX() - radius,
                 drawposition.getY() - radius, diameter, diameter);
 
-        if(base.getTeam() == Ship.BLUE_TEAM) {
-            g.setColor(Color.BLUE);
-        } else if(base.getTeam() == Ship.RED_TEAM) {
-            g.setColor(Color.RED);
-        } else {
-            g.setColor(Color.WHITE);
+        String team = base.getTeam();
+        if(ShipShadow.teamcolors.containsKey(team)) {
+        	Color c = ShipShadow.teamcolors.get(team);
+        	g.setColor(c);
+            g.fill(shape);
         }
-
-        g.fill(shape);
     }
 
     public void cleanUp() {
