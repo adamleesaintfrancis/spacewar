@@ -1,0 +1,5 @@
+<ClientInitializer>
+  <clientClass>edu.ou.spacewar.mlfw.agents.RandomTeamClient</clientClass>
+  <configuration>./clientinit.xml</configuration>
+  <!--<data>./knowledge.txt</data>-->
+</ClientInitializer>

@@ -13,7 +13,7 @@ import edu.ou.spacewar.objects.ShipCommand;
 public class ImmutableShip extends ImmutableObject2D implements State {
     private final int id;
     private final String name;
-    private final int team;
+    private final String team;
     private final int energy;
     private final int ammo;
     private final int beacons;
@@ -22,7 +22,7 @@ public class ImmutableShip extends ImmutableObject2D implements State {
     private final int hits;
     private final int flags;
     private final boolean hasFlag;
-    private final int flagTeam;
+    private final String flagTeam;
     private final ShipCommand command;
 
     public ImmutableShip(Ship ship) {
@@ -41,7 +41,7 @@ public class ImmutableShip extends ImmutableObject2D implements State {
         if(hasFlag) {
             this.flagTeam = ship.getFlag().getTeam();
         } else {
-            this.flagTeam = -1;
+            this.flagTeam = null;
         }
         this.command = ship.getActiveCommand();
     }
@@ -69,7 +69,7 @@ public class ImmutableShip extends ImmutableObject2D implements State {
      *
      * @return The ship team.
      */
-    public final int getTeam() {
+    public final String getTeam() {
         return team;
     }
 
@@ -151,7 +151,7 @@ public class ImmutableShip extends ImmutableObject2D implements State {
      * @return The integer indicator of the team of the flag the ship is carrying,
      * or -1 if the ship is not carrying a flag.
      */
-    public final int getFlagTeam() {
+    public final String getFlagTeam() {
         return flagTeam;
     }
 

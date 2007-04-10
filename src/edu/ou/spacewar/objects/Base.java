@@ -16,17 +16,17 @@ public class Base extends Object2D {
     public static final float BASE_RADIUS = 10;
     public static final float BASE_MASS = 100000;
 
-    int team;
+    String team;
 
     public Base(Space space, int id) {
         super(space, id, BASE_RADIUS, BASE_MASS);
     }
 
-    public void setTeam(int team) {
+    public void setTeam(String team) {
         this.team = team;
     }
 
-    public int getTeam() {
+    public String getTeam() {
         return team;
     }
 

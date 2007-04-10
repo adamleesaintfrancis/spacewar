@@ -7,15 +7,15 @@ import java.util.Stack;
 import edu.ou.mlfw.*;
 import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.SpacewarGame;
+import edu.ou.spacewar.controllables.ControllableShip;
+import edu.ou.spacewar.controllables.SWControllable;
 import edu.ou.spacewar.exceptions.NoOpenPositionException;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
 import edu.ou.spacewar.objects.shadows.ShipShadow;
 import edu.ou.spacewar.simulator.Object2D;
 import edu.ou.utils.Vector2D;
 
-public class Ship extends Object2D {
-    public static final int RED_TEAM = 1;
-    public static final int BLUE_TEAM = 2;
+public class Ship extends Object2D implements SWControllable {
     public static final float SHIP_RADIUS = 10;
     public static final float SHIP_MASS = 10;
 
@@ -36,12 +36,13 @@ public class Ship extends Object2D {
     
     private ControllableShip controllable;
     protected Bullet[] bullets;
-    private int energy, beacons, kills, deaths, hits, flags, team, shots;
+    private int energy, beacons, kills, deaths, hits, flags, shots;
     private long cpuTime; 
     private ShipCommand activeCommand;
     private float fireDelay;
     private Flag flag;
     private Stack<Bullet> clip;
+    private String team;
 
     public Ship(SpacewarGame space, int id, boolean isControllable) {
         super(space, id, SHIP_RADIUS, SHIP_MASS);
@@ -106,11 +107,11 @@ public class Ship extends Object2D {
         return activeCommand;
     }
 
-    public final void setTeam(int team) {
+    public final void setTeam(String team) {
         this.team = team;
     }
 
-    public final int getTeam() {
+    public final String getTeam() {
         return team;
     }
 
@@ -175,13 +176,18 @@ public class Ship extends Object2D {
     public final void takeDamage(int damage) {
         energy -= damage;
         if (energy <= 0) {
-            incrementDeaths();
-            setAlive(false);
-            ((SpacewarGame)space).queueForRespawn(this, 3.0f);
+            float delay = 3.0f + (2.0f * this.deaths);
+            if (delay > 10.0f) {
+            	((SpacewarGame)space).queueForRespawn(this, 10.0f);
+            } else {
+            	((SpacewarGame)space).queueForRespawn(this, delay);
+            }
             if(flag != null) {
                 flag.setPosition(this.getPosition());
                 flag.setAlive(true);
             }
+            incrementDeaths();
+            setAlive(false);
         }
     }
 
@@ -229,15 +235,13 @@ public class Ship extends Object2D {
     }
     
     protected final void advanceTime(float timestep) {
-    	if(isControllable && controllable != null) {
+    	System.out.println(this.getName());
+    	activeCommand = ShipCommand.DoNothing;
+    	if(controllable != null) {
     		Action a = controllable.getAction();
     		if(a instanceof ShipCommand) {
     			activeCommand = (ShipCommand)a;
-    		} else {
-    			throw new RuntimeException("Unknown ControllableAction");
     		}
-    	} else {
-            activeCommand = ShipCommand.DoNothing;
     	}
 
         if (activeCommand.thrust) {
@@ -294,7 +298,11 @@ public class Ship extends Object2D {
 		return this.isControllable;
 	}
 	
-	public ControllableShip getControllableShip() {
+	public ControllableShip getControllable() {
+		if(this.getName().equals("Human")) {// && this.controllable != null) {
+			System.out.println("Not replacing controllable");
+			//return this.controllable;
+		}
 		ShipRecord stats = new ShipRecord(this.getName(), 1, this.beacons, this.kills, 
 				this.deaths, this.hits, this.flags, this.shots, this.cpuTime);
 		this.controllable = new ControllableShip(this.getName(), 
