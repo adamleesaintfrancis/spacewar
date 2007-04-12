@@ -8,9 +8,9 @@ package edu.ou.spacewar.configuration;
  * To change this template use File | Settings | File Templates.
  */
 public class BaseInformation {
-    public String name;
-    public String team;
-    public float positionX, positionY;
+    public final String name;
+    public final String team;
+    public final float positionX, positionY;
 
     public BaseInformation(String name, String team, float posX, float posY) {
         this.name = name;

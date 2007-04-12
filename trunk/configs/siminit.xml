@@ -1,4 +1,4 @@
 <SimulatorInitializer>
   <simulatorClass>edu.ou.spacewar.SpacewarSimulator</simulatorClass>
-  <configuration>baseCTFconfig.xml</configuration>
+  <configuration>spacewarconfig.xml</configuration>
 </SimulatorInitializer>

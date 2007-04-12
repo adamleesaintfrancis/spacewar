@@ -194,6 +194,10 @@ public class LegacyBridgeClient implements Client, Drawer {
 		return this.agent;
 	}
 	
+	public void setDisplayName(String name){
+		// do nothing
+	}
+	
 	/**
 	 * Return this client's display name.
 	 * @return This client's display name.

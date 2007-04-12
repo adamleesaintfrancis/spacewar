@@ -2,6 +2,8 @@ package edu.ou.spacewar.configuration;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import com.thoughtworks.xstream.XStream;
 
 import edu.ou.spacewar.*;
@@ -15,6 +17,7 @@ import edu.ou.utils.Vector2D;
  * generated, and into which a config file is loaded.  
  */
 public class SpacewarConfiguration {
+	private static final Logger logger = Logger.getLogger(SpacewarConfiguration.class);
     private long seed;
     private float width, height;
     private float timeLimit;
@@ -105,19 +108,23 @@ public class SpacewarConfiguration {
         for (int i = 0; i < ships.length; i++) {
             //build the ship as specified
             ShipInformation shipinfo = ships[i];
-            Ship ship = new Ship(game, i, shipinfo.isControllable);
-            ship.setName(shipinfo.name);
-            if(shipinfo.team != null) {
-            	if(! teamobjs.containsKey(shipinfo.team)) {
-            		throw new RuntimeException("Invalid team for ship");
+            logger.debug(shipinfo.autoPlace);
+            if(!shipinfo.autoPlace){
+            	Ship ship = new Ship(game, i, shipinfo.isControllable);
+            	ship.setName(shipinfo.name);
+            	if(shipinfo.team != null) {
+            		if(! teamobjs.containsKey(shipinfo.team)) {
+            			throw new RuntimeException("Invalid team for ship");
+            		}
+            		teamobjs.get(shipinfo.team).addShip(ship);
             	}
-            	teamobjs.get(shipinfo.team).addShip(ship);
+            	ship.setTeam(shipinfo.team);
+            	ship.setPosition(new Vector2D(shipinfo.positionX, shipinfo.positionY));
+            	ship.setVelocity(new Vector2D(shipinfo.velocityX, shipinfo.velocityY));
+            	ship.setOrientation(new Vector2D(shipinfo.orientedX, shipinfo.orientedY));  
+            	logger.debug("Adding " + ship.getName() + " at " + ship.getPosition().toString() +"\n");
+            	game.add(ship);
             }
-            ship.setTeam(shipinfo.team);
-            ship.setPosition(new Vector2D(shipinfo.positionX, shipinfo.positionY));
-            ship.setVelocity(new Vector2D(shipinfo.velocityX, shipinfo.velocityY));
-            ship.setOrientation(new Vector2D(shipinfo.orientedX, shipinfo.orientedY));            
-            game.add(ship);
         }
         
         //add all of the specified obstacles
@@ -174,6 +181,25 @@ public class SpacewarConfiguration {
             game.add(f);
         }
 
+        //place all ship where auto place is true
+        for (int i = 0; i < ships.length; i++) {
+            //build the ship as specified
+            ShipInformation shipinfo = ships[i];
+            if(shipinfo.autoPlace){
+            	Ship ship = new Ship(game, i, shipinfo.isControllable);
+            	ship.setName(shipinfo.name);
+            	if(shipinfo.team != null) {
+            		if(! teamobjs.containsKey(shipinfo.team)) {
+            			throw new RuntimeException("Invalid team for ship");
+            		}
+            		teamobjs.get(shipinfo.team).addShip(ship);
+            	}
+            	ship.setTeam(shipinfo.team);
+            	game.autoAdd(ship);
+            }
+        }
+        
+        
         return game;
     }
 

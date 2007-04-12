@@ -1,17 +1,21 @@
 package edu.ou.spacewar.configuration;
 
+import org.apache.log4j.Logger;
+
 /**
  * ShipInformation gives the information to be specified in the configuration file.
  */
 public class ShipInformation {
-    public String name;  //the name of the ship
-    public String team;     //the ship's team name
-    public float positionX, positionY;    //if autoPlacement is false, specify the position
-    public float velocityX, velocityY;    //if autoPlacement is false, specify the velocity
-    public float orientedX, orientedY;    //if autoplacement is false, specify the orientation
-    public boolean agentRecord;           //the agentRecord to load.
+	transient private static final Logger logger = Logger.getLogger(ShipInformation.class);
+    public final String name;  //the name of the ship
+    public final String team;     //the ship's team name
+    public final boolean autoPlace;
+    public final float positionX, positionY;    //if autoPlacement is false, specify the position
+    public final float velocityX, velocityY;    //if autoPlacement is false, specify the velocity
+    public final float orientedX, orientedY;    //if autoplacement is false, specify the orientation
+    public final boolean agentRecord;           //the agentRecord to load.
     public String knowledgeFile;          //the knowledge file to load??todo:should this be here?
-    public boolean isControllable;        // is the ship a controllable object? 
+    public final boolean isControllable;        // is the ship a controllable object? 
     
     public ShipInformation(String name,
                            float posX, float posY,
@@ -33,9 +37,14 @@ public class ShipInformation {
     						boolean agentRecord, 
     						boolean isControllable) 
     {
+    	
         this(name, team, -1, -1, -1, -1, -1, -1, agent, agentRecord, isControllable);
     }
 
+    public ShipInformation(String name, boolean agentRecord, boolean isControllable){
+    	this(name, null, -1, -1, -1, -1, -1, -1, null, agentRecord, isControllable);
+    }
+    
     ShipInformation(String name, String team,
     						float posX, float posY,
                             float velX, float velY,
@@ -53,6 +62,16 @@ public class ShipInformation {
         this.orientedY = oriY;
         this.agentRecord = agentRecord;
         this.isControllable = isControllable;
+        
+        if(this.positionX <= 0.0f || this.positionY <= 0.0f){
+        	this.autoPlace = true;
+        }
+        else{
+        	this.autoPlace = false;
+        }
+        
+        logger.debug(this.autoPlace);
     }
 
+    
 }

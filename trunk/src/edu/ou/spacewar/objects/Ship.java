@@ -4,6 +4,8 @@ package edu.ou.spacewar.objects;
 import java.util.Random;
 import java.util.Stack;
 
+import org.apache.log4j.Logger;
+
 import edu.ou.mlfw.*;
 import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.SpacewarGame;
@@ -16,6 +18,7 @@ import edu.ou.spacewar.simulator.Object2D;
 import edu.ou.utils.Vector2D;
 
 public class Ship extends Object2D implements SWControllable {
+	private static final Logger logger = Logger.getLogger(Ship.class);
     public static final float SHIP_RADIUS = 10;
     public static final float SHIP_MASS = 10;
 
@@ -235,7 +238,7 @@ public class Ship extends Object2D implements SWControllable {
     }
     
     protected final void advanceTime(float timestep) {
-    	System.out.println(this.getName());
+    	logger.debug(this.getName());
     	activeCommand = ShipCommand.DoNothing;
     	if(controllable != null) {
     		Action a = controllable.getAction();
@@ -300,7 +303,7 @@ public class Ship extends Object2D implements SWControllable {
 	
 	public ControllableShip getControllable() {
 		if(this.getName().equals("Human")) {// && this.controllable != null) {
-			System.out.println("Not replacing controllable");
+			logger.debug("Not replacing controllable");
 			//return this.controllable;
 		}
 		ShipRecord stats = new ShipRecord(this.getName(), 1, this.beacons, this.kills, 

@@ -78,6 +78,10 @@ public class HumanClient implements InteractiveClient, KeyListener {
 		// do nothing
 	}
 
+	public void setDisplayName(String name){
+		// do nothing
+	}
+	
 	public String getDisplayName() {
 		return "HumanClient";
 	}

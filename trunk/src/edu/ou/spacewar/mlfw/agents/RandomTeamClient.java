@@ -3,24 +3,32 @@ package edu.ou.spacewar.mlfw.agents;
 import java.io.File;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import edu.ou.mlfw.*;
 import edu.ou.spacewar.controllables.*;
 import edu.ou.spacewar.objects.*;
 import edu.ou.spacewar.controllables.ControllableShip;
 
 public class RandomTeamClient implements Client {
+	private static final Logger logger = Logger.getLogger(RandomTeamClient.class);
+	private String displayName;
 	Random rand = new Random();
 
 	public void endAction(State state, Controllable controllable) {
 		// do nothing
 	}
 
+	public void setDisplayName(String name){
+		this.displayName = name;
+	}
+	
 	public String getDisplayName() {
-		return "RandomTeamClient";
+		return displayName;
 	}
 
 	public void initialize(File config) {
-		// TODO Auto-generated method stub
+		// Do nothing
 	}
 
 	public void loadData(File data) {
@@ -35,7 +43,7 @@ public class RandomTeamClient implements Client {
 		if (! (controllable instanceof ControllableTeam)) {
 			throw new RuntimeException("Unexpected controllable!");
 		}
-		System.out.println("Selecting random actions");
+		logger.debug("Selecting random actions");
 		
 		ControllableTeam ct = (ControllableTeam) controllable;
 		TeamState ts = (TeamState)ct.getState();
@@ -52,7 +60,7 @@ public class RandomTeamClient implements Client {
 			
 			legal.toArray(legalasarray);
 			ShipCommand action = legalasarray[rand.nextInt(legalasarray.length)];
-			System.out.println(action);
+			logger.debug(action);
 			commands.put(e.getKey(), action);				 
 		}
 		
