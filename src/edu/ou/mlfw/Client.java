@@ -16,9 +16,11 @@ public interface Client
 	public Action startAction(State state, Controllable controllable);
 	public void endAction(State state, Controllable controllable);
 	
+	
 	public void initialize(File config);
 	public void loadData(File data);
 	public void shutdown();
 	
+	public void setDisplayName(String name);
 	public String getDisplayName();
 }

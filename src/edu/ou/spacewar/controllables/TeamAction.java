@@ -2,6 +2,8 @@ package edu.ou.spacewar.controllables;
 
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
 import edu.ou.mlfw.Action;
 import edu.ou.spacewar.objects.ShipCommand;
 
@@ -10,6 +12,7 @@ import edu.ou.spacewar.objects.ShipCommand;
  * ShipCommand that each ship should take.
  */
 public class TeamAction implements Action {
+	private static final Logger logger = Logger.getLogger(TeamAction.class);
 	private final Map<String, ShipCommand> actions; 
 	
 	public TeamAction( Map<String, ShipCommand> actions ) {
@@ -17,7 +20,7 @@ public class TeamAction implements Action {
 	}
 	
 	public ShipCommand getCommand(String shipid) {
-		System.out.println("Fetching command for " + shipid);
+		logger.debug("Fetching command for " + shipid);
 		return this.actions.get(shipid);
 	}
 	

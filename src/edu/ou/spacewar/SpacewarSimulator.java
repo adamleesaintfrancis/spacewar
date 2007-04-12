@@ -5,6 +5,8 @@ import java.util.*;
 
 import javax.swing.JComponent;
 
+import org.apache.log4j.Logger;
+
 import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.*;
@@ -22,6 +24,7 @@ import edu.ou.spacewar.simulator.Object2D;
  * @author Jason
  */
 public class SpacewarSimulator implements Simulator {
+	private static final Logger logger = Logger.getLogger(SpacewarSimulator.class);
 	private SpacewarGame game;
 	private Collection<Controllable> controllables;
 	private JSpacewarComponent gui = null;
@@ -36,8 +39,8 @@ public class SpacewarSimulator implements Simulator {
             fr.close();
             initialize(swconfig);
         } catch (FileNotFoundException e) {
-            System.out.println("Could not find Spacewar configuration file!");
-            System.out.println("Was looking for: " + configfile);
+            logger.error("Could not find Spacewar configuration file!");
+            logger.error("Was looking for: " + configfile);
             e.printStackTrace();
         } catch (IOException e) {
 			e.printStackTrace();
@@ -96,7 +99,8 @@ public class SpacewarSimulator implements Simulator {
 	}
 	
 	public void shutdown() {
-		// TODO: game stats get collected here?
+//		 TODO: game stats get collected here?
+		this.controllables = extractControllables( this.game );		
 	}
 
 	public JComponent getGUI() {

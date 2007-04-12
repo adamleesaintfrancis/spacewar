@@ -93,6 +93,7 @@ public class World {
 				= NewClientInitializer.fromXMLFile(
 					mapping.getClientInitializerFile());
 			final Client client = clientinit.getClientClass().newInstance();
+			client.setDisplayName(clientinit.getDisplayName());
 			client.initialize(clientinit.getConfiguration());
 			client.loadData(clientinit.getData());
 			

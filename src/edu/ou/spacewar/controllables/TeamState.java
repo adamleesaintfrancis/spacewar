@@ -30,6 +30,5 @@ public class TeamState implements State
 	public ControllableShip getShip(String name) {
 		return this.ships.get(name);
 	}
-	
 }
 
