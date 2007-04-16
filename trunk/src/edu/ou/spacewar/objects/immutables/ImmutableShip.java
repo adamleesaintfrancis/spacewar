@@ -148,8 +148,8 @@ public class ImmutableShip extends ImmutableObject2D implements State {
     /**
      * Returns the team of the flag the ship is carrying.
      *
-     * @return The integer indicator of the team of the flag the ship is carrying,
-     * or -1 if the ship is not carrying a flag.
+     * @return The String indicator of the team of the flag the ship is carrying,
+     * or NULL if the ship is not carrying a flag.
      */
     public final String getFlagTeam() {
         return flagTeam;
