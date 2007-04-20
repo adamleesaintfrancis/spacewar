@@ -53,7 +53,7 @@ public class Team implements SWControllable {
 	}
 	
 	public void advanceTime(float timestep) {
-		logger.debug(this.getName());
+		logger.trace(this.getName());
     	if(this.controllable != null) {
     		Action a = controllable.getAction();
     		if(a instanceof TeamAction) {

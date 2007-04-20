@@ -90,37 +90,11 @@ public class Ladder {
 				}
 				catch(Exception e){
 					e.printStackTrace();
-					//exit("Error instantiating World");
 				}
 				float gameTimeElapsed = (new Date().getTime() - gameStartTime);
 				gameTimeElapsed /= 60000.0f;
 				logger.info("Game " + gameCnt + " took " + gameTimeElapsed + " minutes.\n");
-				if(records == null){
-					records = recordTemp;
-				}
-				else if(recordTemp != null){
-					for(Record r: recordTemp){
-						if(r == null){
-							continue;
-						}
-						if(r.getDisplayName()==null){
-							r.setDisplayName(new String("displayName not set"));
-						}
-						if(records.contains(r)){
-							logger.trace("r = " + r.getDisplayName() + "\n");
-							for(Record r2: records){
-								logger.trace("r2 = " + r2.getDisplayName() + "\n");
-								if(r2.equals(r)){
-									r2.addRecord(r);
-									break;
-								}
-							}
-						}
-						else{
-							records.add(r);
-						}
-					}
-				}
+				addRecords(recordTemp);
 			}
 		}
 	}
@@ -155,6 +129,43 @@ public class Ladder {
 		catch(Exception e){
 			e.printStackTrace();
 			exit("Error writing output");
+		}
+	}
+	
+	private void addRecords(List<Record> newRecords){
+		if(newRecords != null){
+			Collections.sort(newRecords);
+			logger.debug(newRecords);
+			if(newRecords.size() > 0){
+				newRecords.get(0).setWinner();
+			}
+			logger.debug(newRecords.get(0).getWins());
+			if(records == null){
+				records = newRecords;
+			}
+			else{			
+				for(Record r: newRecords){
+					if(r == null){
+						continue;
+					}
+					if(r.getDisplayName()==null){
+						r.setDisplayName(new String("displayName not set"));
+					}
+					if(records.contains(r)){
+						logger.trace("r = " + r.getDisplayName() + "\n");
+						for(Record r2: records){
+							logger.trace("r2 = " + r2.getDisplayName() + "\n");
+							if(r2.equals(r)){
+								r2.addRecord(r);
+								break;
+							}
+						}
+					}
+					else{
+						records.add(r);
+					}
+				}
+			}
 		}
 	}
 	

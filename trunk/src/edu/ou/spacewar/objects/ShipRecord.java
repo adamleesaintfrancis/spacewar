@@ -14,7 +14,6 @@ public class ShipRecord extends Record {
 	private float avgFlags;
 	private float avgShotsFired;
 	private float avgCPUTime;
-	private int totalGames;
 	private int totalBeacons;
 	private int totalKills;
 	private int totalDeaths;

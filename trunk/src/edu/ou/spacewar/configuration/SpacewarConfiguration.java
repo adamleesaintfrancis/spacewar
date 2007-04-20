@@ -136,12 +136,14 @@ public class SpacewarConfiguration {
             game.add(o);
         }
 
-        //add all of the specified beacons
+        //add all of the specified beacons with out autoplace
         for (int i = 0; i < beacons.length; i++) {
             BeaconInformation bconinfo = beacons[i];
-            Beacon b = new Beacon(game, i);
-            b.setPosition(new Vector2D(bconinfo.positionX, bconinfo.positionY));
-            game.add(b);
+            if(!bconinfo.autoPlace){
+            	Beacon b = new Beacon(game, i);
+            	b.setPosition(new Vector2D(bconinfo.positionX, bconinfo.positionY));
+            	game.add(b);
+            }
         }
 
         //if a team name hasn't already been specified for a ship, it will 
@@ -181,7 +183,18 @@ public class SpacewarConfiguration {
             game.add(f);
         }
 
-        //place all ship where auto place is true
+        //place all beacons where auto place is true
+        for (int i = 0; i < beacons.length; i++) {
+            //build the ship as specified
+            BeaconInformation bconinfo = beacons[i];
+            if(bconinfo.autoPlace){
+            	Beacon b = new Beacon(game, i);
+            	b.setPosition(new Vector2D(bconinfo.positionX, bconinfo.positionY));
+            	game.autoAdd(b);
+            }
+        }
+        
+        //place all ships where auto place is true
         for (int i = 0; i < ships.length; i++) {
             //build the ship as specified
             ShipInformation shipinfo = ships[i];

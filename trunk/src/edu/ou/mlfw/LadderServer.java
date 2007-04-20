@@ -25,30 +25,30 @@ public class LadderServer {
 	public static final int DEFAULT_PORT = 10100;
 
 	private static final Logger logger = Logger.getLogger(LadderServer.class);
-	
+
 	private final LadderConfiguration ladderconfig;
 	private final int serverPort;
 	private List<Record> records;
 	private int gameID = 0;
-	
+
 	public LadderServer(LadderConfiguration ladderconfig, int serverPort){
 		this.ladderconfig = ladderconfig;
 		this.serverPort = serverPort;
 	}
-	
+
 	public void run() {
 		ClientMappingEntry[] a = new ClientMappingEntry[ladderconfig.getNumVariableAgentsPerGame() + ladderconfig.getStaticClientMappingInformation().length];
-		
+
 		//Assign static clients
 		for(int i = 0; i < ladderconfig.getStaticClientMappingInformation().length; i++){
 			a[i+ladderconfig.getNumVariableAgentsPerGame()] = ladderconfig.getStaticClientMappingInformation()[i];
 		}
-		
+
 		int agentsPerGame = ladderconfig.getNumVariableAgentsPerGame();
 		if(agentsPerGame > ladderconfig.getVariableClientMappingInformation().length){
 			agentsPerGame = ladderconfig.getVariableClientMappingInformation().length;
 		}
-		
+
 		ServerSocket server = null;
 		try{
 			server = new ServerSocket(serverPort);
@@ -57,7 +57,7 @@ public class LadderServer {
 			logger.error("Unable to open server socket!");
 			System.exit(-1);
 		}
-		
+
 		HashMap<InetAddress, LadderMessage> currentGames = new HashMap<InetAddress, LadderMessage>(); 
 		CombinationGenerator matchGen = new CombinationGenerator(ladderconfig.getVariableClientMappingInformation().length, agentsPerGame);
 		//main ladder loop
@@ -75,22 +75,22 @@ public class LadderServer {
 				 */
 				Socket socket = null;
 				LadderMessage mesg = null;
-				
+
 				try{
 					socket = server.accept();
 					XStream xstream = new XStream();
 					mesg = (LadderMessage)xstream.fromXML(socket.getInputStream());
-					
+
 				}
 				catch(Exception e){
 					logger.error("Unable to accept connection!");
 				}
-				
+
 				//Process message
 				if(mesg instanceof GameRequest){
 					//check does this client have an outstanding game
 					LadderMessage tmp = currentGames.get(socket.getInetAddress());
-					
+
 					//if it does it must have crash so we will remove the old game.
 					if(tmp != null){						
 						currentGames.remove(socket.getInetAddress());
@@ -116,14 +116,14 @@ public class LadderServer {
 					continue;
 					//error condition					
 				}
-				
+
 				//send new game
 				gameID++;
 				logger.info("Dispatching game: " + gameID + " to " + socket.getInetAddress().getCanonicalHostName());
-				
+
 				mesg = new GameSettings(ladderconfig.getSimulatorInitializerFile(), gameID, a);
 				currentGames.put(socket.getInetAddress(), mesg);
-				
+
 				try{
 					XStream xstream = new XStream();
 					xstream.toXML(mesg, socket.getOutputStream());
@@ -134,7 +134,7 @@ public class LadderServer {
 				}
 			}
 		}
-		
+
 		//wait till all games have been returned
 		while(!currentGames.isEmpty()){
 			/*
@@ -143,22 +143,22 @@ public class LadderServer {
 			 */
 			Socket socket = null;
 			LadderMessage mesg = null;
-			
+
 			try{
 				socket = server.accept();
 				XStream xstream = new XStream();
 				mesg = (LadderMessage)xstream.fromXML(socket.getInputStream());
-				
+
 			}
 			catch(Exception e){
 				logger.error("Unable to accept connection!");
 			}
-			
+
 			//Process message
 			if(mesg instanceof GameRequest){
 				//check does this client have an outstanding game
 				LadderMessage tmp = currentGames.get(socket.getInetAddress());
-				
+
 				//if it does it must have crash so we will remove the old game.
 				if(tmp != null){						
 					currentGames.remove(socket.getInetAddress());
@@ -176,10 +176,10 @@ public class LadderServer {
 				logger.error("Unknown message recieved");
 				//error condition					
 			}
-			
+
 			//send shutdown message
 			mesg = new LadderClientShutdownMesg();
-			
+
 			try{
 				XStream xstream = new XStream();
 				xstream.toXML(mesg, socket.getOutputStream());
@@ -190,7 +190,7 @@ public class LadderServer {
 			}
 		}
 	}
-	
+
 	public void writeHTML(){
 		FileWriter out = null;
 		try{
@@ -223,43 +223,51 @@ public class LadderServer {
 			exit("Error writing output");
 		}
 	}
-	
+
 	private void addRecords(List<Record> newRecords){
-		if(records == null){
-			records = newRecords;
-		}
-		else if(newRecords != null){
-			for(Record r: newRecords){
-				if(r == null){
-					continue;
-				}
-				if(r.getDisplayName()==null){
-					r.setDisplayName(new String("displayName not set"));
-				}
-				if(records.contains(r)){
-					logger.trace("r = " + r.getDisplayName() + "\n");
-					for(Record r2: records){
-						logger.trace("r2 = " + r2.getDisplayName() + "\n");
-						if(r2.equals(r)){
-							r2.addRecord(r);
-							break;
+		if(newRecords != null){
+			Collections.sort(newRecords);
+			logger.debug(newRecords);
+			if(newRecords.size() > 0){
+				newRecords.get(0).setWinner();
+			}
+			logger.debug(newRecords.get(0).getWins());
+			if(records == null){
+				records = newRecords;
+			}
+			else{			
+				for(Record r: newRecords){
+					if(r == null){
+						continue;
+					}
+					if(r.getDisplayName()==null){
+						r.setDisplayName(new String("displayName not set"));
+					}
+					if(records.contains(r)){
+						logger.trace("r = " + r.getDisplayName() + "\n");
+						for(Record r2: records){
+							logger.trace("r2 = " + r2.getDisplayName() + "\n");
+							if(r2.equals(r)){
+								r2.addRecord(r);
+								break;
+							}
 						}
 					}
-				}
-				else{
-					records.add(r);
+					else{
+						records.add(r);
+					}
 				}
 			}
 		}
 	}
-	
+
 	public static void main(String[] args){
 		Arguments parsedArgs = parseArgs(args);
 		logger.info("Loading ladder configuration...\n");
 		try {
 			LadderConfiguration ladderconfig = (LadderConfiguration)fromXML(
-				LadderConfiguration.getXStream(),
-				parsedArgs.configLocation);
+					LadderConfiguration.getXStream(),
+					parsedArgs.configLocation);
 			logger.debug("Done\n");
 			logger.info("Initializing Ladder: \n");
 			LadderServer ladder = new LadderServer(ladderconfig, parsedArgs.serverPort);
@@ -273,7 +281,7 @@ public class LadderServer {
 			exit("Error instantiating Ladder");
 		}
 	}
-	
+
 	/**
 	 * Handle the command-line arguments passed to an invocation of World.  
 	 * Generates an Arguments object, which is a simple encapsulation of
@@ -285,30 +293,30 @@ public class LadderServer {
 	public static Arguments parseArgs(final String[] args) 
 	{
 		final CmdLineParser parser = new CmdLineParser();
-        final CmdLineParser.Option help   = parser.addBooleanOption('h', "help");
-        final CmdLineParser.Option config = parser.addStringOption('c', "config");
-        final CmdLineParser.Option port = parser.addIntegerOption('p', "port");
-        
-        try {
-            parser.parse(args);
-        } catch (Exception e) {
-            exit("Error parsing arguments");
-        }
+		final CmdLineParser.Option help   = parser.addBooleanOption('h', "help");
+		final CmdLineParser.Option config = parser.addStringOption('c', "config");
+		final CmdLineParser.Option port = parser.addIntegerOption('p', "port");
 
-        if (parser.getOptionValue(help) != null) {
-            exit("Displaying help");  //exit prints the help string.
-        }
-        
-        //store the file indicated by the config argument, or the default 
-        //location if the config argument is not specified.
-        File configLocation = new File((String) parser.getOptionValue(config, DEFAULT_CONFIG));
-        int serverPort = (Integer)parser.getOptionValue(port, DEFAULT_PORT);
-        
-        //store whether or not the gui should be displayed (false by default)
-        
-        return new Arguments(configLocation, serverPort);
+		try {
+			parser.parse(args);
+		} catch (Exception e) {
+			exit("Error parsing arguments");
+		}
+
+		if (parser.getOptionValue(help) != null) {
+			exit("Displaying help");  //exit prints the help string.
+		}
+
+		//store the file indicated by the config argument, or the default 
+		//location if the config argument is not specified.
+		File configLocation = new File((String) parser.getOptionValue(config, DEFAULT_CONFIG));
+		int serverPort = (Integer)parser.getOptionValue(port, DEFAULT_PORT);
+
+		//store whether or not the gui should be displayed (false by default)
+
+		return new Arguments(configLocation, serverPort);
 	}
-	
+
 	/**
 	 * A throwaway class that encapsulates the command line arguments for 
 	 * World.  configLocation stores the file location where the world should
@@ -319,13 +327,13 @@ public class LadderServer {
 	{
 		public final File configLocation;
 		public final int serverPort;
-		
+
 		public Arguments(File configLocation, int serverPort){
 			this.configLocation = configLocation;
 			this.serverPort = serverPort;
 		}
 	}
-	
+
 	/**
 	 * Given a configuration's File location and its Class, instantiate an 
 	 * instance of that configuration from the xml file.  This method assumes 
@@ -338,38 +346,38 @@ public class LadderServer {
 	 * @return An instance of the target class from the serialized xml.
 	 */
 	public static Object fromXML(XStream xstream, File location) 
-		throws ClassNotFoundException, NullPointerException, IOException, 
-			FileNotFoundException{
+	throws ClassNotFoundException, NullPointerException, IOException, 
+	FileNotFoundException{
 		Object out = null;
-		
-        FileReader fr = new FileReader(location);
-        out = xstream.fromXML(fr);
-        fr.close();
-		
+
+		FileReader fr = new FileReader(location);
+		out = xstream.fromXML(fr);
+		fr.close();
+
 		return out;
 	}
-	
-	/**
-     * Exits the program with usage instructions.
-     */
-    public static void exit(String exitMessage) {
-        logger.error(
-        	exitMessage + "\n\n"
-        		+"Usage: SpacewarSim [-h] [-g] [-c /path/to/configfile] \n\n"
-        		+
-        	
-        		"-h display this help screen and exit.\n\n"
-        		+
 
-        		"-g indicates the gui should be shown.  If this flag\n"
+	/**
+	 * Exits the program with usage instructions.
+	 */
+	public static void exit(String exitMessage) {
+		logger.error(
+				exitMessage + "\n\n"
+				+"Usage: SpacewarSim [-h] [-g] [-c /path/to/configfile] \n\n"
+				+
+
+				"-h display this help screen and exit.\n\n"
+				+
+
+				"-g indicates the gui should be shown.  If this flag\n"
 				+ "   is not set, the program will run in graphical mode.\n\n"
 				+
-        		
-        		"-c indicates the path to the ladder configuration file.\n"
-        		+"   If -c is not set, the program will attempt to find\n"
-        		+"   and load \"" + DEFAULT_CONFIG + "\" in the working "
-        		+"   directory.\n\n"
-        );
-        System.exit(-1);
-    }
+
+				"-c indicates the path to the ladder configuration file.\n"
+				+"   If -c is not set, the program will attempt to find\n"
+				+"   and load \"" + DEFAULT_CONFIG + "\" in the working "
+				+"   directory.\n\n"
+		);
+		System.exit(-1);
+	}
 }

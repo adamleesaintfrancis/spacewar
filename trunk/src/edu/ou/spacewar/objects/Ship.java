@@ -238,7 +238,7 @@ public class Ship extends Object2D implements SWControllable {
     }
     
     protected final void advanceTime(float timestep) {
-    	logger.debug(this.getName());
+    	logger.trace(this.getName());
     	activeCommand = ShipCommand.DoNothing;
     	if(controllable != null) {
     		Action a = controllable.getAction();
