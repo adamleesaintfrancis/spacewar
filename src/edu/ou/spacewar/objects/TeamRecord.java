@@ -194,7 +194,7 @@ public class TeamRecord extends Record {
 					"<td>" + displayName + "</td>" +
 					"<td>" + Integer.toString(rank) + "</td>" +
 					"<td>" + Integer.toString(totalGames) + "</td>" +
-					"<td>" + Float.toString(percentageWins)+ "%" + "</td>" +
+					"<td>" + Float.toString(percentageWins*100)+ "%" + "</td>" +
 					"<td>" + Integer.toString(totalWins) + "</td>" +
 					"<td>" + Float.toString(avgFlags)+ "</td>" +
 					"<td>" + Integer.toString(totalFlags) + "</td>" +
