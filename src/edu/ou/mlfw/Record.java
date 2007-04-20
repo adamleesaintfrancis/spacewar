@@ -4,11 +4,17 @@ public abstract class Record implements Comparable<Record> {
 	protected static int sortMethod = 0;
 	protected String displayName;
 	protected int rank;
+	protected float percentageWins;
+	protected int totalWins;
+	protected int totalGames;
 	
 	public Record(String displayName){
 		super();
 		this.displayName = displayName;
 		this.rank = 0;
+		this.totalWins = 0;
+		this.percentageWins = 0f;
+		this.totalGames = 0;
 	}
 	
 	public String getDisplayName(){
@@ -19,12 +25,27 @@ public abstract class Record implements Comparable<Record> {
 		this.displayName = s;
 	}
 
+	public int getTotalGames(){
+		return totalGames;
+	}
+	
 	public int getRank(){
 		return rank;
 	}
 	
 	public void setRank(int rank){
 		this.rank = rank;
+	}
+	
+	public int getWins(){
+		return totalWins;
+	}
+	
+	public void setWinner(){
+		this.totalWins++;
+		if(this.totalGames != 0){
+			this.percentageWins = this.totalWins / this.totalGames;
+		}
 	}
 	
 	public boolean equals(Object a){

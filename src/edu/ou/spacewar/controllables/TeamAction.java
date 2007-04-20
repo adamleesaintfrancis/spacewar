@@ -20,7 +20,7 @@ public class TeamAction implements Action {
 	}
 	
 	public ShipCommand getCommand(String shipid) {
-		logger.debug("Fetching command for " + shipid);
+		logger.trace("Fetching command for " + shipid);
 		return this.actions.get(shipid);
 	}
 	

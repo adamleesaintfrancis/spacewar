@@ -8,12 +8,20 @@ package edu.ou.spacewar.configuration;
  * To change this template use File | Settings | File Templates.
  */
 public class BeaconInformation {
-    public String name;
-    public float positionX, positionY;
+    public final String name;
+    public final boolean autoPlace;
+    public final float positionX, positionY;
 
     public BeaconInformation(String name, float posX, float posY) {
-        this.name = name;
+        this.name = name;        
         this.positionX = posX;
         this.positionY = posY;
+        
+        if(this.positionX <= 0.0f || this.positionY <= 0.0f){
+        	this.autoPlace = true;
+        }
+        else{
+        	this.autoPlace = false;
+        }
     }
 }
