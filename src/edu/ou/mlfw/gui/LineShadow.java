@@ -7,7 +7,7 @@ import edu.ou.utils.Vector2D;
 public class LineShadow extends Shadow2D {
 	private Vector2D realposition;
 	private boolean slopesUp;
-	private Color myColor = Color.RED;
+	private Color myColor = Color.CYAN;
     private boolean drawme;
     private float width;
     
