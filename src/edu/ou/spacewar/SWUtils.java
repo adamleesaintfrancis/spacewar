@@ -1,5 +1,6 @@
 package edu.ou.spacewar;
 
+import edu.ou.spacewar.objects.ShipCommand;
 import edu.ou.spacewar.objects.immutables.ImmutableObject2D;
 import edu.ou.spacewar.simulator.Object2D;
 import edu.ou.spacewar.simulator.Space;
@@ -112,6 +113,28 @@ public class SWUtils {
         return out;
     }
 
+    /**
+     * Returns the command needed for alligning the orientation of
+     * the ship with the vector v. Returns null if the orientation
+     * of the ship is within the supplied precision.
+     *
+     * @author Charles DeGranville
+     *
+     * @param shipOrt   The orientation of the ship.
+     * @param v         The vector to allign the orientation of the ship.
+     * @param precision The precision.
+     * @return The command to be executed.
+     */
+    public static ShipCommand AllignmentController(Vector2D shipOrt, Vector2D v, float precision) {
+        double angle = v.angleBetween(shipOrt);
 
+        if (Math.abs(angle) < precision) {
+            return null;
+        } else if (angle > 0.0f) {
+            return ShipCommand.TurnLeft;
+        } else {
+            return ShipCommand.TurnRight;
+        }
+    }
     
 }

@@ -14,8 +14,6 @@ public class TeamState implements State
 {
 	private final Map<String, ControllableShip> ships;
 	
-	//TODO: any metadata?
-	
 	public TeamState(Collection<ControllableShip> cs) {
 		this.ships = new HashMap<String, ControllableShip>();
 		for(ControllableShip s : cs) {

@@ -11,6 +11,7 @@ import edu.ou.spacewar.simulator.*;
 import edu.ou.mlfw.*;
 import edu.ou.utils.*;
 import edu.ou.spacewar.*;
+import edu.ou.spacewar.actions.ShipNavigationActions;
 import edu.ou.spacewar.objects.immutables.*;
 import edu.ou.spacewar.objects.*;
 

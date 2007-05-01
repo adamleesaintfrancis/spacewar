@@ -81,7 +81,7 @@ public class SimulatorInitializer {
 				return null;
 			}
 
-			public void advance(float secs) {
+			public void advance() {
 				// TODO Auto-generated method stub	
 			}
 
