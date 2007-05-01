@@ -53,8 +53,8 @@ public class SpacewarSimulator implements Simulator {
 			this.game = swconfig.newGame();
 			this.controllables = extractControllables( this.game );
 		} catch (Exception e) {
-			//TODO: replace stack trace printouts with logging
-			e.printStackTrace();
+			logger.error(e.toString());
+			logger.error(e.getStackTrace());
 		}
     }
     
@@ -81,9 +81,9 @@ public class SpacewarSimulator implements Simulator {
     	return this.game.isRunning();
 	}
 	
-    public void advance(float secs) {
+    public void advance() {
 		assert(this.game != null);
-		this.game.advanceTime(secs);  
+		this.game.advanceTime();  
 	}
 	
 	public State getState() {

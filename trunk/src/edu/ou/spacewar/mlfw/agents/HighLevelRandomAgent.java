@@ -7,7 +7,7 @@ import java.util.*;
 import edu.ou.mlfw.*;
 import edu.ou.mlfw.gui.*;
 import edu.ou.spacewar.ImmutableSpacewarState;
-import edu.ou.spacewar.objects.ShipNavigationActions;
+import edu.ou.spacewar.actions.ShipNavigationActions;
 import edu.ou.spacewar.objects.immutables.ImmutableObstacle;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
 import edu.ou.spacewar.objects.shadows.CrossHairShadow;

@@ -137,8 +137,7 @@ public class World {
 	 */
 	public void run() {
 		while (simulator.isRunning()) {
-			step(0.0333f, true);  //TODO:  how should update rate be decided?
-								  //       hardcoding is badhi	
+			step(true);
 		}
 		this.shutdown();
 	}
@@ -175,7 +174,7 @@ public class World {
 			while (simulator.isRunning()) {
 				SwingUtilities.invokeAndWait(new Runnable() {
 					public void run() {
-						step(0.0333f, true);
+						step(true);
 						for (Client c : mappings.values()) {
 							if (c instanceof Drawer) {
 								handleDrawer(gui, (Drawer) c);
@@ -206,10 +205,10 @@ public class World {
 	 * Step through the simulator a single step. 
 	 * 
 	 */
-	private void step(float simulatedSeconds, boolean updateAgents) {
+	private void step(boolean updateAgents) {
 		State state = simulator.getState();	
 		startActions(state);
-		simulator.advance(simulatedSeconds);
+		simulator.advance();
 		state = simulator.getState();  //if getState is expensive, simulator should memoize
 		endActions(state);
 	}

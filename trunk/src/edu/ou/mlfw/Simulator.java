@@ -26,7 +26,7 @@ public interface Simulator
 	void shutdown();  
 	
 	boolean isRunning();
-	void advance(float seconds);
+	void advance();
 
 	State getState();
 	

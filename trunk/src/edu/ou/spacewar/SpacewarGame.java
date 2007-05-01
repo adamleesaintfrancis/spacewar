@@ -65,14 +65,13 @@ public final class SpacewarGame extends Space {
 	 * @param buffertotal The total number of objects (sum of bufferinfo)
 	 * @param timeLimit How long the game will run for. 
 	 */
-	public SpacewarGame(long seed,
-			float width,
-			float height,
+	public SpacewarGame(long seed, float width,	float height, 
 			Map<Class<? extends Object2D>, Integer> bufferinfo,
 			int buffertotal, //needed for call to super()
-			float timeLimit)
+			float timeLimit,
+			float timeStep)
 	{
-		super(width, height, new SpacewarCollisionHandler(), buffertotal);
+		super(width, height, timeStep, new SpacewarCollisionHandler(), buffertotal);
 
 		this.seed = seed;
 		this.rand = new Random(seed);
@@ -321,7 +320,7 @@ public final class SpacewarGame extends Space {
 	 * Makes sure the game is initialized before calling super.advanceTime(timestep).
 	 * @param timestep
 	 */
-	 public final void advanceTime(float timestep) {
+	 public final void advanceTime() {
 		 if(!initialized) {
 			 initialize();
 		 }
@@ -332,9 +331,9 @@ public final class SpacewarGame extends Space {
 			 }
 			 //do teams first
 			 for(Team t: this.teams) {
-				 t.advanceTime(timestep);
+				 t.advanceTime(timeStep);
 			 }
-			 super.advanceTime(timestep);
+			 super.advanceTime();
 			 
 		 }
 	 }

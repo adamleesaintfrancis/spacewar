@@ -21,6 +21,7 @@ public class SpacewarConfiguration {
     private long seed;
     private float width, height;
     private float timeLimit;
+    private float timeStep;
 
     private ShipInformation[] ships;
     private ObstacleInformation[] obstacles;
@@ -48,6 +49,7 @@ public class SpacewarConfiguration {
     }
 
     public SpacewarConfiguration(int seed, float width, float height, float timeLimit,
+    							 float timeStep,
                                  ShipInformation[] ships,
                                  ObstacleInformation[] obstacles,
                                  BeaconInformation[] beacons,
@@ -58,6 +60,7 @@ public class SpacewarConfiguration {
         this.width = width;
         this.height = height;
         this.timeLimit = timeLimit;
+        this.timeStep = timeStep;
 
         this.ships = ships;
         this.obstacles = obstacles;
@@ -74,7 +77,7 @@ public class SpacewarConfiguration {
     public ShipInformation[] getShips() {
         return this.ships;
     }
-
+    
     public void setShips(ShipInformation[] ships) {
         this.ships = ships;
     }   
@@ -94,8 +97,15 @@ public class SpacewarConfiguration {
         int buffertotal = numberOfBullets + ships.length + 
         	beacons.length + flags.length + obstacles.length + bases.length;
         
+        logger.info(timeStep);
+        if(timeStep == 0.0f){
+        	logger.info(timeStep);
+        	timeStep = 0.0333f;
+        }
+        logger.info(timeStep);
+        
         SpacewarGame game = new SpacewarGame(seed, width, height,
-    			bufferinfo, buffertotal, timeLimit);
+    			bufferinfo, buffertotal, timeLimit, timeStep);
     	
     	Map<String, Team> teamobjs = new HashMap<String, Team>();
     	for (TeamInformation teaminfo : this.teams ) {
@@ -242,7 +252,7 @@ public class SpacewarConfiguration {
         TeamInformation[] teams = new TeamInformation[0];
 
         SpacewarConfiguration gb = new SpacewarConfiguration(0, 800f, 600f,
-                30.0f, ships, obstacles, beacons, flags, bases, teams);
+                30.0f, 0.0333f, ships, obstacles, beacons, flags, bases, teams);
 
         XStream test = getXStream();
         System.out.println(test.toXML(gb));

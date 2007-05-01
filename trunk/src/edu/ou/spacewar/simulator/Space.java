@@ -35,11 +35,14 @@ public abstract class Space implements CollisionHandler, Iterable<Object2D> {
 	private float timestamp = 0.0f;
 
 	private int stepcount = 0;
+	
+	protected final float timeStep;
 
-	public Space(float width, float height, CollisionHandler collisionHandler,
-			int numberOfObjects) {
+	public Space(float width, float height, float timeStep, 
+			CollisionHandler collisionHandler, int numberOfObjects) {
 		this.width = width;
 		this.height = height;
+		this.timeStep = timeStep;
 		if (collisionHandler != null)
 			this.collisionHandler = collisionHandler;
 		else
@@ -178,8 +181,8 @@ public abstract class Space implements CollisionHandler, Iterable<Object2D> {
 	 * 
 	 * @param incrementInSeconds
 	 */
-	public void advanceTime(float incrementInSeconds) {
-		this.timestamp += incrementInSeconds;
+	public void advanceTime() {
+		this.timestamp += this.timeStep;
 		this.stepcount++;
 		
 		// let all the objects update themselves
@@ -187,14 +190,15 @@ public abstract class Space implements CollisionHandler, Iterable<Object2D> {
 			if (o != null && o.alive) {
 				//we hope that nobody updates themselves badly (i.e. setting
 				//their own position so they intersect with another object)
-				o.advanceTime(incrementInSeconds);
+				o.advanceTime(this.timeStep);
 			}
 		}
-	
+
+		float tempTimeStep = this.timeStep;
 		// find and update with collisions
-		while (incrementInSeconds >= 0.0f) {
-			this.distanceCache.forceUpdate(this.timestamp);
-			float advanceTo = incrementInSeconds;  
+		while (tempTimeStep >= 0.0f) {
+			this.distanceCache.forceUpdate(tempTimeStep);
+			float advanceTo = tempTimeStep;  
 			Object2D object1 = null;
 			Object2D object2 = null;
 
@@ -277,10 +281,10 @@ public abstract class Space implements CollisionHandler, Iterable<Object2D> {
 						object2);
 			}
 
-			incrementInSeconds -= advanceTo;
+			tempTimeStep -= advanceTo;
 
-			if (incrementInSeconds == 0 && object1 == null)
-				incrementInSeconds = -1;
+			if (tempTimeStep == 0 && object1 == null)
+				tempTimeStep = -1;
 		}
 	}
 
