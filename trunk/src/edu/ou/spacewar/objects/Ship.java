@@ -309,7 +309,7 @@ public class Ship extends Object2D implements SWControllable {
 		ShipRecord stats = new ShipRecord(this.getName(), 1, this.beacons, this.kills, 
 				this.deaths, this.hits, this.flags, this.shots, this.cpuTime);
 		this.controllable = new ControllableShip(this.getName(), 
-				ShipCommand.commands, new ImmutableShip(this), stats);
+				ShipCommand.getAllCommands(), new ImmutableShip(this), stats);
 		return this.controllable;
 	}
 }
