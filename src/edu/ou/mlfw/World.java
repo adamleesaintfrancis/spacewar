@@ -53,7 +53,7 @@ public class World {
 	 * @throws UnboundAgentException
 	 * @throws UnboundControllableException
 	 */
-	public World(final WorldConfiguration worldconfig)
+	public World(final WorldConfig worldconfig)
 		throws InstantiationException, IllegalAccessException,
 			NameCollisionException, UnboundAgentException,
 			UnboundControllableException, ClassNotFoundException,
@@ -81,7 +81,7 @@ public class World {
 
 		logger.debug("Initializing clients:\n");
 		final Map<String, Client> mappings = new HashMap<String, Client>();
-		for (final ClientMappingEntry mapping : 
+		for (final ClientMapping mapping : 
 				worldconfig.getMappingInformation()) 
 		{
 			final String controllableName = mapping.getControllableName();
@@ -89,8 +89,8 @@ public class World {
 				logger.debug(controllableName);
 				throw new UnboundAgentException();
 			}
-			final NewClientInitializer clientinit 
-				= NewClientInitializer.fromXMLFile(
+			final ClientInitializer clientinit 
+				= ClientInitializer.fromXMLFile(
 					mapping.getClientInitializerFile());
 			final Client client = clientinit.getClientClass().newInstance();
 			client.setDisplayName(clientinit.getDisplayName());
@@ -309,8 +309,8 @@ public class World {
 		Arguments arguments = parseArgs(args);
 		logger.info("Loading world configuration...\n");
 		try {
-			WorldConfiguration worldconfig 
-				= WorldConfiguration.fromXMLFile(arguments.configLocation);
+			WorldConfig worldconfig 
+				= WorldConfig.fromXMLFile(arguments.configLocation);
 			logger.debug("Done\n");
 			logger.info("Initializing World: \n");
 			World world = new World(worldconfig);
