@@ -11,7 +11,7 @@ import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.*;
 import edu.ou.mlfw.gui.Shadow2D;
-import edu.ou.spacewar.configuration.SpacewarConfiguration;
+import edu.ou.spacewar.configuration.SpacewarConfig;
 import edu.ou.spacewar.controllables.SWControllable;
 import edu.ou.spacewar.gui.*;
 import edu.ou.spacewar.objects.*;
@@ -31,11 +31,11 @@ public class SpacewarSimulator implements Simulator {
 	
 
 	public void initialize(File configfile) {
-		XStream xstream = SpacewarConfiguration.getXStream();
-        SpacewarConfiguration swconfig;
+		XStream xstream = SpacewarConfig.getXStream();
+        SpacewarConfig swconfig;
         try {
             FileReader fr = new FileReader(configfile);
-            swconfig = (SpacewarConfiguration) xstream.fromXML(fr);
+            swconfig = (SpacewarConfig) xstream.fromXML(fr);
             fr.close();
             initialize(swconfig);
         } catch (FileNotFoundException e) {
@@ -47,7 +47,7 @@ public class SpacewarSimulator implements Simulator {
 		}
 	}
 
-    public void initialize(SpacewarConfiguration swconfig)
+    public void initialize(SpacewarConfig swconfig)
     {
     	try {
 			this.game = swconfig.newGame();
