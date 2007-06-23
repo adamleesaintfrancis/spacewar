@@ -25,12 +25,16 @@ public enum ShipCommand implements Action {
     public static final byte NOTHING_FLAG = 0x00;
 
     public static final int COMMANDS = values().length;
-    public static final ShipCommand[] commands = {
+
+    private static final ShipCommand[] basicCommands = {
         DoNothing,
         Thrust,
         TurnRight,
         TurnLeft,
-        Fire,
+        Fire
+    };
+    
+    private static final ShipCommand[] extendedCommands = {
         ThrustRight,
         ThrustLeft,
         ThrustFire,
@@ -39,14 +43,22 @@ public enum ShipCommand implements Action {
         ThrustRightFire,
         ThrustLeftFire,
     };
+    
+    public static final ShipCommand[] getBasicCommands() {
+    	ShipCommand[] out = new ShipCommand[ basicCommands.length ];
+    	System.arraycopy(basicCommands, 0, out, 0, basicCommands.length);
+    	return out;
+    }
 
-    public static final ShipCommand[] trunCmnds = {
-        DoNothing,
-        Thrust,
-        TurnRight,
-        TurnLeft,
-        Fire
-    };
+    public static final ShipCommand[] getAllCommands() {    	
+    	ShipCommand[] out = 
+    		new ShipCommand[ basicCommands.length + extendedCommands.length ];
+    	System.arraycopy(basicCommands, 0, out, 0, basicCommands.length);
+    	System.arraycopy(extendedCommands, 0, 
+    					 out, basicCommands.length, 
+    			         extendedCommands.length);
+    	return out;
+    }
 
     public final boolean thrust;
     public final boolean left;
@@ -54,7 +66,10 @@ public enum ShipCommand implements Action {
     public final boolean fire;
     public final byte commandByte;
 
-    private ShipCommand(boolean thrust, boolean left, boolean right, boolean fire) {
+    private ShipCommand( boolean thrust, 
+    		             boolean left, boolean right, 
+    		             boolean fire ) 
+    {
         this.thrust = thrust;
         this.left = left;
         this.right = right;

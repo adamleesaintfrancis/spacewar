@@ -15,28 +15,28 @@ import edu.ou.mlfw.Record;
  * The simulator should be able to read a controllable's currently set action 
  * and update one or more simulator objects based on that action.   
  */
-public interface Controllable {
+public interface Controllable<A extends Action, S extends State> {
 	/**
 	 * @return A set of actions that are legal for this controllable's current 
 	 * state.
 	 */
-	Set<Action> getLegalActions();
+	Set<A> getLegalActions();
 	
 	/**
 	 * Accept an action. 
 	 * @param action
 	 */
-	void setAction(Action action);
+	void setAction(A action);
 	
 	/**
 	 * @return The current action for this controllable.
 	 */
-	Action getAction();
+	A getAction();
 	
 	/**
 	 * @return A representation of the controllable's state.
 	 */
-	State getState();
+	S getState();
 	
 	/**
 	 * Return this controllable's unique identifying name.

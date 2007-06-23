@@ -21,7 +21,7 @@ import edu.ou.utils.Vector2D;
  * location (not in an obstacle) and moves to that location using the custom 
  * built high level actions and environment.
  */
-public class HighLevelRandomAgent 
+public class HighLevelRandomClient 
 	extends SpacewarClient
 	implements Drawer
 {
