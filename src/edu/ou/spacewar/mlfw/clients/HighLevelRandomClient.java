@@ -4,10 +4,8 @@ import java.awt.Graphics;
 import java.io.File;
 import java.util.*;
 
-import edu.ou.mlfw.*;
 import edu.ou.mlfw.gui.*;
 import edu.ou.spacewar.ImmutableSpacewarState;
-import edu.ou.spacewar.actions.ShipNavigationActions;
 import edu.ou.spacewar.controllables.ControllableShip;
 import edu.ou.spacewar.objects.ShipCommand;
 import edu.ou.spacewar.objects.immutables.ImmutableObstacle;
@@ -21,9 +19,7 @@ import edu.ou.utils.Vector2D;
  * location (not in an obstacle) and moves to that location using the custom 
  * built high level actions and environment.
  */
-public class HighLevelRandomClient 
-	extends SpacewarClient
-	implements Drawer
+public class HighLevelRandomClient extends AbstractShipClient implements Drawer
 {
 	private static final int fudge_factor = 10;
 	private final Random random = new Random();

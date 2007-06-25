@@ -10,7 +10,7 @@ import edu.ou.spacewar.objects.ShipCommand;
 /**
  * RandomClient returns a random action at every timestep.
  */
-public class RandomClient extends SpacewarClient {
+public class RandomClient extends AbstractShipClient {
 	private final Random random = new Random();
 	private final ShipCommand[] commands = ShipCommand.getAllCommands();
 	

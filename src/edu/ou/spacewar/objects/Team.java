@@ -11,7 +11,8 @@ import edu.ou.spacewar.controllables.*;
  * Teams aren't really objects, but are instead collections of ships, bases,
  * and flags. 
  */
-public class Team implements SWControllable {
+public class Team implements SWControllable
+{
 	private static final Logger logger = Logger.getLogger(Team.class);
 	private final Collection<Ship> ships;
 	private final String name;
@@ -59,14 +60,15 @@ public class Team implements SWControllable {
     		if(a instanceof TeamAction) {
     			TeamAction ta = (TeamAction) a;
     			TeamState ts = (TeamState) this.controllable.getState();
-    			for(Map.Entry<String, ControllableShip> e: ts.getShips().entrySet()) {
+    			Map<String, ControllableShip> ships = ts.getShips();
+    			for(Map.Entry<String, ControllableShip> e: ships.entrySet()) {
     				e.getValue().setAction(ta.getCommand(e.getKey()));
     			}
     		}
     	}
 	}
 	
-	public Controllable getControllable() {
+	public ControllableTeam getControllable() {
 		Collection<ControllableShip> cs 
 			= new ArrayList<ControllableShip>(this.ships.size()); 		
 		for(Ship s: this.ships) {

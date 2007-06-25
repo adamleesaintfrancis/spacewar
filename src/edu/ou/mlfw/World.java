@@ -70,7 +70,7 @@ public class World {
 
 		logger.debug("Extracting controllables...\n");
 		final Set<String> controllables = new HashSet<String>();
-		for (final Controllable c : simulator.getControllables()) {
+		for (Controllable c : simulator.getControllables()) {
 			if (controllables.contains(c.getName())) {
 				throw new NameCollisionException();
 			}
@@ -80,7 +80,7 @@ public class World {
 		logger.debug("Done\n");
 
 		logger.debug("Initializing clients:\n");
-		final Map<String, Client> mappings = new HashMap<String, Client>();
+		this.mappings = new HashMap<String, Client>();
 		for (final ClientMapping mapping : 
 				worldconfig.getMappingInformation()) 
 		{
@@ -91,7 +91,7 @@ public class World {
 			}
 			final ClientInitializer clientinit 
 				= ClientInitializer.fromXMLFile(
-					mapping.getClientInitializerFile());
+						mapping.getClientInitializerFile());
 			final Client client = clientinit.getClientClass().newInstance();
 			client.setDisplayName(clientinit.getDisplayName());
 			client.initialize(clientinit.getConfiguration());
@@ -110,7 +110,6 @@ public class World {
 
 		// set instance variables
 		this.simulator = simulator;
-		this.mappings = mappings;
 	}
 	
 	/**
@@ -151,7 +150,8 @@ public class World {
 			if (c instanceof InteractiveClient) {
 				logger.debug("Adding interactive client for " + 
 						c.getDisplayName() + "\n");
-				keylisteners.add(((InteractiveClient)c).getKeyListener());
+				keylisteners.add( 
+					((InteractiveClient)c).getKeyListener() );  
 			}
 		}
 			

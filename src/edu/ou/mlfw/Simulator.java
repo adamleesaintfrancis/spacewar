@@ -20,7 +20,7 @@ import javax.swing.JComponent;
  * simulator may provide an implementation of a gui (as a JComponent).
  *
  */
-public interface Simulator 
+public interface Simulator
 {
 	void initialize(File configfile);
 	void shutdown();  

@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
  * of the simulator to create a suitable control scheme; this interface merely
  * provides the hook that allows a Viewer to register the KeyListener. 
  */
-public interface InteractiveClient extends Client {
+public interface InteractiveClient extends Client
+{
 	KeyListener getKeyListener();
 }
