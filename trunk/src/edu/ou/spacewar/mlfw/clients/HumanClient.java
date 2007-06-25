@@ -4,17 +4,17 @@ import java.awt.event.*;
 import java.io.File;
 
 import edu.ou.mlfw.*;
+import edu.ou.spacewar.ImmutableSpacewarState;
+import edu.ou.spacewar.controllables.ControllableShip;
 import edu.ou.spacewar.objects.ShipCommand;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
 
-public class HumanClient implements InteractiveClient, KeyListener {
+public class HumanClient extends AbstractShipClient
+	implements InteractiveClient, KeyListener 
+{
 	private static final long serialVersionUID = 1L;
 
     private byte shipCommandAsByte = 0;
-
-    public void keyTyped(KeyEvent event) {
-    	//do nothing
-    }
 
     /**
      * Specifies a set of useful GUI keystrokes.
@@ -59,43 +59,23 @@ public class HumanClient implements InteractiveClient, KeyListener {
     }
 	
 	public KeyListener getKeyListener() {
-		// TODO Auto-generated method stub
 		return this;
 	}
 	
-	public Action startAction(State state, Controllable controllable) {
-		//am i dead?
-		if( controllable.getState() instanceof ImmutableShip ) {
-			ImmutableShip s = (ImmutableShip)(controllable.getState());
-			if (!s.isAlive()) {
-				//System.out.println("Dead ship!");
-			}
+	public ShipCommand startAction( ImmutableSpacewarState state, 
+								    ControllableShip controllable ) 
+	{
+		ImmutableShip s = controllable.getState();
+		if (!s.isAlive()) {
+			//System.out.println("Dead ship!");
 		}
 		return ShipCommand.fromByte(this.shipCommandAsByte);
 	}
 
-	public void endAction(State state, Controllable controllable) {
-		// do nothing
-	}
-
-	public void setDisplayName(String name){
-		// do nothing
-	}
-	
-	public String getDisplayName() {
-		return "HumanClient";
-	}
-
-	public void initialize(File config) {
-		// do nothing 
-	}
-
-	public void loadData(File data) {
-		// do nothing
-	}
-
-	public void shutdown() {
-		// do nothing
-		
-	}
+	//do nothing methods
+	public void endAction(ImmutableSpacewarState s, ControllableShip c) {}
+	public void initialize(File config) {}
+	public void loadData(File data) {}
+	public void shutdown() {}
+    public void keyTyped(KeyEvent event) {}
 }

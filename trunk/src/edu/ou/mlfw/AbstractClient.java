@@ -1,9 +1,6 @@
 package edu.ou.mlfw;
 
-public abstract class AbstractClient<A extends Action, 
-									 S extends State, 
-                                     C extends Controllable> 
-	implements Client<A,S,C> 
+public abstract class AbstractClient implements Client
 {
 	private String displayName = "Unset Display Name";
 	

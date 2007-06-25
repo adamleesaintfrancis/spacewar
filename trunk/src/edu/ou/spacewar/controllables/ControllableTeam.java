@@ -1,7 +1,5 @@
 package edu.ou.spacewar.controllables;
 
-import java.util.*;
-
 import edu.ou.mlfw.*;
 
 /**
@@ -31,32 +29,24 @@ public class ControllableTeam implements Controllable {
 	 * find legal actions.  The basic idea is that any combination of legal 
 	 * ship actions for ships on a team will be a legal TeamAction.
 	 */
-	public Set<Action> getLegalActions() {
-		//TODO: do we still need this method?  it might be better to just have
-		//an 'isLegal' method.  as it stands right now, even if you call this
-		//method, you still need to know what kinds of actions you're going to
-		//get back.  As commented above, sometimes the set of legal actions 
-		//might be really big, and we wouldn't want to enumerate all of them, 
-		//we would just want to make sure the action we picked was legal.  
-		//
-		//Another option would be to eliminate explicit communication of legal
-		//actions, and put it on the simulator to ignore an illegal action
-		//request.  
-	
-		return new HashSet<Action>(); 
+	public boolean isLegal(Action action) {
+		return (action instanceof TeamAction);
+		//TODO: does this need more detail on what it and isn't legal?
 	}
 
-	public Action getAction() {
+	public TeamAction getAction() {
 		return this.current;
 	}
 
 	public void setAction(Action action) {
-		if (action instanceof TeamAction) {
+		if(isLegal(action)) {
 			this.current = (TeamAction)action;
 		}
+		//TODO: else { this.current = TeamAction.DoNothing }
+
 	}
 	
-	public State getState() {
+	public TeamState getState() {
 		return this.state;
 	}
 	

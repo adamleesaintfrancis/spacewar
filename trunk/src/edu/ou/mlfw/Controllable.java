@@ -1,6 +1,5 @@
 package edu.ou.mlfw;
 
-import java.util.Set;
 import edu.ou.mlfw.Record;
 
 /**
@@ -15,29 +14,30 @@ import edu.ou.mlfw.Record;
  * The simulator should be able to read a controllable's currently set action 
  * and update one or more simulator objects based on that action.   
  */
-public interface Controllable<A extends Action, S extends State> {
+public interface Controllable {
 	/**
-	 * @return A set of actions that are legal for this controllable's current 
-	 * state.
+	 * Indicates whether the given action is legal for the controllable.
+	 * @param action
+	 * @return
 	 */
-	Set<A> getLegalActions();
+	boolean isLegal(Action action);
 	
 	/**
-	 * Accept an action. 
+	 * Set the action the controllable should take.  Any action can be give and 
+	 * no errors will be thrown; however, if !isLegal(action), the  
+	 * controllable's behavior is undefined.  It is the client's responsibility
+	 * to know whether the given action is legal or not (hint: use isLegal if 
+	 * you need to find out)
 	 * @param action
 	 */
-	void setAction(A action);
+	void setAction(Action action);
 	
 	/**
+	 * Get the action that was previously set by setAction().
 	 * @return The current action for this controllable.
 	 */
-	A getAction();
-	
-	/**
-	 * @return A representation of the controllable's state.
-	 */
-	S getState();
-	
+	Action getAction();
+
 	/**
 	 * Return this controllable's unique identifying name.
 	 * @return

@@ -17,7 +17,8 @@ import edu.ou.spacewar.objects.shadows.ShipShadow;
 import edu.ou.spacewar.simulator.Object2D;
 import edu.ou.utils.Vector2D;
 
-public class Ship extends Object2D implements SWControllable {
+public class Ship extends Object2D implements SWControllable 
+{
 	private static final Logger logger = Logger.getLogger(Ship.class);
     public static final float SHIP_RADIUS = 10;
     public static final float SHIP_MASS = 10;
@@ -88,7 +89,9 @@ public class Ship extends Object2D implements SWControllable {
         while(true) {
             try {
                 Random rand = ((SpacewarGame)space).getRandom();
-                setPosition(space.findOpenPosition(getRadius(), SpacewarGame.BUFFER_DIST, rand, SpacewarGame.ATTEMPTS));
+                setPosition( space.findOpenPosition(getRadius(), 
+                		     SpacewarGame.BUFFER_DIST, rand, 
+                		     SpacewarGame.ATTEMPTS ));
                 break;
             } catch(NoOpenPositionException e) {
                 e.printStackTrace();
@@ -172,7 +175,8 @@ public class Ship extends Object2D implements SWControllable {
     }
 
     public final void takeDamage(Vector2D deltaVelocity) {
-        float magnitude = (float) Math.pow(deltaVelocity.getMagnitude(), COLLISION_RATE);
+        float magnitude = (float) Math.pow( deltaVelocity.getMagnitude(), 
+        									COLLISION_RATE );
         takeDamage((int) Math.ceil(magnitude / 10 / SHIP_MASS));
     }
 
@@ -248,7 +252,9 @@ public class Ship extends Object2D implements SWControllable {
     	}
 
         if (activeCommand.thrust) {
-            velocity = velocity.add(orientation.multiply(THRUST_ACCELERATION * timestep));
+            velocity = 
+            	velocity.add(
+            		orientation.multiply(THRUST_ACCELERATION * timestep));
             takeDamage(THRUST_COST);
         }
 
@@ -271,12 +277,13 @@ public class Ship extends Object2D implements SWControllable {
                 Bullet bullet = clip.pop();
                 shots++;
                 bullet.setOrientation(this.orientation);
-                bullet.setPosition(this.position.add(
-                		this.orientation.multiply(SHIP_RADIUS - Bullet.BULLET_RADIUS)
-                ));
-                bullet.setVelocity(this.velocity.add(
-                        this.orientation.multiply(Bullet.BULLET_VELOCITY)
-                ));
+                bullet.setPosition(
+                	this.position.add(
+                		this.orientation.multiply(SHIP_RADIUS - 
+                								  Bullet.BULLET_RADIUS)));
+                bullet.setVelocity(
+                	this.velocity.add(
+                        this.orientation.multiply(Bullet.BULLET_VELOCITY)));
                 bullet.setLifetime(Bullet.BULLET_LIFETIME);
                 bullet.setAlive(true);
             }
@@ -286,8 +293,6 @@ public class Ship extends Object2D implements SWControllable {
 	public Bullet getBullet(int i) {
 		return bullets[i];
 	}
-
-
 
 	/**
 	 * Ships can be specified as Controllables, but we don't want to pass a
@@ -306,10 +311,12 @@ public class Ship extends Object2D implements SWControllable {
 			logger.debug("Not replacing controllable");
 			//return this.controllable;
 		}
-		ShipRecord stats = new ShipRecord(this.getName(), 1, this.beacons, this.kills, 
-				this.deaths, this.hits, this.flags, this.shots, this.cpuTime);
+		ShipRecord stats = new ShipRecord(this.getName(), 1, this.beacons, 
+				this.kills, this.deaths, this.hits, this.flags, this.shots, 
+				this.cpuTime);
 		this.controllable = new ControllableShip(this.getName(), 
-				ShipCommand.getAllCommands(), new ImmutableShip(this), stats);
+				                                 new ImmutableShip(this), 
+				                                 stats);
 		return this.controllable;
 	}
 }

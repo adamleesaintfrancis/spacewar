@@ -11,12 +11,10 @@ import java.io.File;
  * display name for the client that will be used in mlfw-generated reports and
  * in a gui if one is enabled. 
  */
-public interface Client<A extends Action, 
-						S extends State, 
-						C extends Controllable>
+public interface Client
 {
-	public A startAction(S state, C controllable);
-	public void endAction(S state, C controllable);
+	public Action startAction(State state, Controllable controllable);
+	public void endAction(State state, Controllable controllable);
 	
 	public void initialize(File config);
 	public void loadData(File data);

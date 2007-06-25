@@ -1,7 +1,5 @@
 package edu.ou.spacewar.controllables;
 
-import java.util.*;
-
 import edu.ou.mlfw.*;
 import edu.ou.spacewar.objects.ShipCommand;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
@@ -13,22 +11,21 @@ import edu.ou.spacewar.objects.immutables.ImmutableShip;
  * ensure that the simulator state cannot be corrupted by a client, this object 
  * does not maintain a reference back to its parent Ship object.
  */
-public class ControllableShip implements Controllable {
+public class ControllableShip implements Controllable
+{
 	private final String name;
-	private final Set<Action> legal;
-	private final State state;
-	private Action current;
+	private final ImmutableShip state;
+	private ShipCommand current;
 	private Record stats;
 	
-	public ControllableShip(String name, ShipCommand[] legal, ImmutableShip state, Record stats) {
+	public ControllableShip(String name, ImmutableShip state, Record stats) {
 		this.name = name;
-		this.legal = new HashSet<Action>(Arrays.asList(legal));
 		this.state = state;
 		this.stats = stats;
 	}
 
-	public Set<Action> getLegalActions() {
-		return Collections.unmodifiableSet(this.legal);
+	public boolean isLegal(Action a) {
+		return (a instanceof ShipCommand);
 	}
 
 	public Action getAction() {
@@ -36,10 +33,14 @@ public class ControllableShip implements Controllable {
 	}
 
 	public void setAction(Action action) {
-		this.current = action;
+		if(isLegal(action)) {
+			this.current = (ShipCommand)action;
+		} else {
+			this.current = ShipCommand.DoNothing;
+		}
 	}
 	
-	public State getState() {
+	public ImmutableShip getState() {
 		return this.state;
 	}
 	
