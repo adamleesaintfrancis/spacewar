@@ -16,7 +16,7 @@ import edu.ou.spacewar.controllables.TeamAction;
  */
 public abstract class AbstractTeamClient extends AbstractClient
 {
-	public Action startAction( State state, Controllable controllable ) {
+	public final Action startAction( State state, Controllable controllable ) {
 		return startAction( (ImmutableSpacewarState)state,
 				            (ControllableTeam) controllable );
 	}
@@ -24,7 +24,7 @@ public abstract class AbstractTeamClient extends AbstractClient
 	public abstract TeamAction startAction( ImmutableSpacewarState state, 
 			                                ControllableTeam controllable);
 
-	public void endAction( State state, Controllable controllable ) {
+	public final void endAction( State state, Controllable controllable ) {
 		endAction( (ImmutableSpacewarState)state,
 				   (ControllableTeam) controllable );
 	}

@@ -16,7 +16,7 @@ import edu.ou.spacewar.objects.ShipCommand;
  */
 public abstract class AbstractShipClient extends AbstractClient
 {
-	public Action startAction( State state, Controllable controllable ) {
+	public final Action startAction( State state, Controllable controllable ) {
 		return startAction( (ImmutableSpacewarState)state,
 				            (ControllableShip) controllable );
 	}
@@ -24,7 +24,7 @@ public abstract class AbstractShipClient extends AbstractClient
 	public abstract ShipCommand startAction( ImmutableSpacewarState state, 
 			                                 ControllableShip controllable);
 
-	public void endAction( State state, Controllable controllable ) {
+	public final void endAction( State state, Controllable controllable ) {
 		endAction( (ImmutableSpacewarState)state,
 				   (ControllableShip) controllable );
 	}
