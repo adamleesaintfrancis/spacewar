@@ -11,7 +11,8 @@ import edu.ou.mlfw.Client;
  * initializes a Client.  A ClientMapping from a WorldConfig points 
  * to a ClientInitializer.  
  */
-public class ClientInitializer {
+public class ClientInitializer 
+{
 	private final Class<? extends Client> clientClass;
 	private final File configuration;
 	private final File data;
@@ -29,10 +30,28 @@ public class ClientInitializer {
 		this.displayName = displayName;
 	}
 
+	/**
+	 * Each client will be an instance of a class submitted by students.  We
+	 * don't know ahead of time what that class will be named, what package it
+	 * will live in, etc, so we make the client's class configurable.  
+	 * 
+	 * TODO:  Right now clients aren't sandboxed in any way.  This means they
+	 * could make use of any class on the classpath, which includes other 
+	 * client code, system-level classes, etc.
+	 * 
+	 * @return Return the class that should be used to instantiate the client 
+	 * object. 
+	 */
 	public Class<? extends Client> getClientClass() {
 		return clientClass;
 	}
 
+	/**
+	 * Each client can be configured independently, using any format the client
+	 * wishes to use.  The only caveat is that the config fit into a single 
+	 * file.  This returns that file location.
+	 * @return The location of the client's configuration file.
+	 */
 	public File getConfiguration() {
 		return configuration;
 	}
@@ -57,18 +76,5 @@ public class ClientInitializer {
 		ClientInitializer out = (ClientInitializer) xstream.fromXML(fr);
 		fr.close();
 		return out;
-	}
-
-	public static void main(String[] args) {
-		Class<? extends Client> klass = Client.class;
-		File config = new File("./config.txt");
-		File data = new File("./knowledge.txt");
-		String display = "Display Name";
-		
-		ClientInitializer env = 
-			new ClientInitializer(klass, config, data, display);
-		XStream xstream = getXStream();
-		xstream.alias("ClientConfiguration", ClientInitializer.class);
-		System.out.println(xstream.toXML(env));
 	}
 }
