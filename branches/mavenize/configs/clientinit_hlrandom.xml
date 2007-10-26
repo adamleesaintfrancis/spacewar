@@ -1,0 +1,12 @@
+<ClientInitializer>
+  <environmentEntry>
+    <environmentClass>edu.ou.spacewar.mlfw.environments.HighLevelEnvironment</environmentClass>
+    <configuration/>
+  </environmentEntry>
+  <agentEntry>
+    <agentClass>edu.ou.spacewar.mlfw.agents.HighLevelRandomAgent</agentClass>
+    <configuration/>
+    <knowledge/>
+  </agentEntry>
+  <displayName>HLRandom Agent</displayName>
+</ClientInitializer>

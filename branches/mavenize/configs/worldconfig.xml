@@ -1,0 +1,17 @@
+<WorldConfiguration>
+  <simulatorInitializerFile>siminit.xml</simulatorInitializerFile>
+  <mappingInformation>
+   <!--<ClientMappingEntry>
+      <controllableName>Human</controllableName>
+      <clientInitializerFile>interactiveclientinit.xml</clientInitializerFile>
+    </ClientMappingEntry>-->
+    <ClientMappingEntry>
+      <controllableName>Team1</controllableName>
+      <clientInitializerFile>teamclientinit.xml</clientInitializerFile>      
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Team2</controllableName>
+      <clientInitializerFile>teamclientinit.xml</clientInitializerFile>      
+    </ClientMappingEntry>
+  </mappingInformation>
+</WorldConfiguration>

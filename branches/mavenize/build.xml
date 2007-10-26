@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<project name="Spacewar" default="gui" basedir=".">
+  <property name="src" value="src"/>
+  <property name="build" value="build"/>
+  <property name="dist" value="dist"/>
+
+  <property name="output.dir" value="./classes"/>
+  
+  <path id="spacewar.sourcepath">
+    <dirset dir="./">
+        <include name="src"/>
+    </dirset>
+  </path>
+
+  <path id="spacewar.classpath">
+    <pathelement location="./lib/xstream.jar"/>
+    <pathelement location="./lib/xpp3.jar"/>
+    <pathelement location="./lib/jargs.jar"/>
+	<pathelement location="./lib/log4j-1.2.14.jar"/>
+  </path>
+
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${build}"/>
+	<mkdir dir="${dist}"/>
+  </target>
+
+  <target name="compile" depends="init"> 
+    <javac srcdir="${src}" destdir="${build}" debug="on" debuglevel="lines,vars,source">
+	  <classpath refid="spacewar.classpath"/>
+      <compilerarg value="-Xlint"/>
+	  <src refid="spacewar.sourcepath"/>
+    </javac>
+    <copy file="${src}/log4j.properties" todir="${build}"/>    
+  </target>
+
+  <target name="combined" depends="compile">
+    <unzip dest="${build}">
+      <fileset dir=".">
+        <include name="lib/*.jar"/>
+      </fileset>
+    </unzip>
+    <delete>
+      <fileset dir="${build}/META-INF"/>
+    </delete>
+    <jar jarfile="${dist}/Spacewar-complete-${DSTAMP}.jar" basedir="${build}">
+      <manifest>
+        <attribute name="Main-class" value="edu.ou.mlfw.World"/>
+      </manifest>
+    </jar>
+    <copy todir="${dist}">
+      <fileset dir="configs"/>
+    </copy>
+  </target>
+  
+  <target name="separated" depends="compile">
+    <mkdir dir="${dist}/lib"/>
+    <jar jarfile="${dist}/lib/mlfw.jar" basedir="${build}" includes="edu/ou/mlfw/**"/>
+    <jar jarfile="${dist}/lib/spacewar.jar" basedir="${build}" includes="edu/ou/spacewar/**"/>
+    <jar jarfile="${dist}/lib/utils.jar" basedir="${build}" includes="edu/ou/utils/**"/>
+	<jar jarfile="${dist}/lib/useragent.jar" basedir="${build}" excludes="edu/**"/>
+    <jar jarfile="${dist}/main.jar">
+      <manifest>
+        <attribute name="Main-class" value="edu.ou.mlfw.World"/>
+        <attribute name="Class-path" value="lib/utils.jar lib/spacewar.jar lib/mlfw.jar lib/xpp3.jar lib/xstream.jar lib/jargs.jar lib/log4j-1.2.14.jar lib/useragent.jar ."/>
+      </manifest>
+    </jar>
+    <copy todir="${dist}">
+      <fileset dir="configs"/>
+    </copy>
+    <copy file="lib/xstream.jar" tofile="${dist}/lib/xstream.jar"/>
+    <copy file="lib/xpp3.jar" tofile="${dist}/lib/xpp3.jar"/>
+    <copy file="lib/jargs.jar" tofile="${dist}/lib/jargs.jar"/>
+	<copy file="lib/log4j-1.2.14.jar" tofile="${dist}/lib/log4j-1.2.14.jar"/>
+  </target>
+
+  <target name="dist" depends="separated">
+  </target>
+
+  <target name="clean">
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+	<delete dir="docs/api"/>
+  </target>
+
+  <target name="run" depends="separated">
+    <java jar="${dist}/main.jar" fork="true" dir="${dist}">
+      <jvmarg value="-Djava.awt.headless=true"/>
+      <jvmarg value="-Xmx512M"/>
+    </java>
+  </target>
+
+  <target name="ladder-run" depends="separated">
+	<jar jarfile="${dist}/ladder.jar">
+	  <manifest>
+	    <attribute name="Main-class" value="edu.ou.mlfw.Ladder"/>
+	    <attribute name="Class-path" value="lib/utils.jar lib/spacewar.jar lib/mlfw.jar lib/xpp3.jar lib/xstream.jar lib/jargs.jar lib/log4j-1.2.14.jar lib/useragent.jar ."/>
+	  </manifest>
+	</jar>
+	<java jar="${dist}/ladder.jar" fork="true" dir="${dist}">
+	  <jvmarg value="-Djava.awt.headless=true"/>
+	  <jvmarg value="-Xmx512M"/>
+	</java>
+  </target>	
+	
+  <target name="gui" depends="separated">
+    <java jar="${dist}/main.jar" fork="true" dir="${dist}">
+      <arg value="-g"/>
+      <jvmarg value="-Xmx512M"/>
+    </java>
+  </target>
+	
+  <target name="ladder-gui" depends="separated">
+    <jar jarfile="${dist}/ladder.jar">
+      <manifest>
+	    <attribute name="Main-class" value="edu.ou.mlfw.Ladder"/>
+		<attribute name="Class-path" value="lib/utils.jar lib/spacewar.jar lib/mlfw.jar lib/xpp3.jar lib/xstream.jar lib/jargs.jar lib/log4j-1.2.14.jar lib/useragent.jar ."/>
+      </manifest>
+    </jar>
+    <java jar="${dist}/ladder.jar" fork="true" dir="${dist}">
+	  <arg value="-g"/>
+	  <jvmarg value="-Xmx512M"/>
+    </java>
+  </target>	
+	
+  <target name="doc">
+	<mkdir dir="docs" />
+	<javadoc destdir="docs/api"
+			 author="true"
+			 version="true"
+			 use="true"
+		     windowtitle="Machine Learning Framework / Spacewar! API"> 
+	  <packageset dir="src" defaultexcludes="yes">
+	    <include name="edu/**"/>
+	  </packageset>
+	  <doctitle><![CDATA[<h1>Machine Learning Framework / Spacewar! API</h1>]]></doctitle>
+      <bottom><![CDATA[<i>Copyright &#169; 2007 University of Oklahoma. All Rights Reserved.</i>]]></bottom>
+	  <tag name="todo" scope="all" description="To do:"/>
+	  <group title="Machine Learning Framework Packages" packages="edu.ou.mlfw*"/>
+      <group title="Spacewar! Packages" packages="edu.ou.spacewar*"/>
+      <group title="Utilities Packages" packages="edu.ou.utils*"/>
+	</javadoc>	
+  </target>
+	
+</project>
+
