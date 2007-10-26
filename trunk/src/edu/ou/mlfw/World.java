@@ -23,7 +23,7 @@ import org.apache.log4j.*;
  * Client configurations, and specifies how clients are paired with 
  * Controllables.  
  * 
- * This class also provides control for the gui if disply is desired by the 
+ * This class also provides control for the gui if display is desired by the 
  * user.
  */
 public class World {
@@ -209,7 +209,7 @@ public class World {
 		State state = simulator.getState();	
 		startActions(state);
 		simulator.advance();
-		state = simulator.getState();  //if getState is expensive, simulator should memoize
+		state = simulator.getState();  
 		endActions(state);
 	}
 	
@@ -259,9 +259,6 @@ public class World {
 	 * @param d A Drawer object.
 	 */
 	private void handleDrawer(final JComponent gui, final Drawer d) {
-//		System.out.println("isEventDispatchThread:" + 
-//				SwingUtilities.isEventDispatchThread());
-		
 		d.updateGraphics(gui.getGraphics());
 		if (gui instanceof Shadow2DCanvas) {
 			Set<Shadow2D> toregister = d.registerShadows();
@@ -287,8 +284,8 @@ public class World {
 	 * @return A list of Record objects.
 	 */
 	public List<Record> getRecords() {
-		Collection<Controllable> controllables = simulator
-				.getAllControllables();
+		Collection<Controllable> controllables 
+			= simulator.getAllControllables();
 		List<Record> out = new ArrayList<Record>(controllables.size());
 		for (Controllable c : controllables) {
 			String displayName = mappings.get(c.getName()).getDisplayName();

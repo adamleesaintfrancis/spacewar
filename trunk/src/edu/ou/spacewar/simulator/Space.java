@@ -13,31 +13,45 @@ import edu.ou.utils.Vector2D;
 
 /**
  * This class is responsible for handling the physics of the 2D toroidal space
- * and the objects within it. This includes collision detection, the size of the
- * space, placing Object2Ds in the space, etc.
+ * and the objects within it. This includes collision detection, the size of 
+ * the space, placing Object2Ds in the space, etc.
  */
-public abstract class Space implements CollisionHandler, Iterable<Object2D> {
+public abstract class Space 
+	implements CollisionHandler, Iterable<Object2D> 
+{
+	//The width and height of the environment.  halfWidth and 
+	//halfHeight are stored because they are used very frequently.
 	private final float width, halfWidth, height, halfHeight;
 
+	//Callbacks for when collisions are detected.
 	private final CollisionHandler collisionHandler;
 
-	// distances, tempDistances, and distancesSaved are used for caching
+	//Distances between objects are cached for faster lookup.
 	private final DistanceCache distanceCache;
 
-	// The main object storage array. This is marked protected because we want
-	// to farm out to a subclass the responsibility for handling the details of
-	// what kinds of objects are stored where and how those objects are accessed
+	//The main object storage array. This is marked protected because we want
+	//to farm out to a subclass the responsibility for handling the details of
+	//storing and accessing different kinds of objects.
 	protected final Object2D[] objects;
 
-	// Timestamp keeps track of the elapsed simulation time in seconds,
-	// while stepcount keeps track of how many times advanceTime() has been
-	// called.
+	//How many seconds elapse each simulation step.
+	protected final float timeStep;
+	
+	//Track the elapsed simulation time in seconds.
 	private float timestamp = 0.0f;
-
+	
+	//Track how many times advanceTime() has been called.
 	private int stepcount = 0;
 	
-	protected final float timeStep;
-
+	/**
+	 * Create a new Space object.
+	 * 
+	 * @param width The width of the environment (unitless)
+	 * @param height The height of the environment (unitless)
+	 * @param timeStep The number of seconds for each step of the simulator. 
+	 * @param collisionHandler Callbacks for when collisions are detected.
+	 * @param numberOfObjects The maximum number of objects in the environment.
+	 */
 	public Space(float width, float height, float timeStep, 
 			CollisionHandler collisionHandler, int numberOfObjects) {
 		this.width = width;
@@ -55,15 +69,15 @@ public abstract class Space implements CollisionHandler, Iterable<Object2D> {
 	}
 
 	public Iterator<Object2D> iterator() {
-		return new ArrayIterator<Object2D>(this.objects, 0, this.objects.length);
+		return new ArrayIterator<Object2D>(objects, 0, objects.length);
 	}
 
 	public float getTimestamp() {
-		return this.timestamp;
+		return timestamp;
 	}
 
 	public int getStepCount() {
-		return this.stepcount;
+		return stepcount;
 	}
 
 	public final float getWidth() {
