@@ -16,16 +16,14 @@ class MappingsGenerator implements Iterable<ClientMapping[]>
 	
 	MappingsGenerator( final LadderConfig ladderconfig ) {
 		variableClientMappings = ladderconfig.getVariableClientMappings();
-		agentsPerGame = 
-			Math.min(ladderconfig.getMaxVariableAgentsPerGame(),
-					 variableClientMappings.length);
+		agentsPerGame = Math.min(ladderconfig.getMaxVariableAgentsPerGame(),
+								 variableClientMappings.length);
 		
-		final ClientMapping[] staticClientMappings = 
-			ladderconfig.getStaticClientMappings();
+		final ClientMapping[] staticClientMappings 
+			= ladderconfig.getStaticClientMappings();
 
-		allClientMappings = 
-			new ClientMapping[ agentsPerGame + 
-			                   staticClientMappings.length ];
+		allClientMappings = new ClientMapping[ agentsPerGame + 
+		                                       staticClientMappings.length ];
 
 		//Copy static clients to end of allClientMappings array
 		System.arraycopy( staticClientMappings, 0,   
@@ -35,7 +33,7 @@ class MappingsGenerator implements Iterable<ClientMapping[]>
 
 	public Iterator<ClientMapping[]> iterator() {
 		return new Iterator<ClientMapping[]>() {
-			CombinationGenerator comboGen 
+			final CombinationGenerator comboGen 
 				= new CombinationGenerator( variableClientMappings.length, 
 											agentsPerGame );
 			public boolean hasNext() {
@@ -43,20 +41,16 @@ class MappingsGenerator implements Iterable<ClientMapping[]>
 			}
 			
 			public ClientMapping[] next() {
-				int[] clientIndices = comboGen.getNext();
 				int allMappingsIndex = 0;
-				for(int clientIndex : clientIndices) {
-					ClientMapping clientMapping = 
-						variableClientMappings[clientIndex];
-					//TODO: does this need to be a copy of the mapping?
-					//before this was appending the index value from the 
-					//for loop to the controllable's name.
+				for(int clientIndex : comboGen.getNext()) {
+					final ClientMapping clientMapping 
+						= variableClientMappings[clientIndex];
 					
-					//a[j] = new ClientMapping(clientTemp.getControllableName()+j, clientTemp.getClientInitializerFile());
 					allClientMappings[allMappingsIndex++] = clientMapping;
 
-					LadderServer.logger.info( clientMapping.getControllableName() + ": " 
-								 + clientMapping.getClientInitializerFile());
+					LadderServer.logger.info( 
+							clientMapping.getControllableName() + ": " 
+							+ clientMapping.getClientInitializerFile());
 				}
 
 				return allClientMappings;
