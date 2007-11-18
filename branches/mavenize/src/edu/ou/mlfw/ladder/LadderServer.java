@@ -344,20 +344,14 @@ public class LadderServer {
 	public static void exit(String exitMessage) {
 		logger.error(
 				exitMessage + "\n\n"
-				+"Usage: SpacewarSim [-h] [-g] [-c /path/to/configfile] \n\n"
-				+
-
-				"-h display this help screen and exit.\n\n"
-				+
-
-				"-g indicates the gui should be shown.  If this flag\n"
+				+ "Usage: SpacewarSim [-h] [-g] [-c /path/to/configfile] \n\n"
+				+ "-h display this help screen and exit.\n\n"
+				+ "-g indicates the gui should be shown.  If this flag\n"
 				+ "   is not set, the program will run in graphical mode.\n\n"
-				+
-
-				"-c indicates the path to the ladder configuration file.\n"
-				+"   If -c is not set, the program will attempt to find\n"
-				+"   and load \"" + DEFAULT_CONFIG + "\" in the working "
-				+"   directory.\n\n"
+				+ "-c indicates the path to the ladder configuration file.\n"
+				+ "   If -c is not set, the program will attempt to find\n"
+				+ "   and load \"" + DEFAULT_CONFIG + "\" in the working "
+				+ "   directory.\n\n"
 		);
 		System.exit(-1);
 	}

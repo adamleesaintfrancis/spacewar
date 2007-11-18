@@ -9,7 +9,9 @@ public class GameSettings implements LadderMessage {
 	private final int gameID;
 	private final ClientMapping[] clients;
 	
-	public GameSettings(File simInitFile, int gameID, ClientMapping[] clients) {
+	public GameSettings(File simInitFile, 
+						int gameID, 
+						ClientMapping[] clients) {
 		this.simInitFile = simInitFile;
 		this.gameID = gameID;
 		this.clients = clients;
@@ -26,7 +28,4 @@ public class GameSettings implements LadderMessage {
 	public File getSimInitFile() {
 		return simInitFile;
 	}
-	
-	
-	
 }
