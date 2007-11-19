@@ -7,9 +7,18 @@ import com.thoughtworks.xstream.XStream;
 import edu.ou.mlfw.Client;
 
 /**
- * A ClientInitializer is the means by which World finds, loads, and
- * initializes a Client.  A ClientMapping from a WorldConfig points 
- * to a ClientInitializer.  
+ * A ClientInitializer is the means by which a World finds, loads, and 
+ * initializes a Client.  From the point of view of a Client developer,
+ * the ClientInitializer is a minimal set of configuration necessary for
+ * specifying the Client implementation class (which must be available on the 
+ * classpath), the file that the client may use for configuration purposes, and 
+ * the file the client may use for data loading purposes.  A ClientInitializer 
+ * also allows the developer to specify the name that should be associated with 
+ * the Client for display purposes (on the ladder, for instance). 
+ * 
+ * A ClientInitializer will normally be created by deserializing from an 
+ * xml file (see the fromXMLFile method), the location of which is given as 
+ * part of a ClientMapping in a WorldConfig.    
  */
 public class ClientInitializer 
 {
@@ -18,10 +27,18 @@ public class ClientInitializer
 	private final File data;
 	private final String displayName;
 	
-	public ClientInitializer(Class<? extends Client> clientClass, 
-								File configuration, 
-								File data,
-								String displayName) 
+	/**
+	 * Constructor for a ClientInitializer.
+	 * 
+	 * @param clientClass The client class
+	 * @param configuration The file location of the client's configuration.
+	 * @param data The file location of the client's data.
+	 * @param displayName The name that should be displayed for the client.
+	 */
+	public ClientInitializer(final Class<? extends Client> clientClass, 
+							 final File configuration, 
+							 final File data,
+							 final String displayName) 
 	{
 		super();
 		this.clientClass = clientClass;
@@ -35,10 +52,6 @@ public class ClientInitializer
 	 * don't know ahead of time what that class will be named, what package it
 	 * will live in, etc, so we make the client's class configurable.  
 	 * 
-	 * TODO:  Right now clients aren't sandboxed in any way.  This means they
-	 * could make use of any class on the classpath, which includes other 
-	 * client code, system-level classes, etc.
-	 * 
 	 * @return Return the class that should be used to instantiate the client 
 	 * object. 
 	 */
@@ -50,30 +63,60 @@ public class ClientInitializer
 	 * Each client can be configured independently, using any format the client
 	 * wishes to use.  The only caveat is that the config fit into a single 
 	 * file.  This returns that file location.
+	 * 
 	 * @return The location of the client's configuration file.
 	 */
 	public File getConfiguration() {
 		return configuration;
 	}
 
+	/**
+	 * Each client can specify the location of any data that should be loaded
+	 * when the simulator starts up.
+	 * 
+	 * @return The location of the client's data file.
+	 */
 	public File getData() {
 		return data;
 	}
 	
+	/**
+	 * Each client can specify the name that should be associated with that 
+	 * client for display purposes.
+	 * 
+	 * @return The display name of the client.
+	 */
 	public String getDisplayName() {
 		return displayName;
 	}
 	
+	/**
+	 * @return An XStream object properly initialized for serializing and 
+	 * deserializing a ClientInitializer.  
+	 */
 	public static XStream getXStream() {
 		final XStream xstream = new XStream();
 		xstream.alias("ClientInitializer", ClientInitializer.class);
 		return xstream;
 	}
 	
-	public static ClientInitializer fromXMLFile(File f) throws IOException {
-		FileReader fr = new FileReader(f);
-		XStream xstream = getXStream();
-		ClientInitializer out = (ClientInitializer) xstream.fromXML(fr);
+	/**
+	 * Factory method to generate a ClientInitializer from the given file.
+	 * This uses Xstream to deserialize an XML representation of the
+	 * ClientInitializer object; additional documentation on the required 
+	 * format for this file can be found in the example ClientInitializer 
+	 * config file included in the samples distribution.
+	 * 
+	 * @param f The file to deserialize.
+	 * @return The deserialized ClientInitializer
+	 * @throws IOException
+	 */
+	public static ClientInitializer fromXMLFile(final File f) 
+		throws IOException 
+	{
+		final FileReader fr = new FileReader(f);
+		final XStream xstream = getXStream();
+		final ClientInitializer out = (ClientInitializer)xstream.fromXML(fr);
 		fr.close();
 		return out;
 	}
