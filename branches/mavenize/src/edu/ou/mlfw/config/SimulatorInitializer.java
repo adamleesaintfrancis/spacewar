@@ -1,9 +1,6 @@
 package edu.ou.mlfw.config;
 
 import java.io.*;
-import java.util.Collection;
-
-import javax.swing.JComponent;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -26,6 +23,12 @@ public class SimulatorInitializer {
 	private final Class<? extends Simulator> simulatorClass;
 	private final File configuration;
 	
+	/**
+	 * Constructor for a SimulatorInitializer.
+	 * 
+	 * @param simulatorClass The class to load as the simulator.
+	 * @param configuration The file location of the simulator configuration.
+	 */
 	public SimulatorInitializer(Class<? extends Simulator> simulatorClass, 
 								File configuration) 
 	{
@@ -34,83 +37,48 @@ public class SimulatorInitializer {
 		this.configuration = configuration;
 	}
 
+	/**
+	 * @return The file location of the configuration.
+	 */
 	public File getConfiguration() {
 		return configuration;
 	}
 
+	/**
+	 * @return The class to use for Simulator.
+	 */
 	public Class<? extends Simulator> getSimulatorClass() {
 		return simulatorClass;
 	}
 	
+	/**
+	 * @return An XStream object properly initialized for serializing and 
+	 * deserializing a SimulatorInitializer.  
+	 */
 	public static XStream getXStream() {
 		XStream out = new XStream();
 		out.alias("SimulatorInitializer", SimulatorInitializer.class);
 		return out;
 	}
 	
-	public static SimulatorInitializer fromXMLFile(File f) throws IOException {
+	/**
+	 * Factory method to generate a SimulatorInitializer from the given file.
+	 * This uses Xstream to deserialize an XML representation of the
+	 * SimulatorInitializer object; additional documentation on the required 
+	 * format for this file can be found in the example SimulatorInitializer 
+	 * config file included in the samples distribution.
+	 * 
+	 * @param f The file to deserialize.
+	 * @return The deserialized SimulatorInitializer
+	 * @throws IOException
+	 */	
+	public static SimulatorInitializer fromXMLFile(File f) 
+		throws IOException 
+	{
 		FileReader fr = new FileReader(f);
 		XStream xstream = getXStream();
 		SimulatorInitializer out = (SimulatorInitializer) xstream.fromXML(fr);
 		fr.close();
 		return out;
-	}
-
-	public static void main(String[] args) {
-		Class<? extends Simulator> klass = new Simulator() {
-			public Collection<Controllable> getControllables() {
-				System.out.println("getControllables called!");
-				return null;
-			}
-
-			public Collection<Controllable> getAllControllables() {
-				System.out.println("getAllControllables called!");
-				return null;
-			}
-			
-			public void initialize(File config) {
-				System.out.println("initialize called!");
-			}
-
-			public void shutdown() {
-				System.out.println("shutdown called!");
-			}
-
-			public State getState() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public void advance() {
-				// TODO Auto-generated method stub	
-			}
-
-			public boolean isRunning() {
-				// TODO Auto-generated method stub
-				return false;
-			}
-
-			public JComponent getGUI() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		}.getClass();
-		File file = new File("./foo.xml");
-		try {
-			System.out.println(file.getCanonicalPath());
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
-		
-		SimulatorInitializer simconf = new SimulatorInitializer(klass, file);
-		XStream xstream = getXStream();
-		System.out.println(xstream.toXML(simconf));
-		
-		try {
-			Simulator sim = (Simulator)simconf.getSimulatorClass().newInstance();
-			sim.initialize(simconf.getConfiguration());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 }
