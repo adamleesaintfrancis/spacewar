@@ -327,6 +327,7 @@ public class ShipRecord extends Record {
 					Integer.toString(totalFlags) + "," +
 					Float.toString(avgCPUTime)+ "," +
 					Long.toString(totalCPUTime) + ",");
+			break;
 		}
 		default:
 		{

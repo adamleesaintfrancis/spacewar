@@ -1,8 +1,8 @@
 Machine Learning Framework
 
 Goals:
-1.)  Code separation of agents and simulators to allow for independent development of each
-2.)  Runtime separation of agents and simulators to allow for multi-agent competition
+1.)  Separation of clients and simulators to allow for independent development of each
+2.)  Runtime separation of clients and simulators to allow for multi-agent competition
 3.)  Simplified agent development focused on AI/ML issues (rather than simulaton details)
 4.)  Benchmarking for agent performance using simulator and agent-specific metrics
 5.)  GUI mode for human interaction and visual feedback during development
@@ -11,25 +11,36 @@ Goals:
            World
           /     \
          /       \
- Simulator       Environment
-     |                |
-     |                |
-     |                | 
-Controllable        Agent
+    Simulator     |
+        |         |
+        |         | 
+Controllable     Client
 
-Controllables define what actions are available to manipulate objects in a Simulator.
-The simulator understands how specified actions are to be interpreted for a controllable
-in context of other controllables, non-controllables, and some set of internal simulation 
-"physics".   
+A World object is the central broker for the machine learning framework.  
+At startup, it finds and loads a Simulator, extracts a set of Controllables 
+from that Simulator, and matches each Controllable with corresponding Client 
+and Record objects.  If graphics are enabled, the World is also responsible
+for asking the Simulator to provide the appropriate drawing code.  
 
-Agents decide which actions a controllable should take at any given time, based on the information
-about the state of the Simulator available through an Environment.  An Environment provides an 
-abstraction layer that can be used to hide, limit access to, or otherwise transform simulator details, 
-and different environments can be defined so that different agents or controllables can interact with 
-the same simulator.
+The World then transitions to driving the Simulator, using a simple loop that 
+requests a representation of the simulator state, distributes that state to 
+each client, asks each client for an action for its controllable in response
+to that state, and finally, asks the simulator to update the states of the 
+controllables and the state of the whole simulator based on those actions. 
 
-A World acts as a bridge between a single Simulator and the Environments and Agents associated with
-each Controllable.  Every Controllable must have exactly one Agent, and every Agent has exactly one
-Environment. 
+A Simulator is just an interface; the machine learning framework does not 
+enforce any kind of behavior other than that interface.  The intent, however,
+is that a Simulator be able to maintain state and provide controllables that
+can be handled by clients.   
+
+Controllables are also just interfaces.  The intent of a controllable is that
+it can provide a list of legal actions for any state, and can, in turn, have an
+action set by a client.
+
+Clients decide which actions a controllable should take at any given time, 
+based on the information about the state of the Simulator available through an 
+Environment.  
+
+
 
 

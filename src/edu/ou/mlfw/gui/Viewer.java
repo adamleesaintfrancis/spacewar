@@ -56,6 +56,7 @@ public class Viewer extends JFrame implements KeyListener {
                     this.speed = lastspeed;
                     this.lastspeed = -1;
                 }
+                break;
             case KeyEvent.VK_S:
                 break;
         }

@@ -1,6 +1,7 @@
 package edu.ou.mlfw;
 
 import jargs.gnu.CmdLineParser;
+import jargs.gnu.CmdLineParser.Option;
 
 import java.awt.event.KeyListener;
 import java.io.*;
@@ -336,9 +337,9 @@ public class World {
 	 */
 	public static Arguments parseArgs(final String[] args) {
 		final CmdLineParser parser = new CmdLineParser();
-		final CmdLineParser.Option help = parser.addBooleanOption('h', "help");
-		final CmdLineParser.Option gui = parser.addBooleanOption('g', "gui");
-		final CmdLineParser.Option config = parser.addStringOption('c',	"config");
+		final Option help = parser.addBooleanOption('h', "help");
+		final Option gui = parser.addBooleanOption('g', "gui");
+		final Option config = parser.addStringOption('c', "config");
 
 		try {
 			parser.parse(args);
@@ -352,11 +353,11 @@ public class World {
 
 		// store the file indicated by the config argument, or the default
 		// location if the config argument is not specified.
-		File configLocation = new File((String) parser.getOptionValue(config,
-				DEFAULT_CONFIG));
+		final File configLocation 
+			= new File((String)parser.getOptionValue(config, DEFAULT_CONFIG));
 
 		// store whether or not the gui should be displayed (false by default)
-		boolean showGUI = parser.getOptionValue(gui) != null;
+		final boolean showGUI = parser.getOptionValue(gui) != null;
 
 		return new Arguments(configLocation, showGUI);
 	}
@@ -383,13 +384,10 @@ public class World {
 	public static void exit(String exitMessage) {
 		logger.error(exitMessage + "\n\n"
 				+ "Usage: SpacewarSim [-h] [-g] [-c /path/to/configfile] \n\n"
-				+ "-h display this help screen and exit.\n\n" +
-
-				"-g indicates the gui should be shown.  If this flag\n"
+				+ "-h display this help screen and exit.\n\n" 
+				+ "-g indicates the gui should be shown.  If this flag\n"
 				+ "   is not set, the program will run in experiment mode.\n\n"
-				+
-
-				"-c indicates the path to the world configuration file.\n"
+				+ "-c indicates the path to the world configuration file.\n"
 				+ "   If -c is not set, the program will attempt to find\n"
 				+ "   and load \"" + DEFAULT_CONFIG + "\" in the working "
 				+ "   directory.\n\n");
