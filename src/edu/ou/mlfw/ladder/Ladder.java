@@ -40,6 +40,16 @@ public class Ladder {
 	public void run() {
 		//main ladder loop
 		for(ClientMapping[] mappings : new MappingsGenerator(ladderconfig)) {
+			final StringBuilder logEntry 
+				= new StringBuilder("Starting match using mappings: \n");
+			for( final ClientMapping mapping : mappings ) {
+				logEntry.append(mapping.getControllableName());
+				logEntry.append(": ");
+				logEntry.append(mapping.getClientInitializerFile());
+				logEntry.append("\n");
+			}
+			logger.info( logEntry );
+			
 			for(int k = 0; k < ladderconfig.getNumMatchRepeats(); k++) {
 				gameCnt++;
 				logger.info("Starting game " + gameCnt);
@@ -56,15 +66,15 @@ public class Ladder {
 					}
 					recordTemp = world.getRecords();
 				}
-				catch(java.lang.ClassNotFoundException e){
+				catch(java.lang.ClassNotFoundException e) {
 					e.printStackTrace();
 					logger.error("An agent required a class that could not be found");
 				}
-				catch(NullPointerException e){
+				catch(NullPointerException e) {
 					e.printStackTrace();
 					logger.error("An agent had a null pointer exception");
 				}
-				catch(Exception e){
+				catch(Exception e) {
 					e.printStackTrace();
 				}
 				float gameTimeElapsed = (new Date().getTime() - gameStartTime);
