@@ -9,7 +9,9 @@ public class GameResult implements LadderMessage {
 	private final long gameRunTime;
 	private final List<Record> records;
 	
-	public GameResult(final int gameID, final long gameRunTime, final List<Record> records) {
+	public GameResult(final int gameID, 
+					  final long gameRunTime, 
+					  final List<Record> records) {
 		super();
 		this.gameID = gameID;
 		this.gameRunTime = gameRunTime;
