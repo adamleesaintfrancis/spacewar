@@ -4,13 +4,16 @@ import java.io.*;
 
 import com.thoughtworks.xstream.XStream;
 
+import edu.ou.mlfw.Simulator;
+
 /**
  * A WorldConfiguration points to the file location of a SimulatorInitializer
  * and provides mapping entries from uniquely named controllables to the
  * clients (that is, Environment/Agent pairs) that will control them. 
  */
 public class WorldConfig {
-	private final File simulatorInitializerFile;
+	private final Class<? extends Simulator> simulatorClass;
+	private final File simulatorConfig;
 	private final ClientMapping[] mappingInformation;
 	
 	/**
@@ -22,11 +25,13 @@ public class WorldConfig {
 	 * controllables that should be provided by the simulator, and the 
 	 * ClientInitializers for the clients that will control them.
 	 */
-	public WorldConfig(final File simulatorConfigurationFile, 
+	public WorldConfig(final Class<? extends Simulator> simulatorClass, 
+					   final File simulatorConfig, 
 					   final ClientMapping[] mappingInformation) 
 	{
 		super();
-		this.simulatorInitializerFile = simulatorConfigurationFile;
+		this.simulatorClass = simulatorClass;
+		this.simulatorConfig = simulatorConfig;
 		this.mappingInformation = mappingInformation;
 	}
 	
@@ -40,8 +45,12 @@ public class WorldConfig {
 	/**
 	 * @return The file location of the SimulatorInitializer.
 	 */
-	public File getSimulatorInitializerFile() {
-		return simulatorInitializerFile;
+	public File getSimulatorConfig() {
+		return simulatorConfig;
+	}
+	
+	public Class<? extends Simulator> getSimulatorClass() {
+		return simulatorClass;
 	}
 	
 	/**
