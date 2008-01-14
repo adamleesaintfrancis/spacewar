@@ -9,7 +9,7 @@ import com.thoughtworks.xstream.XStream;
 import edu.ou.spacewar.*;
 import edu.ou.spacewar.exceptions.*;
 import edu.ou.spacewar.objects.*;
-import edu.ou.spacewar.simulator.Object2D;
+import edu.ou.spacewar.simulator.*;
 import edu.ou.utils.Vector2D;
 
 /**
@@ -33,13 +33,13 @@ public class SpacewarConfig {
     public static XStream getXStream() {
     	try {
     		XStream xstream = new XStream();
-    		xstream.alias("spacewar", SpacewarConfig.class);
-    		xstream.alias("ship", ShipConfig.class);
-    		xstream.alias("obstacle", ObstacleConfig.class);
-    		xstream.alias("beacon", BeaconConfig.class);
-    		xstream.alias("flag", FlagConfig.class);
-    		xstream.alias("base", BaseConfig.class);
-    		xstream.alias("team", TeamConfig.class);	
+    		xstream.alias("SpacewarConfig", SpacewarConfig.class);
+    		xstream.alias("ShipConfig", ShipConfig.class);
+    		xstream.alias("ObstacleConfig", ObstacleConfig.class);
+    		xstream.alias("BeaconConfig", BeaconConfig.class);
+    		xstream.alias("FlagConfig", FlagConfig.class);
+    		xstream.alias("BaseConfig", BaseConfig.class);
+    		xstream.alias("TeamConfig", TeamConfig.class);	
     		return xstream;
     	} catch(Exception e) {
     		System.out.println("Could not load configuration aliases.");
