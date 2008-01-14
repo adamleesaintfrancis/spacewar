@@ -1,30 +1,35 @@
 package edu.ou.mlfw.ladder;
 
+import jargs.gnu.CmdLineParser;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.Record;
+import edu.ou.mlfw.Simulator;
 import edu.ou.mlfw.World;
 import edu.ou.mlfw.config.ClientMapping;
 import edu.ou.mlfw.config.WorldConfig;
-
-import jargs.gnu.CmdLineParser;
-
-import org.apache.log4j.*;
 
 public class Ladder {
 
 	public static final String DEFAULT_CONFIG = "ladderconfig.xml";
 
 	private static final Logger logger = Logger.getLogger(Ladder.class);
-	
-	private final File simulatorInitializerFile;
+
+	private final Class<? extends Simulator> simulatorClass;
+	private final File simulatorConfig;
 	private final File outputHTML;
 	private final LadderConfig ladderconfig;
 	private static boolean gui = false;
@@ -33,7 +38,8 @@ public class Ladder {
 	
 	public Ladder(LadderConfig ladderconfig){
 		this.ladderconfig = ladderconfig;
-		this.simulatorInitializerFile = ladderconfig.getSimulatorInitializerFile();
+		this.simulatorClass = ladderconfig.getSimulatorClass();
+		this.simulatorConfig = ladderconfig.getSimulatorConfig();
 		this.outputHTML = ladderconfig.getOutputHTML();
 	}
 	
@@ -53,7 +59,8 @@ public class Ladder {
 			for(int k = 0; k < ladderconfig.getNumMatchRepeats(); k++) {
 				gameCnt++;
 				logger.info("Starting game " + gameCnt);
-				WorldConfig worldconfig = new WorldConfig(simulatorInitializerFile, mappings);
+				WorldConfig worldconfig 
+					= new WorldConfig(simulatorClass, simulatorConfig, mappings);
 				List<Record> recordTemp = null;
 				long gameStartTime = new Date().getTime();
 				try{

@@ -1,19 +1,20 @@
 package edu.ou.mlfw.ladder;
 
-import java.io.OutputStream;
+import jargs.gnu.CmdLineParser;
+
 import java.io.InputStream;
-import java.util.*;
+import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.Record;
 import edu.ou.mlfw.World;
 import edu.ou.mlfw.config.WorldConfig;
-
-import jargs.gnu.CmdLineParser;
-
-import org.apache.log4j.*;
 
 public class LadderClient {
 
@@ -64,7 +65,10 @@ public class LadderClient {
 				GameSettings settings = (GameSettings) mesg;
 
 				logger.info("Starting game " + settings.getGameID());
-				WorldConfig worldconfig = new WorldConfig(settings.getSimInitFile(), settings.getClients());
+				WorldConfig worldconfig 
+					= new WorldConfig(settings.getSimulatorClass(),
+							          settings.getSimulatorConfig(),
+								      settings.getClients());
 				List<Record> recordTemp = null;
 				long gameStartTime = new Date().getTime();
 				try{
