@@ -1,23 +1,26 @@
 package edu.ou.mlfw.ladder;
 
+import jargs.gnu.CmdLineParser;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.Record;
 import edu.ou.mlfw.config.ClientMapping;
-
-import jargs.gnu.CmdLineParser;
-
-import org.apache.log4j.*;
 
 public class LadderServer {
 
@@ -102,7 +105,9 @@ public class LadderServer {
 				gameID++;
 				logger.info("Dispatching game: " + gameID + " to " + socket.getInetAddress().getCanonicalHostName());
 
-				mesg = new GameSettings(ladderconfig.getSimulatorInitializerFile(), gameID, mappings);
+				mesg = new GameSettings(ladderconfig.getSimulatorConfig(), 
+						                ladderconfig.getSimulatorClass(),
+						                gameID, mappings);
 				currentGames.put(socket.getInetAddress(), mesg);
 
 				try{
@@ -159,7 +164,7 @@ public class LadderServer {
 			}
 
 			//send shutdown message
-			mesg = new LadderClientShutdownMesg();
+			//mesg = new LadderClientShutdownMesg();
 
 			try{
 				XStream xstream = new XStream();

@@ -1,9 +1,10 @@
 package edu.ou.mlfw.ladder;
 
-import java.io.*;
+import java.io.File;
 
 import com.thoughtworks.xstream.XStream;
 
+import edu.ou.mlfw.Simulator;
 import edu.ou.mlfw.config.ClientMapping;
 
 /**
@@ -12,7 +13,8 @@ import edu.ou.mlfw.config.ClientMapping;
  * clients (that is, Environment/Agent pairs) that will control them. 
  */
 public class LadderConfig {
-	private final File simulatorInitializerFile;
+	private final File simulatorConfig;
+	private final Class<? extends Simulator> simulatorClass;
 	private final File outputHTML;
 
 	private final int maxVariableAgentsPerGame;
@@ -26,7 +28,8 @@ public class LadderConfig {
 	private final ClientMapping[] staticClientMappings;
 
 	
-	public LadderConfig(File simulatorConfigurationFile,
+	public LadderConfig(File simulatorConfig,
+						Class<? extends Simulator> simulatorClass,
 						File outputHTML,
 						int maxVariableAgentsPerGame,
 						int numMatchRepeats,
@@ -34,7 +37,8 @@ public class LadderConfig {
 						ClientMapping[] staticClientMappings )
 	{
 		super();
-		this.simulatorInitializerFile = simulatorConfigurationFile;
+		this.simulatorConfig = simulatorConfig;
+		this.simulatorClass = simulatorClass;
 		this.outputHTML = outputHTML;
 		this.maxVariableAgentsPerGame = maxVariableAgentsPerGame;
 		this.numMatchRepeats = numMatchRepeats;
@@ -50,8 +54,12 @@ public class LadderConfig {
 		return staticClientMappings;
 	}
 	
-	public File getSimulatorInitializerFile() {
-		return simulatorInitializerFile;
+	public File getSimulatorConfig() {
+		return simulatorConfig;
+	}
+	
+	public Class<? extends Simulator> getSimulatorClass() {
+		return simulatorClass;
 	}
 	
 	public File getOutputHTML(){
@@ -71,26 +79,5 @@ public class LadderConfig {
 		out.alias("LadderConfiguration", LadderConfig.class);
 		out.alias("ClientMappingEntry", ClientMapping.class);
 		return out;
-	}
-
-	public static void main(String[] args) 
-	{
-		// a small test case showing usage
-		File sim = new File("./siminit.xml");
-		File out = new File("./ladder.html");
-		ClientMapping[] variableMapping = new ClientMapping[] {
-				new ClientMapping("Controllable1", new File("./cli1config.txt")),
-				new ClientMapping("Controllable2", new File("./cli2config.txt"))
-		};
-		ClientMapping[] staticMapping = new ClientMapping[] {
-				new ClientMapping("Controllable3", new File("./cli3config.txt")),
-				new ClientMapping("Controllable4", new File("./cli4config.txt"))
-		};
-		
-		LadderConfig ladder = new LadderConfig(sim, out, 1, 5, variableMapping, staticMapping);
-		
-		XStream xstream = getXStream();
-		String serialized = xstream.toXML(ladder);
-		System.out.println(serialized);
 	}
 }

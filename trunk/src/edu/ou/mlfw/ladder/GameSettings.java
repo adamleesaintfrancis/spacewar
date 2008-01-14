@@ -2,17 +2,21 @@ package edu.ou.mlfw.ladder;
 
 import java.io.File;
 
+import edu.ou.mlfw.Simulator;
 import edu.ou.mlfw.config.ClientMapping;
 
 public class GameSettings implements LadderMessage {
-	private final File simInitFile;
+	private final File simConfig;
+	private final Class<? extends Simulator> simClass;
 	private final int gameID;
 	private final ClientMapping[] clients;
 	
-	public GameSettings(File simInitFile, 
+	public GameSettings(File simConfig, 
+						Class<? extends Simulator> simClass,
 						int gameID, 
 						ClientMapping[] clients) {
-		this.simInitFile = simInitFile;
+		this.simConfig = simConfig;
+		this.simClass = simClass;
 		this.gameID = gameID;
 		this.clients = clients;
 	}
@@ -25,7 +29,11 @@ public class GameSettings implements LadderMessage {
 		return gameID;
 	}
 
-	public File getSimInitFile() {
-		return simInitFile;
+	public File getSimulatorConfig() {
+		return simConfig;
+	}
+	
+	public Class<? extends Simulator> getSimulatorClass() {
+		return simClass;
 	}
 }
