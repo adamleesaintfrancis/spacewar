@@ -1,32 +1,14 @@
 The edu.ou.mlfw.config package contains the classes necessary for configuring
 how a World instance finds and initializes its component simulator and clients.
 
-At the top level is a WorldConfiguration.  A WorldConfiguration points to 
-a SimulatorInitializer (via a filepath reference) and maps between controllable
-names and ClientInitializers (via a ClientMappingEntry array).  The 
-WorldConfiguration file is provided by the runtime user.
+At the top level is a WorldConfig.  A WorldConfig contains an entry indicating
+the class that implements the Simulator interface that should be loaded, and an 
+entry for a configuration file that can be used by that Simulator instance.  
+A WorldConfig also contains mappings between controllables and 
+ClientInitializers via a ClientMapping array.  The WorldConfiguration file 
+should be provided by the user.
 
-A SimulatorInitializer points to an implementation of the Simulator interface
-and a file that can be passed to this implementation (for general configuration
-purposes).  The SimulatorInitializer file is provided by the simulator writer.
+A ClientInitializer points to an implementation of the Client interface 
+and a file that can be passed to this implementation for configuration.
+The ClientInitializer file is provided by the client writer.
 
-A ClientInitializer points to an implementation of the Environment interface 
-and a file that can be passed to this implementation for configuration, and 
-an implementation of the Agent interface, a file that can be passed to this 
-implementation for configuration, and a file that can be passed to this 
-implementation for knowledge storage.  The ClientInitializer file is provided
-by the client writer.
-
-As for naming convention, the distinction between *Configuration, *Initializer,
-and *Entry is as follows:
-
-1.)  Configuration and Initializer are meant to be standalone xml files.  Entry 
-is meant as an xml snippet within a Configuration or an Initializer.
-
-2.)  The distinction between an Initializer and a Configuration is less clear,
-but the use of Initializer is intended to avoid confusion in the case when the
-object being created is handed another configuration file at initialization,
-where the format of that configuration file is specific to the actual 
-implementation of that object.  Since there are no other implementations of 
-World, this confusion is avoided, and so this package gives a 
-WorldConfiguration file.
