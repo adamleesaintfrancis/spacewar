@@ -2,6 +2,8 @@ package edu.ou.mlfw.config;
 
 import java.io.*;
 
+import org.apache.log4j.Logger;
+
 import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.Client;
@@ -22,6 +24,9 @@ import edu.ou.mlfw.Client;
  */
 public class ClientInitializer 
 {
+	private static final Logger logger 
+		= Logger.getLogger(ClientInitializer.class);
+	
 	private final Class<? extends Client> clientClass;
 	private final File configuration;
 	private final File data;
@@ -114,6 +119,7 @@ public class ClientInitializer
 	public static ClientInitializer fromXMLFile(final File f) 
 		throws IOException 
 	{
+		logger.info("Trying to initialize client from " + f.getAbsolutePath());
 		final FileReader fr = new FileReader(f);
 		final XStream xstream = getXStream();
 		final ClientInitializer out = (ClientInitializer)xstream.fromXML(fr);
