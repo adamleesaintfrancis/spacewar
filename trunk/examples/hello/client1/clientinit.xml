@@ -1,0 +1,6 @@
+<ClientInitializer>
+  <clientClass>edu.ou.spacewar.mlfw.clients.RandomClient</clientClass>
+  <configuration/>
+  <data/>
+  <displayName>Random Agent</displayName>
+</ClientInitializer>
