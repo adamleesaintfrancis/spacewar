@@ -1,0 +1,16 @@
+<WorldConfiguration>
+
+  <simulatorClass>edu.ou.spacewar.SpacewarSimulator</simulatorClass>
+  <simulatorConfig>spacewarconfig.xml</simulatorConfig>
+
+  <mappingInformation>
+    <ClientMappingEntry>
+      <controllableName>Human</controllableName>
+      <clientInitializerFile>client0/clientinit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Random</controllableName>
+      <clientInitializerFile>client1/clientinit.xml</clientInitializerFile>      
+    </ClientMappingEntry>
+  </mappingInformation>
+</WorldConfiguration>
