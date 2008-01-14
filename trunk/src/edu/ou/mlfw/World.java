@@ -60,13 +60,10 @@ public class World {
 			UnboundControllableException, ClassNotFoundException,
 			FileNotFoundException, IOException 
 	{
-		logger.debug("Initializing Simulator...\n");
-		final SimulatorInitializer siminit 
-			= SimulatorInitializer.fromXMLFile(
-					worldconfig.getSimulatorInitializerFile());		
 		logger.debug("Instantiating Simulator object...\n");
-		final Simulator simulator = siminit.getSimulatorClass().newInstance();
-		simulator.initialize(siminit.getConfiguration());
+		final Simulator simulator 
+			= worldconfig.getSimulatorClass().newInstance();
+		simulator.initialize(worldconfig.getSimulatorConfig());
 		logger.debug("Done\n");
 
 		logger.debug("Extracting controllables...\n");
@@ -389,7 +386,7 @@ public class World {
 				+ "   is not set, the program will run in experiment mode.\n\n"
 				+ "-c indicates the path to the world configuration file.\n"
 				+ "   If -c is not set, the program will attempt to find\n"
-				+ "   and load \"" + DEFAULT_CONFIG + "\" in the working "
+				+ "   and load \"" + DEFAULT_CONFIG + "\" in the working\n"
 				+ "   directory.\n\n");
 		System.exit(-1);
 	}
