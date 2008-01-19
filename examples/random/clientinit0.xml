@@ -1,5 +1,0 @@
-<ClientInitializer>
-  <clientClass>examples.random.SampleRandomClient</clientClass>
-  <!--<data>./knowledge.txt</data>-->
-  <displayName>High Level Random</displayName>
-</ClientInitializer>
