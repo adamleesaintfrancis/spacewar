@@ -6,7 +6,7 @@
   <mappingInformation>
     <ClientMappingEntry>
       <controllableName>High Level Random</controllableName>
-      <clientInitializerFile>client0/clientinit.xml</clientInitializerFile>
+      <clientInitializerFile>clientinit0.xml</clientInitializerFile>
     </ClientMappingEntry>
   </mappingInformation>
 </WorldConfiguration>
