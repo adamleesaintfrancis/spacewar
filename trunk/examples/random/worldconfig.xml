@@ -1,0 +1,12 @@
+<WorldConfiguration>
+
+  <simulatorClass>edu.ou.spacewar.SpacewarSimulator</simulatorClass>
+  <simulatorConfig>spacewarconfig.xml</simulatorConfig>
+
+  <mappingInformation>
+    <ClientMappingEntry>
+      <controllableName>High Level Random</controllableName>
+      <clientInitializerFile>client0/clientinit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+  </mappingInformation>
+</WorldConfiguration>
