@@ -114,8 +114,17 @@
   <!-- Examples -->
 
   <target name="hello" depends="jar-spacewar">
-	<java jar="${dist}/spacewar.jar" fork="true" dir="examples/hello">
+    <javac srcdir="examples/hello" classpath="${dist}/spacewar.jar" />
+           
+    
+	<java classname="edu.ou.mlfw.World"
+	      fork="true" 
+	      dir="examples/hello">
 	  <arg value="-g" />
+	  <classpath>
+	  	<pathelement location="${dist}/spacewar.jar"/>
+	    <pathelement path="examples/hello" />
+	  </classpath>
 	</java>
   </target>
 
