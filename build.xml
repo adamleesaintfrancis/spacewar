@@ -127,6 +127,21 @@
 	  </classpath>
 	</java>
   </target>
+	
+	<target name="random" depends="jar-spacewar">
+	    <javac srcdir="examples/random" classpath="${dist}/spacewar.jar" />
+	           
+	    
+		<java classname="edu.ou.mlfw.World"
+		      fork="true" 
+		      dir="examples/random">
+		  <arg value="-g" />
+		  <classpath>
+		  	<pathelement location="${dist}/spacewar.jar"/>
+		    <pathelement path="examples/random"/>
+		  </classpath>
+		</java>
+	  </target>
 
 <!-- 
 
