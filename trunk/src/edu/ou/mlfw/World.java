@@ -303,6 +303,7 @@ public class World {
 	public static void main(String[] args) {
 		Arguments arguments = parseArgs(args);
 		logger.info("Loading world configuration...\n");
+		logger.info("Classpath is: " + System.getProperty("java.class.path"));
 		try {
 			WorldConfig worldconfig 
 				= WorldConfig.fromXMLFile(arguments.configLocation);
@@ -318,7 +319,7 @@ public class World {
 			}
 			logger.info("Simulation completed successfully\n");
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 			exit("Error instantiating World");
 		}
 	}
