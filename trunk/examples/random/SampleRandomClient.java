@@ -1,4 +1,3 @@
-package examples.random;
 
 import java.awt.Graphics;
 import java.io.File;
