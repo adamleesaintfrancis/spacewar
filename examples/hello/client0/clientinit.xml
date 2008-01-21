@@ -1,5 +1,5 @@
 <ClientInitializer>
-  <clientClass>edu.ou.spacewar.mlfw.clients.HumanClient</clientClass>
+  <clientClass>client0.MyHumanClient</clientClass>
   <!--<data>./knowledge.txt</data>-->
-  <displayName>Human</displayName>
+  <displayName>My Human</displayName>
 </ClientInitializer>

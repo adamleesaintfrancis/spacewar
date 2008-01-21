@@ -1,4 +1,4 @@
-package edu.ou.spacewar.mlfw.clients;
+package client0;
 
 import java.awt.event.*;
 import java.io.File;
@@ -8,6 +8,9 @@ import edu.ou.spacewar.ImmutableSpacewarState;
 import edu.ou.spacewar.controllables.ControllableShip;
 import edu.ou.spacewar.objects.ShipCommand;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
+import edu.ou.spacewar.mlfw.clients.*;
+
+import org.apache.log4j.*;
 
 public class MyHumanClient extends HumanClient
 {
@@ -23,9 +26,9 @@ public class MyHumanClient extends HumanClient
 								    final ControllableShip controllable ) 
 	{
 		actionCounter++;
-		if(actionCounter % 10) {
+		if(actionCounter % 10 == 0) {
 			logger.info("MyHumanClient taking action " + actionCounter);
 		}
-		super.startAction(state, controllable);
+		return super.startAction(state, controllable);
 	}
 }
