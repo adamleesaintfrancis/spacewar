@@ -23,7 +23,7 @@
       <isControllable>true</isControllable>
     </ShipConfig>
     <ShipConfig>
-      <name>Your 4x4</name>
+      <name>YourName</name>
       <autoPlace>true</autoPlace>
       <agentRecord>true</agentRecord>
       <isControllable>true</isControllable>

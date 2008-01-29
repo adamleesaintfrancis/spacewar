@@ -17,7 +17,7 @@
       <clientInitializerFile>donothinginit.xml</clientInitializerFile>
     </ClientMappingEntry>
     <ClientMappingEntry>
-      <controllableName>Your 4x4</controllableName>
+      <controllableName>YourName</controllableName>
       <clientInitializerFile>clientinit.xml</clientInitializerFile>
     </ClientMappingEntry>
   </mappingInformation>
