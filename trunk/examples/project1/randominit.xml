@@ -1,0 +1,5 @@
+<ClientInitializer>
+  <clientClass>edu.ou.spacewar.mlfw.clients.RandomClient</clientClass>
+  <!--<data>./knowledge.txt</data>-->
+  <displayName>Random</displayName>
+</ClientInitializer>
