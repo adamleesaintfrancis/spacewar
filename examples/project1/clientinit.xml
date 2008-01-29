@@ -1,0 +1,9 @@
+<ClientInitializer>
+  <!-- 
+    Replace the reference below to the DoNothing Agent with the reference to your agent.
+    That is, it should say <clientClass>your4x4.MySpacewarAgent</clientClass> 
+  -->
+  <clientClass>edu.ou.spacewar.mlfw.clients.DoNothingClient</clientClass>
+  <!--<data>./knowledge.txt</data>-->
+  <displayName>Your 4x4</displayName>
+</ClientInitializer>
