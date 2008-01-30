@@ -33,7 +33,6 @@ public class BeaconCollector extends AbstractShipClient implements Drawer {
 	private boolean makeNewLine = false;
 	private Vector2D startPosition;
 	private Vector2D lineVec;
-	private String myName;
 	private boolean pickNewPoint = true;
 
 	public Set<Shadow2D> registerShadows() {
@@ -82,21 +81,8 @@ public class BeaconCollector extends AbstractShipClient implements Drawer {
 		}
 	}
 
-	public void setControllableName(String name) {
-		myName = name;
-	}
 
-	private ImmutableShip findMyShip(ImmutableSpacewarState state) {
-		if (myName == null) {
-			return null;
-		}
-		for (ImmutableShip s : state.getShips()) {
-			if (s.getName().equals(myName)) {
-				return s;
-			}
-		}
-		return null;
-	}
+	
 
 	/**
 	 * The agent receives the current state. This agent then
@@ -105,10 +91,9 @@ public class BeaconCollector extends AbstractShipClient implements Drawer {
 	 */
 	public ShipCommand startAction(ImmutableSpacewarState state,
 			ControllableShip controllable) {
-		
-		// boolean goalIsClear = true;
 
-		Vector2D pos = findMyShip(state).getPosition();
+		Vector2D pos = findMyShip(state, controllable).getPosition();
+		
 		// save some information for drawing the line to the goal
 		startPosition = pos;
 		makeNewLine = true;
@@ -135,18 +120,18 @@ public class BeaconCollector extends AbstractShipClient implements Drawer {
 		// (for drawing only)
 		lineVec = state.findShortestDistance(startPosition, goalPos);
 		
-		return moveToPoint(state, goalPos);
+		return moveToPoint(state, controllable, goalPos);
 	}
 
 	// we want actions like: MoveToPoint
-	public ShipCommand moveToPoint(ImmutableSpacewarState state,
+	public ShipCommand moveToPoint(ImmutableSpacewarState state, ControllableShip c,
 			Vector2D goalPosition) {
 		/*
 		 * This is a temporary hack, I am deeply sorry. Here we assume only one
 		 * ship, and that it is ours. Later we will use attributes of the ships
 		 * to identify which we are able to control.
 		 */
-		ImmutableShip myShip = findMyShip(state);
+		ImmutableShip myShip = findMyShip(state, c);
 		Vector2D currentPosition = myShip.getPosition();
 		Vector2D pathToGoal = Space.findShortestDistance(currentPosition,
 				goalPosition, state.getWidth(), state.getHeight());
@@ -264,9 +249,4 @@ public class BeaconCollector extends AbstractShipClient implements Drawer {
 	public void shutdown() {
 	}
 
-	@Override
-	public void setDisplayName(String name) {
-		this.myName = name;
-		super.setDisplayName(name);
-	}
 }
