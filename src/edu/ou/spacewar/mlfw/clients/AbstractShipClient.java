@@ -7,6 +7,7 @@ import edu.ou.mlfw.State;
 import edu.ou.spacewar.ImmutableSpacewarState;
 import edu.ou.spacewar.controllables.ControllableShip;
 import edu.ou.spacewar.objects.ShipCommand;
+import edu.ou.spacewar.objects.immutables.ImmutableShip;
 
 /**
  * Convenience class for handling typecasting for clients that control ships.
@@ -31,4 +32,14 @@ public abstract class AbstractShipClient extends AbstractClient
 	
 	public abstract void endAction( ImmutableSpacewarState s, 
 			                        ControllableShip c);
+	
+	protected ImmutableShip findMyShip(ImmutableSpacewarState state, ControllableShip c) {
+
+		for (ImmutableShip s : state.getShips()) {
+			if (s.getName().equals(c.getName())) {
+				return s;
+			}
+		}
+		return null;
+	}
 }
