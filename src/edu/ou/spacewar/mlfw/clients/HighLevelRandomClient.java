@@ -1,5 +1,6 @@
 package edu.ou.spacewar.mlfw.clients;
 
+
 import java.awt.Graphics;
 import java.io.File;
 import java.util.*;
@@ -7,6 +8,7 @@ import java.util.*;
 import edu.ou.mlfw.gui.*;
 import edu.ou.spacewar.ImmutableSpacewarState;
 import edu.ou.spacewar.controllables.ControllableShip;
+import edu.ou.spacewar.mlfw.clients.AbstractShipClient;
 import edu.ou.spacewar.objects.ShipCommand;
 import edu.ou.spacewar.objects.immutables.ImmutableObstacle;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
@@ -14,13 +16,15 @@ import edu.ou.spacewar.objects.shadows.CrossHairShadow;
 import edu.ou.spacewar.simulator.Space;
 import edu.ou.mlfw.gui.LineShadow;
 import edu.ou.utils.Vector2D;
+
 /**
- * HighLevelRandomAgent is a simple high level agent that chooses a random 
- * location (not in an obstacle) and moves to that location using the custom 
+ * HighLevelRandomClient is a simple high level agent 
+ * that chooses a random
+ * location (not in an obstacle) and moves to that location using the custom
  * built high level actions and environment.
  */
-public class HighLevelRandomClient extends AbstractShipClient implements Drawer
-{
+public class HighLevelRandomClient extends AbstractShipClient implements Drawer {
+
 	private static final int fudge_factor = 10;
 	private final Random random = new Random();
 	private Vector2D goalPos;
@@ -30,12 +34,12 @@ public class HighLevelRandomClient extends AbstractShipClient implements Drawer
 	private boolean makeNewLine = false;
 	private Vector2D startPosition;
 	private Vector2D lineVec;
-	private String myName;
+	private boolean pickNewPoint = true;
 
 	public Set<Shadow2D> registerShadows() {
 		Set<Shadow2D> out = new HashSet<Shadow2D>();
 
-		if(shadow == null) {
+		if (shadow == null) {
 			shadow = new CrossHairShadow();
 			shadow.setDrawMe(true);
 			System.out.println("Registering shadow");
@@ -66,120 +70,104 @@ public class HighLevelRandomClient extends AbstractShipClient implements Drawer
 			out.add(oldLineShadow);
 			makeNewLine = false;
 			return out;
-		} else {
+		}
+		else {
 			return null;
 		}
 	}
 
 	public void updateGraphics(Graphics g) {
-		if(shadow != null && goalPos != null) {
+		if (shadow != null && goalPos != null) {
 			shadow.setRealPosition(goalPos);
 		}
-	}
-
-	public void setControllableName(String name) {
-		myName = name;
-	}
-
-	private ImmutableShip findMyShip(ImmutableSpacewarState state){
-		if(myName == null){
-			return null;
-		}
-		for(ImmutableShip s: state.getShips()){
-			if(s.getName().equals(myName)){
-				return s;
-			}
-		}
-		return null;
 	}
 	
 	/**
 	 * Ensures that the specified point is not inside an obstacle
-	 * @param x x-location
-	 * @param y y-location
-	 * @param state state object used to find the other objects
+	 * 
+	 * @param x
+	 *                x-location
+	 * @param y
+	 *                y-location
+	 * @param state
+	 *                state object used to find the other objects
 	 * @return true if it is in free space and false otherwise
 	 */
 	private boolean inFreeSpace(Vector2D pos, ImmutableSpacewarState state) {
 		for (ImmutableObstacle obstacle : state.getObstacles()) {
-			final Vector2D shortdist = 
-				state.findShortestDistance(pos, obstacle.getPosition());  
-			final double magnitude = shortdist.getMagnitude(); 
-				
+			final Vector2D shortdist = state.findShortestDistance(pos, obstacle
+					.getPosition());
+			final double magnitude = shortdist.getMagnitude();
+
 			if (magnitude < (obstacle.getRadius() + fudge_factor)) {
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
 	/**
-	 * The agent receives the current state (which should be cast to 
-	 * ImmutableSpacewarState to make it more useful), and a set of available 
-	 * actions. Normally these actions are simply the set of legal ShipCommands 
-	 * to make (see the other random agent), in this case we have a custom 
-	 * environment which sends a single action, from which two types of actions 
-	 * can be created. The first is to do nothing. The second is to move to 
-	 * some point in space, specified by the x and y locations.  This agent 
-	 * then randomly chooses x and y location to move to, and returns the 
-	 * resulting action.
-	 * 
-	 * This illustrates how custom Action classes, Environment classes, and 
-	 * Agent classes can be used to provide different features to the agent. 
-	 * Here the agent does not need to worry about the implementation of low 
-	 * level actions to move from one spot to another. Instead it relies on the 
-	 * Environment, and the provided HighLevelActions class.
+	 * The agent receives the current state. This agent then
+	 * randomly chooses x and y location to move to, and returns the resulting
+	 * action.
 	 */
-	public ShipCommand startAction( ImmutableSpacewarState state,
-									ControllableShip controllable ) 
-	{
+	public ShipCommand startAction(ImmutableSpacewarState state,
+			ControllableShip controllable) {
+		
 		int fixed_multiplier = 1000;
-		//boolean goalIsClear = true;
-		Vector2D pos = findMyShip(state).getPosition();
+		// boolean goalIsClear = true;
+
+		Vector2D pos = findMyShip(state, controllable).getPosition();
 		// save some information for drawing the line to the goal
 		startPosition = pos;
 		makeNewLine = true;
-
-		float dirX;
-		float dirY;
-		float newX;
-		float newY;
-		goalPos = null;
-		while(goalPos == null) {
-			dirX = random.nextFloat() - (float)0.5;
-			dirY = random.nextFloat() - (float)0.5;
-			newX = dirX*fixed_multiplier + pos.getX();
-			newY = dirY*fixed_multiplier + pos.getY();
-			goalPos = new Vector2D(newX, newY);
-			
-			if( !inFreeSpace(goalPos, state) ) {
-				goalPos = null;
-			}
-		}
-		// save a vector pointing to the goal from current position 
-		// (for drawing only)
-		lineVec = state.findShortestDistance(startPosition, goalPos);
-		return moveToPoint(state, goalPos);
-	}	
+		
+		if (pickNewPoint) {
+			float dirX;
+			float dirY;
+			float newX;
+			float newY;
+			goalPos = null;
+			while (goalPos == null) {
+				dirX = random.nextFloat() - (float) 0.5;
+				dirY = random.nextFloat() - (float) 0.5;
+				newX = dirX * fixed_multiplier + pos.getX();
+				newY = dirY * fixed_multiplier + pos.getY();
+				goalPos = new Vector2D(newX, newY);
 	
+				if (!inFreeSpace(goalPos, state)) {
+					goalPos = null;
+				}
+			}
+
+			pickNewPoint = false;
+			// save a vector pointing to the goal from current position
+			// (for drawing only)
+			
+			
+		}
+		lineVec = state.findShortestDistance(startPosition, goalPos);
+		
+		return moveToPoint(state, controllable, goalPos);
+	}
+
 	// we want actions like: MoveToPoint
-	public ShipCommand moveToPoint( ImmutableSpacewarState state, 
-			                        Vector2D goalPosition)
-	{
-		/* This is a temporary hack, I am deeply sorry. 
-		 * Here we assume only one ship, and that it is ours. Later we will use 
-		 * attributes of the ships to identify which we are able to control.
+	public ShipCommand moveToPoint(ImmutableSpacewarState state,
+			ControllableShip c, Vector2D goalPosition) {
+		/*
+		 * This is a temporary hack, I am deeply sorry. Here we assume only one
+		 * ship, and that it is ours. Later we will use attributes of the ships
+		 * to identify which we are able to control.
 		 */
-		ImmutableShip myShip = findMyShip(state);
+		ImmutableShip myShip = findMyShip(state, c);
 		Vector2D currentPosition = myShip.getPosition();
-		Vector2D pathToGoal = 
-			Space.findShortestDistance( currentPosition, goalPosition, 
-					                    state.getWidth(), state.getHeight() );
+		Vector2D pathToGoal = Space.findShortestDistance(currentPosition,
+				goalPosition, state.getWidth(), state.getHeight());
 
 		// If we are close to the goal point lets just say we are there
-		if(pathToGoal.getMagnitude() < 10)
-		{
+		if (pathToGoal.getMagnitude() < 10) {
 			// Close enough, finish executing this extended high level action
+			pickNewPoint  = true;
 			return ShipCommand.DoNothing;
 		}
 
@@ -193,13 +181,16 @@ public class HighLevelRandomClient extends AbstractShipClient implements Drawer
 		if (pathToGoal.getX() > 0) {
 			if (pathToGoal.getY() > 0) {
 				maxVelocity = new Vector2D(maxVel, maxVel);
-			} else {
+			}
+			else {
 				maxVelocity = new Vector2D(maxVel, -maxVel);
 			}
-		} else {
+		}
+		else {
 			if (pathToGoal.getY() > 0) {
 				maxVelocity = new Vector2D(-maxVel, maxVel);
-			} else {
+			}
+			else {
 				maxVelocity = new Vector2D(-maxVel, -maxVel);
 			}
 		}
@@ -208,19 +199,22 @@ public class HighLevelRandomClient extends AbstractShipClient implements Drawer
 		Vector2D accel = pdControl(state, goalPosition, currentPosition,
 				maxVelocity, myShip.getVelocity());
 
-		// if it is small enough (can tune this parameter), just drift 
+		// if it is small enough (can tune this parameter), just drift
 		if (accel.getMagnitude() < 6) {
 			return ShipCommand.DoNothing;
-		} else {
+		}
+		else {
 			// the angle between the acceleration and my current heading
 			float oriangle = accel.angleBetween(myShip.getOrientation());
 
 			// can tune this parameter
 			if (Math.abs(oriangle) < (Math.PI / 16)) {
 				return ShipCommand.Thrust;
-			} else if (oriangle > 0) {
+			}
+			else if (oriangle > 0) {
 				return ShipCommand.TurnLeft;
-			} else {
+			}
+			else {
 				return ShipCommand.TurnRight;
 			}
 		}
@@ -228,23 +222,26 @@ public class HighLevelRandomClient extends AbstractShipClient implements Drawer
 
 	/**
 	 * Proportional derivative vector controller
-	 * @param goalLoc location that you are trying to get to
-	 * @param currentLoc your current location
-	 * @param goalVelocity velocity you want to achieve
-	 * @param currentVelocity your current velocity
+	 * 
+	 * @param goalLoc
+	 *                location that you are trying to get to
+	 * @param currentLoc
+	 *                your current location
+	 * @param goalVelocity
+	 *                velocity you want to achieve
+	 * @param currentVelocity
+	 *                your current velocity
 	 */
-	private Vector2D pdControl( ImmutableSpacewarState state, 
-			Vector2D goalLoc, Vector2D currentLoc,
-			Vector2D goalVel, Vector2D currentVel ) 
-	{
+	private Vector2D pdControl(ImmutableSpacewarState state, Vector2D goalLoc,
+			Vector2D currentLoc, Vector2D goalVel, Vector2D currentVel) {
 		// tunable parameters; should be in relationship to one another
-		// TODO: what relationship?  Kp = 2Kv?
+		// TODO: what relationship? Kp = 2Kv?
 		float Kv = 0.8f;
 		float Kp = 0.16f;
 
 		// take care of wrap-around
 		Vector2D shortdist = state.findShortestDistance(currentLoc, goalLoc);
-		Vector2D position = shortdist.multiply(Kp); 
+		Vector2D position = shortdist.multiply(Kp);
 		Vector2D vel = goalVel.subtract(currentVel).multiply(Kv);
 
 		Vector2D accel = position.add(vel);
@@ -252,9 +249,17 @@ public class HighLevelRandomClient extends AbstractShipClient implements Drawer
 		return accel;
 	}
 
-	//do nothing methods
-	public void endAction( ImmutableSpacewarState s, ControllableShip c ) {}
-	public void initialize(File configfile) {}
-	public void loadData(File datafile) {}
-	public void shutdown() {}
+	// do nothing methods
+	public void endAction(ImmutableSpacewarState s, ControllableShip c) {
+	}
+
+	public void initialize(File configfile) {
+	}
+
+	public void loadData(File datafile) {
+	}
+
+	public void shutdown() {
+	}
+
 }
