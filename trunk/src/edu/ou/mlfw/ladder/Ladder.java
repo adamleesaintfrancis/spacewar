@@ -102,7 +102,7 @@ public class Ladder {
 			exit("Error opening output file");
 		}
 		try{
-			Record.setSortMethod(1);
+			//Record.setSortMethod(1);
 			Collections.sort(records);
 			for(int i = 0; i < records.size(); i++){
 				records.get(i).setRank(i+1);
