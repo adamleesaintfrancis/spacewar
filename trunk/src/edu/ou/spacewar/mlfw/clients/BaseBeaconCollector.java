@@ -25,10 +25,8 @@ public class BaseBeaconCollector extends BaseShipClient implements Drawer {
 	private Vector2D lineVec;
 	private Vector2D goalPos;
 	
-	@Override
 	public void endAction(ImmutableSpacewarState state, ImmutableShip myShip) {}
 
-	@Override
 	public ShipCommand startAction(ImmutableSpacewarState state,
 			ImmutableShip myShip) {
 		
@@ -57,13 +55,10 @@ public class BaseBeaconCollector extends BaseShipClient implements Drawer {
 		return moveToPoint(goalPos);
 	}
 
-	@Override
 	public void initialize(File config) {}
 
-	@Override
 	public void loadData(File data) {}
 
-	@Override
 	public void shutdown() {}
 
 	public Set<Shadow2D> registerShadows() {
