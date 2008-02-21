@@ -3,6 +3,7 @@ package edu.ou.mlfw;
 import jargs.gnu.CmdLineParser;
 import jargs.gnu.CmdLineParser.Option;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -13,6 +14,7 @@ import javax.swing.*;
 import edu.ou.mlfw.config.*;
 import edu.ou.mlfw.exceptions.*;
 import edu.ou.mlfw.gui.*;
+import edu.ou.spacewar.objects.ShipCommand;
 
 import org.apache.log4j.*;
 
@@ -37,6 +39,8 @@ public class World {
 
 	private final Simulator simulator;
 	private final Map<String, Client> mappings;
+	
+	private boolean paused = false;
 
 	/**
 	 * Initialize the simulator, initialize each client, and bind each
@@ -144,6 +148,17 @@ public class World {
 		// a set to hold any key listeners that any human agents might 
 		// define these are only added if running in gui mode.
 		final Set<KeyListener> keylisteners = new HashSet<KeyListener>();
+		keylisteners.add( new KeyListener() {
+			public void keyPressed(KeyEvent e) {
+				switch(e.getKeyCode()) {
+				case KeyEvent.VK_P:
+					paused = !paused;
+					break;
+				}
+			}
+			public void keyReleased(KeyEvent e) {}
+			public void keyTyped(KeyEvent e) {}
+		});
 		for(Client c : this.mappings.values()) {
 			if (c instanceof InteractiveClient) {
 				logger.debug("Adding interactive client for " + 
@@ -172,15 +187,21 @@ public class World {
 			while (simulator.isRunning()) {
 				SwingUtilities.invokeAndWait(new Runnable() {
 					public void run() {
-						step(true);
-						for (Client c : mappings.values()) {
-							if (c instanceof Drawer) {
-								handleDrawer(gui, (Drawer) c);
+						if(!paused) {
+							step(true);
+							for (Client c : mappings.values()) {
+								if (c instanceof Drawer) {
+									handleDrawer(gui, (Drawer) c);
+								}
 							}
 						}
 					}
 				});
-				gui.repaint();
+				if(!paused) {
+					gui.repaint();
+				}
+				//keeping this in place when paused means we don't busy-wait
+				//as badly.  TODO: move to purely event-driven.
 				SwingUtilities.invokeAndWait(new Runnable() {
 					public void run() {
 						try {
