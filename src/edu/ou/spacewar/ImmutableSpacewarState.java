@@ -29,42 +29,42 @@ public class ImmutableSpacewarState implements State {
      *
      * @param swg
      */
-    public ImmutableSpacewarState(SpacewarGame swg) {
+    public ImmutableSpacewarState(final SpacewarGame swg) {
         //get all the ships
-        Ship[] swgships = swg.getAll(Ship.class);
+        final Ship[] swgships = swg.getAll(Ship.class);
         ships = new ImmutableShip[swgships.length];
         for(int i = 0;i < swgships.length; i++) {
             ships[i] = new ImmutableShip(swgships[i]);
         }
 
         //get all the obstacles
-        Obstacle[] swgobs = swg.getLive(Obstacle.class);
+        final Obstacle[] swgobs = swg.getLive(Obstacle.class);
         obstacles = new ImmutableObstacle[swgobs.length];
         for(int i = 0;i < swgobs.length; i++) {
             obstacles[i] = new ImmutableObstacle(swgobs[i]);
         }
 
         //get all the bullets
-        Bullet[] swgblts = swg.getLive(Bullet.class);
-        LinkedList<ImmutableBullet> blltstmp = new LinkedList<ImmutableBullet>();
-        for(int i = 0;i < swgblts.length; i++) {
-            blltstmp.add(new ImmutableBullet(swgblts[i]));
+        final Bullet[] swgblts = swg.getLive(Bullet.class);
+        final LinkedList<ImmutableBullet> blltstmp = new LinkedList<ImmutableBullet>();
+        for (final Bullet element : swgblts) {
+            blltstmp.add(new ImmutableBullet(element));
         }
         bullets = blltstmp.toArray(new ImmutableBullet[blltstmp.size()]);
 
         //get all the beacons
-        Beacon[] swgbcns = swg.getLive(Beacon.class);
+        final Beacon[] swgbcns = swg.getLive(Beacon.class);
         beacons = new ImmutableBeacon[swgbcns.length];
         for(int i = 0;i < swgbcns.length; i++) {
             beacons[i] = new ImmutableBeacon(swgbcns[i]);
         }
 
         //get all the flags
-        Flag[] swgflags = swg.getLive(Flag.class);
+        final Flag[] swgflags = swg.getLive(Flag.class);
         //Flag[] swgflags = swg.getAllFlags();
         flags = new ImmutableFlag[swgflags.length];
         for (int i = 0; i < swgflags.length; i++) {
-            Flag f = swgflags[i];
+            final Flag f = swgflags[i];
             //if(f.isAlive()) {
                 flags[i] = new ImmutableFlag(f);
 //            } else {
@@ -78,17 +78,17 @@ public class ImmutableSpacewarState implements State {
         }
 
         //get all the bases
-        Base[] swgbases = swg.getLive(Base.class);
+        final Base[] swgbases = swg.getLive(Base.class);
         bases = new ImmutableBase[swgbases.length];
         for (int i = 0; i < swgbases.length; i++) {
             bases[i] = new ImmutableBase(swgbases[i]);
         }
 
         //get the width, height, and timestamp
-        this.width = swg.getWidth();
-        this.height = swg.getHeight();
-        this.timestamp = swg.getTimestamp();
-        this.stepcount = swg.getStepCount();
+        width = swg.getWidth();
+        height = swg.getHeight();
+        timestamp = swg.getTimestamp();
+        stepcount = swg.getStepCount();
     }
 
     /**
@@ -99,8 +99,8 @@ public class ImmutableSpacewarState implements State {
      * @return An array containing the game's ships.
      */
     public final ImmutableShip[] getShips() {
-        ImmutableShip[] out = new ImmutableShip[this.ships.length];
-        System.arraycopy(this.ships, 0, out, 0, this.ships.length);
+        final ImmutableShip[] out = new ImmutableShip[ships.length];
+        System.arraycopy(ships, 0, out, 0, ships.length);
         return out;
     }
 
@@ -111,8 +111,8 @@ public class ImmutableSpacewarState implements State {
      * @return An array containing the game's obstacles.
      */
     public final ImmutableObstacle[] getObstacles() {
-        ImmutableObstacle[] out = new ImmutableObstacle[this.obstacles.length];
-        System.arraycopy(this.obstacles, 0, out, 0, this.obstacles.length);
+        final ImmutableObstacle[] out = new ImmutableObstacle[obstacles.length];
+        System.arraycopy(obstacles, 0, out, 0, obstacles.length);
         return out;
     }
 
@@ -124,8 +124,8 @@ public class ImmutableSpacewarState implements State {
      * @return An array containing the game's bullets.
      */
     public final ImmutableBullet[] getBullets() {
-        ImmutableBullet[] out = new ImmutableBullet[this.bullets.length];
-        System.arraycopy(this.bullets, 0, out, 0, this.bullets.length);
+        final ImmutableBullet[] out = new ImmutableBullet[bullets.length];
+        System.arraycopy(bullets, 0, out, 0, bullets.length);
         return out;
     }
 
@@ -136,8 +136,8 @@ public class ImmutableSpacewarState implements State {
      * @return An array containing the game's beacons.
      */
     public final ImmutableBeacon[] getBeacons() {
-        ImmutableBeacon[] out = new ImmutableBeacon[this.beacons.length];
-        System.arraycopy(this.beacons, 0, out, 0, this.beacons.length);
+        final ImmutableBeacon[] out = new ImmutableBeacon[beacons.length];
+        System.arraycopy(beacons, 0, out, 0, beacons.length);
         return out;
     }
 
@@ -148,8 +148,8 @@ public class ImmutableSpacewarState implements State {
      * @return An array containing the game's Flags.
      */
     public final ImmutableFlag[] getFlags() {
-        ImmutableFlag[] out = new ImmutableFlag[this.flags.length];
-        System.arraycopy(this.flags, 0, out, 0, this.flags.length);
+        final ImmutableFlag[] out = new ImmutableFlag[flags.length];
+        System.arraycopy(flags, 0, out, 0, flags.length);
         return out;
     }
 
@@ -160,8 +160,8 @@ public class ImmutableSpacewarState implements State {
      * @return An array containing the game's Bases.
      */
     public final ImmutableBase[] getBases() {
-        ImmutableBase[] out = new ImmutableBase[this.bases.length];
-        System.arraycopy(this.bases, 0, out, 0, this.bases.length);
+        final ImmutableBase[] out = new ImmutableBase[bases.length];
+        System.arraycopy(bases, 0, out, 0, bases.length);
         return out;
     }
 
@@ -192,7 +192,7 @@ public class ImmutableSpacewarState implements State {
     public final float getTimestamp() {
         return timestamp;
     }
-    
+
     /**
      * Get the current stepcount of the game.  The stepcount represents the
      * number of times the physics engine has advanced.
@@ -208,7 +208,7 @@ public class ImmutableSpacewarState implements State {
      *
      * @return The current state of the SpacewarGame.
      */
-    public final Vector2D findShortestDistance(Vector2D a, Vector2D b) {
-        return Space.findShortestDistance(a, b, this.width, this.height);
+    public final Vector2D findShortestDistance(final Vector2D a, final Vector2D b) {
+        return Space.findShortestDistance(a, b, width, height);
     }
 }

@@ -132,7 +132,8 @@ public class SampleRandomClient extends AbstractShipClient implements Drawer {
 		int fixed_multiplier = 1000;
 		// boolean goalIsClear = true;
 
-		Vector2D pos = findMyShip(state).getPosition();
+		ImmutableShip myShip = findMyShip(state); 
+		Vector2D pos = myShip.getPosition();
 		// save some information for drawing the line to the goal
 		startPosition = pos;
 		makeNewLine = true;

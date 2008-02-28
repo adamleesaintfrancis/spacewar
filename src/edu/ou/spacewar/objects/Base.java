@@ -2,8 +2,7 @@ package edu.ou.spacewar.objects;
 
 import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.objects.shadows.BaseShadow;
-import edu.ou.spacewar.simulator.Object2D;
-import edu.ou.spacewar.simulator.Space;
+import edu.ou.spacewar.simulator.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -18,11 +17,11 @@ public class Base extends Object2D {
 
     String team;
 
-    public Base(Space space, int id) {
-        super(space, id, BASE_RADIUS, BASE_MASS);
+    public Base(final Space space) {
+        super(space, BASE_RADIUS, BASE_MASS);
     }
 
-    public void setTeam(String team) {
+    public void setTeam(final String team) {
         this.team = team;
     }
 
@@ -30,15 +29,18 @@ public class Base extends Object2D {
         return team;
     }
 
-    public Shadow2D getShadow() {
+    @Override
+	public Shadow2D getShadow() {
         return new BaseShadow(this);
     }
 
-    protected void advanceTime(float timestep) {
+    @Override
+	protected void advanceTime(final float timestep) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public void resetStats() {
+    @Override
+	public void resetStats() {
         //do nothing
     }
 }

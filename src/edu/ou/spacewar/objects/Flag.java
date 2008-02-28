@@ -2,8 +2,7 @@ package edu.ou.spacewar.objects;
 
 import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.objects.shadows.FlagShadow;
-import edu.ou.spacewar.simulator.Object2D;
-import edu.ou.spacewar.simulator.Space;
+import edu.ou.spacewar.simulator.*;
 import edu.ou.utils.Vector2D;
 
 /**
@@ -21,45 +20,49 @@ public class Flag extends Object2D {
     String team;
     Vector2D[] startpositions;
 
-    public Flag(Space space, int id) {
-        super(space, id, FLAG_RADIUS, FLAG_MASS);
+    public Flag(final Space space) {
+        super(space, FLAG_RADIUS, FLAG_MASS);
     }
 
-    public Shadow2D getShadow() {
+    @Override
+	public Shadow2D getShadow() {
         return new FlagShadow(this);
     }
 
-    public void setTeam(String team) {
+    public void setTeam(final String team) {
         this.team = team;
     }
 
     public String getTeam() {
-        return this.team;
+        return team;
     }
 
-    public void setStartPositions(Vector2D[] positions) {
-        this.startpositions = positions;
+    public void setStartPositions(final Vector2D[] positions) {
+        startpositions = positions;
     }
 
     public Vector2D[] getStartPositions() {
-        return this.startpositions;
+        return startpositions;
     }
 
     public void placeFlag() {
-        Vector2D pos = startpositions[++posc % startpositions.length];
+        final Vector2D pos = startpositions[++posc % startpositions.length];
         setPosition(pos);
         setAlive(true);
     }
 
-    protected void advanceTime(float timestep) {
+    @Override
+	protected void advanceTime(final float timestep) {
         //do nothing...
     }
 
-    public void resetStats() {
+    @Override
+	public void resetStats() {
         //do nothing
     }
 
-    public void reset() {
+    @Override
+	public void reset() {
         placeFlag();
     }
 }

@@ -10,17 +10,16 @@ import org.apache.log4j.Logger;
 import com.thoughtworks.xstream.XStream;
 
 import edu.ou.mlfw.*;
-import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.configuration.SpacewarConfig;
 import edu.ou.spacewar.controllables.SWControllable;
-import edu.ou.spacewar.gui.*;
-import edu.ou.spacewar.objects.*;
+import edu.ou.spacewar.gui.JSpacewarComponent;
+import edu.ou.spacewar.objects.Team;
 import edu.ou.spacewar.simulator.Object2D;
 
 /**
- * SpacewarSimulator implements the Simulator interface to allow the use 
- * of spacewar as a mlfw simulator.  
- *  
+ * SpacewarSimulator implements the Simulator interface to allow the use
+ * of spacewar as a mlfw simulator.
+ *
  * @author Jason
  */
 public class SpacewarSimulator implements Simulator {
@@ -28,89 +27,87 @@ public class SpacewarSimulator implements Simulator {
 	private SpacewarGame game;
 	private Collection<Controllable> controllables;
 	private JSpacewarComponent gui = null;
-	
 
-	public void initialize(File configfile) {
-		XStream xstream = SpacewarConfig.getXStream();
+
+	public void initialize(final File configfile) {
+		final XStream xstream = SpacewarConfig.getXStream();
         SpacewarConfig swconfig;
         try {
-            FileReader fr = new FileReader(configfile);
+            final FileReader fr = new FileReader(configfile);
             swconfig = (SpacewarConfig) xstream.fromXML(fr);
             fr.close();
-            initialize(swconfig);
-        } catch (FileNotFoundException e) {
+            this.initialize(swconfig);
+        } catch (final FileNotFoundException e) {
             logger.error("Could not find Spacewar configuration file!");
             logger.error("Was looking for: " + configfile);
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-    public void initialize(SpacewarConfig swconfig)
+    public void initialize(final SpacewarConfig swconfig)
     {
     	try {
-			this.game = swconfig.newGame();
-			this.controllables = extractControllables( this.game );
-		} catch (Exception e) {
-			logger.error(e.toString());
-			logger.error(e.getStackTrace());
+			game = swconfig.newGame();
+			controllables = extractControllables( game );
+		} catch (final Exception e) {
+			logger.error("Error initializing from spacewar config.", e);
 		}
     }
-    
-    public static Collection<Controllable> extractControllables( SpacewarGame game ) {
-    	Collection<Controllable> out = new LinkedList<Controllable>();
-    	for(Object2D obj : game.getObjects()) {
+
+    public static Collection<Controllable> extractControllables( final SpacewarGame game ) {
+    	final Collection<Controllable> out = new LinkedList<Controllable>();
+    	for(final Object2D obj : game) {
     		if (obj instanceof SWControllable) {
-    			SWControllable swc = (SWControllable)obj;
+    			final SWControllable swc = (SWControllable)obj;
     			if( swc.isControllable() ) {
     				out.add(swc.getControllable());
     			}
     		}
     	}
     	//Teams aren't Object2Ds, so need to handle separately
-    	for(Team t : game.getTeams()) {
+    	for(final Team t : game.getTeams()) {
     		if( t.isControllable() ) {
     			out.add( t.getControllable() );
     		}
     	}
     	return out;
     }
-    
+
     public boolean isRunning() {
-    	return this.game.isRunning();
+    	return game.isRunning();
 	}
-	
+
     public void advance() {
-		assert(this.game != null);
-		this.game.advanceTime();  
+		assert(game != null);
+		game.advanceTime();
 	}
-	
+
 	public State getState() {
-		return new ImmutableSpacewarState(this.game);
+		return new ImmutableSpacewarState(game);
 	}
-	
+
 	public Collection<Controllable> getControllables() {
-		return this.controllables;
+		return controllables;
 	}
 
 	public Collection<Controllable> getAllControllables() {
-		return this.controllables;
+		return controllables;
 	}
-	
+
 	public void shutdown() {
 //		 TODO: game stats get collected here?
-		this.controllables = extractControllables( this.game );		
+		controllables = extractControllables( game );
 	}
 
 	public JComponent getGUI() {
-		if(this.gui == null) {
-			int width = (int)this.game.getWidth();
-			int height = (int)this.game.getHeight();
-			Collection<Shadow2D> shadows = game.getShadows(); 
-			this.gui = new JSpacewarComponent();
-			this.gui.initialize(width, height, shadows);
-		} 
-		return this.gui;
+		if(gui == null) {
+			final int width = (int)game.getWidth();
+			final int height = (int)game.getHeight();
+			gui = new JSpacewarComponent(width, height);
+			gui.setSimulatorShadowSource(game.getShadowIterable());
+		}
+		return gui;
 	}
 }

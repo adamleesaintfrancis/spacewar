@@ -15,13 +15,12 @@ public class Bullet extends Object2D {
     private float lifetime;
 
 
-    public Bullet(Ship ship, int id) {
-        super(ship.getSpace(), id, BULLET_RADIUS, BULLET_MASS);
+    public Bullet(final Ship ship) {
+        super(ship.getSpace(), BULLET_RADIUS, BULLET_MASS);
 
         this.ship = ship;
-        this.alive = false;
+        alive = false;
     }
-
 
     public final float getLifetime() {
         return lifetime;
@@ -31,27 +30,31 @@ public class Bullet extends Object2D {
         return ship;
     }
 
-    public Shadow2D getShadow() {
+    @Override
+	public Shadow2D getShadow() {
         return new BulletShadow(this);
     }
 
 
-    protected final void setLifetime(float lifetime) {
+    protected final void setLifetime(final float lifetime) {
         this.lifetime = lifetime;
     }
 
-    protected final void advanceTime(float timestep) {
+    @Override
+	protected final void advanceTime(final float timestep) {
         if (lifetime <= 0) {
             ship.reload(this);
         }
         lifetime -= timestep;
     }
 
-    public void reset() {
+    @Override
+	public void reset() {
         ship.reload(this);
     }
 
-    public void resetStats() {
+    @Override
+	public void resetStats() {
         //do nothing
     }
 }

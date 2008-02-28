@@ -12,16 +12,20 @@ public class ObstacleConfig {
     public float radius;
     public float positionX, positionY;
     public float velocityX, velocityY;
+    public boolean destructible;
 
-    public ObstacleConfig(String name,
-                               float radius,
-                               float posX, float posY,
-                               float velX, float velY) {
+    public ObstacleConfig(final String name,
+                          final float radius,
+                          final float posX, final float posY,
+                          final float velX, final float velY,
+                          final boolean destructible )
+    {
         this.name = name;
         this.radius = radius;
-        this.positionX = posX;
-        this.positionY = posY;
-        this.velocityX = velX;
-        this.velocityY = velY;
+        positionX = posX;
+        positionY = posY;
+        velocityX = velX;
+        velocityY = velY;
+        this.destructible = destructible;
     }
 }
