@@ -124,7 +124,7 @@ public class SpacewarConfig {
 
         //add all of the specified obstacles
         for (final ObstacleConfig obstinfo : obstacles) {
-            final Obstacle o = new Obstacle(game, obstinfo.radius);
+            final Obstacle o = new Obstacle(game, obstinfo.radius, obstinfo.destructible);
             o.setPosition(new Vector2D(obstinfo.positionX, obstinfo.positionY));
             o.setVelocity(new Vector2D(obstinfo.velocityX, obstinfo.velocityY));
             game.add(o);
