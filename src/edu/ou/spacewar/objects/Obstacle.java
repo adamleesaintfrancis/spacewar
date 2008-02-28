@@ -55,6 +55,10 @@ public class Obstacle extends Object2D {
     }
 
     public final void takeDamage() {
+    	if(!isDestructible()) {
+    		return;
+    	}
+
         energy -= SHOT_DAMAGE;
         if (energy <= 0) {
             if( radius > 10.0) {
