@@ -17,24 +17,27 @@ public class ObstacleShadow extends Shadow2D {
 
     private final Obstacle obstacle;
 
-    public ObstacleShadow(Obstacle o) {
+    public ObstacleShadow(final Obstacle o) {
         super((int)(o.getRadius() * 2), (int)(o.getRadius() * 2));
-        this.obstacle = o;
+        obstacle = o;
     }
 
-    public Vector2D getRealPosition() {
+    @Override
+	public Vector2D getRealPosition() {
         return obstacle.getPosition();
     }
 
-    public boolean drawMe() {
+    @Override
+	public boolean drawMe() {
         return obstacle.isAlive();
     }
 
-    public void draw(Graphics2D g) {
-        float radius = obstacle.getRadius();
-        float diameter = obstacle.getRadius() * 2;
+    @Override
+	public void draw(final Graphics2D g) {
+        final float radius = obstacle.getRadius();
+        final float diameter = obstacle.getRadius() * 2;
 
-        Ellipse2D.Float shape = new Ellipse2D.Float(drawposition.getX() - radius,
+        final Ellipse2D.Float shape = new Ellipse2D.Float(drawposition.getX() - radius,
                 drawposition.getY() - radius, diameter, diameter);
 
         g.setColor(OBSTACLE_COLOR);
@@ -45,7 +48,8 @@ public class ObstacleShadow extends Shadow2D {
         g.draw(shape);
     }
 
-    public void cleanUp() {
+    @Override
+	public void cleanUp() {
         //do nothing...
     }
 }

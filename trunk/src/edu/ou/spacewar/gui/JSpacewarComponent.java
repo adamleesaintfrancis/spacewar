@@ -1,8 +1,6 @@
 package edu.ou.spacewar.gui;
 
 import java.awt.*;
-import java.util.*;
-import java.util.List;
 
 import javax.swing.JComponent;
 
@@ -20,57 +18,44 @@ public class JSpacewarComponent extends JComponent implements Shadow2DCanvas {
     public static final BasicStroke STROKE = new BasicStroke(3, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
     public static final BasicStroke THICK_STROKE = new BasicStroke(7, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 
-	// Hooray for thread-safety while using fail-fast iterators in a different thread
-	// than the accessors! -BMM
-    private final List<Shadow2D> shadows = Collections.synchronizedList(new ArrayList<Shadow2D>());
-    private final List<Shadow2D> usershadows = Collections.synchronizedList(new LinkedList<Shadow2D>());
-
+    private Iterable<Shadow2D> simulatorshadows = Shadow2D.EMPTY_ITER;
+    private Iterable<Shadow2D> clientshadows = Shadow2D.EMPTY_ITER;
     private boolean showshadows = true;
-    private int width, height;
+    private final int width, height;
 
-    public void initialize(final int width, final int height, Collection<Shadow2D> shadows) {
-        this.width = width;
+    public JSpacewarComponent(final int width, final int height)
+    {
+    	this.width = width;
         this.height = height;
-        this.setPreferredSize(new Dimension(width, height));
-        this.setBackground(Color.BLACK);
-        this.setForeground(Color.BLACK);
-        this.shadows.addAll(shadows);
-    }
-
-    public void addShadow(Shadow2D shadow) {
-        assert(shadow != null);
-        usershadows.add(shadow);
-    }
-
-    public void removeShadow(Shadow2D shadow) {
-        assert(shadow != null);
-        usershadows.remove(shadow);
-    }
-
-    public void clearUserShadows() {
-        usershadows.clear();
-    }
-
-    public void clearAllShadows() {
-        usershadows.clear();
-        shadows.clear();
+        setPreferredSize(new Dimension(width, height));
+        setBackground(Color.BLACK);
+        setForeground(Color.BLACK);
     }
 
     public void toggleShadows() {
         showshadows = !showshadows;
     }
 
-    protected void paintComponent(Graphics g) {
+    public void setClientShadowSource(final Iterable<Shadow2D> clientshadows) {
+    	this.clientshadows = clientshadows;
+    }
+
+    public void setSimulatorShadowSource(final Iterable<Shadow2D> simulatorshadows) {
+    	this.simulatorshadows = simulatorshadows;
+    }
+
+    @Override
+	protected void paintComponent(final Graphics g) {
         super.paintComponent(g);
-        Graphics2D graphics = (Graphics2D) g;
-        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, 
+        final Graphics2D graphics = (Graphics2D) g;
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         		RenderingHints.VALUE_ANTIALIAS_ON);
 
         g.setColor(getBackground());
         g.fillRect(0, 0, getWidth(), getHeight());
-        
-		synchronized (this.shadows) {  // must be used for iterator
-	        for (Shadow2D shadow : this.shadows) {
+
+		synchronized (simulatorshadows) {  // must be used for iterator
+	        for (final Shadow2D shadow : simulatorshadows) {
 	        	if (!shadow.drawMe()) {
 	        		continue;
 	        	}
@@ -79,9 +64,8 @@ public class JSpacewarComponent extends JComponent implements Shadow2DCanvas {
 		}
 
         if (showshadows) {
-        	synchronized (this.usershadows) { // must be used for iterator
-				for (Shadow2D shadow : this.usershadows) {
-        	
+        	synchronized (clientshadows) { // must be used for iterator
+				for (final Shadow2D shadow : clientshadows) {
 	        		if (!shadow.drawMe()) {
 	        			continue;
 	        		}
@@ -91,10 +75,10 @@ public class JSpacewarComponent extends JComponent implements Shadow2DCanvas {
         }
     }
 
-    private void drawShadow(Shadow2D shadow, Graphics2D graphics) {
-        Vector2D position = shadow.getRealPosition();
-        float x = position.getX();
-        float y = position.getY();
+    private void drawShadow(final Shadow2D shadow, final Graphics2D graphics) {
+        final Vector2D position = shadow.getRealPosition();
+        final float x = position.getX();
+        final float y = position.getY();
 
         if (x < shadow.getHalfWidth()) {
             //goes off screen to left
