@@ -37,9 +37,7 @@ Controllables are also just interfaces.  The intent of a controllable is that
 it can provide a list of legal actions for any state, and can, in turn, have an
 action set by a client.
 
-Clients decide which actions a controllable should take at any given time, 
-based on the information about the state of the Simulator available through an 
-Environment.  
+Clients decide which actions a controllable should take at any given time.  
 
 
 

@@ -2,18 +2,15 @@ package edu.ou.mlfw.ladder;
 
 import jargs.gnu.CmdLineParser;
 
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import org.apache.log4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 
-import edu.ou.mlfw.Record;
-import edu.ou.mlfw.World;
+import edu.ou.mlfw.*;
 import edu.ou.mlfw.config.WorldConfig;
 
 public class LadderClient {
@@ -29,9 +26,9 @@ public class LadderClient {
 	private XStream xstream = new XStream();
 
 
-	public LadderClient(String serverAddr, int serverPort){
+	public LadderClient(final String serverAddr, final int serverPort){
 		this.serverAddr = serverAddr;
-		this.serverPort = serverPort;		
+		this.serverPort = serverPort;
 	}
 
 	public void run() {
@@ -39,15 +36,15 @@ public class LadderClient {
 
 		//Register with server
 		try{
-			serverSocket = new Socket(this.serverAddr, serverPort);
-			OutputStream out = serverSocket.getOutputStream();
-			InputStream in = serverSocket.getInputStream();
-			mesg = new GameRequest(serverSocket.getLocalAddress());				
+			serverSocket = new Socket(serverAddr, serverPort);
+			final OutputStream out = serverSocket.getOutputStream();
+			final InputStream in = serverSocket.getInputStream();
+			mesg = new GameRequest(serverSocket.getLocalAddress());
 			xstream.toXML(mesg, out);
-			mesg = (LadderMessage)xstream.fromXML(in);				
+			mesg = (LadderMessage)xstream.fromXML(in);
 			serverSocket.close();
 		}
-		catch(Exception e){
+		catch(final Exception e){
 			logger.error("Cannot open socket to " + serverAddr);
 			System.exit(-1);
 		}
@@ -62,47 +59,47 @@ public class LadderClient {
 				return;
 			}
 			else if(mesg instanceof GameSettings){
-				GameSettings settings = (GameSettings) mesg;
+				final GameSettings settings = (GameSettings) mesg;
 
 				logger.info("Starting game " + settings.getGameID());
-				WorldConfig worldconfig 
+				final WorldConfig worldconfig
 					= new WorldConfig(settings.getSimulatorClass(),
 							          settings.getSimulatorConfig(),
 								      settings.getClients());
 				List<Record> recordTemp = null;
-				long gameStartTime = new Date().getTime();
+				final long gameStartTime = new Date().getTime();
 				try{
-					World world = new World(worldconfig);
+					final World world = new World(worldconfig);
 					world.run();
 					recordTemp = world.getRecords();
 				}
-				catch(java.lang.ClassNotFoundException e){
+				catch(final java.lang.ClassNotFoundException e){
 					e.printStackTrace();
-					logger.error("An agent required a class that could not be found");
+					logger.error("An client required a class that could not be found");
 				}
-				catch(NullPointerException e){
+				catch(final NullPointerException e){
 					e.printStackTrace();
-					logger.error("An agent had a null pointer exception");
+					logger.error("An client had a null pointer exception");
 				}
-				catch(Exception e){
+				catch(final Exception e){
 					e.printStackTrace();
 					//exit("Error instantiating World");
 				}
-				long gameTimeElapsed = (new Date().getTime() - gameStartTime);
+				final long gameTimeElapsed = (new Date().getTime() - gameStartTime);
 				logger.info("Game " + settings.getGameID() + " took " + gameTimeElapsed + " seconds.\n");
 
 				mesg = new GameResult(settings.getGameID(), gameTimeElapsed, recordTemp);
 				//Send result message back to server
 
 				try{
-					serverSocket = new Socket(this.serverAddr, serverPort);
-					InputStream in = serverSocket.getInputStream();
-					OutputStream out = serverSocket.getOutputStream();				
+					serverSocket = new Socket(serverAddr, serverPort);
+					final InputStream in = serverSocket.getInputStream();
+					final OutputStream out = serverSocket.getOutputStream();
 					xstream.toXML(mesg, out);
 					mesg = (LadderMessage)xstream.fromXML(in);
 					serverSocket.close();
 				}
-				catch(Exception e){
+				catch(final Exception e){
 					logger.error("Cannot open socket to " + serverAddr);
 					System.exit(-1);
 				}
@@ -116,10 +113,10 @@ public class LadderClient {
 
 	}
 
-	public static void main(String[] args){
-		Arguments parsedArgs = parseArgs(args);
+	public static void main(final String[] args){
+		final Arguments parsedArgs = parseArgs(args);
 
-		LadderClient client = new LadderClient(parsedArgs.serverAddr, parsedArgs.serverPort);
+		final LadderClient client = new LadderClient(parsedArgs.serverAddr, parsedArgs.serverPort);
 
 		client.run();
 
@@ -127,14 +124,14 @@ public class LadderClient {
 	}
 
 	/**
-	 * Handle the command-line arguments passed to an invocation of World.  
+	 * Handle the command-line arguments passed to an invocation of World.
 	 * Generates an Arguments object, which is a simple encapsulation of
 	 * the relevant command-line options and values into an object.
-	 * 
+	 *
 	 * @param args The arguments string.
 	 * @return An instance of Arguments encapsulating the relevant args.
 	 */
-	public static Arguments parseArgs(final String[] args) 
+	public static Arguments parseArgs(final String[] args)
 	{
 		final CmdLineParser parser = new CmdLineParser();
 		final CmdLineParser.Option help   = parser.addBooleanOption('h', "help");
@@ -143,7 +140,7 @@ public class LadderClient {
 
 		try {
 			parser.parse(args);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			exit("Error parsing arguments");
 		}
 
@@ -151,10 +148,10 @@ public class LadderClient {
 			exit("Displaying help");  //exit prints the help string.
 		}
 
-		//store the file indicated by the config argument, or the default 
+		//store the file indicated by the config argument, or the default
 		//location if the config argument is not specified.
-		String serverAddr = new String((String)parser.getOptionValue(serverAddrOp, DEFAULT_SERVER));
-		int serverPort = new Integer((Integer)parser.getOptionValue(serverPortOp, DEFAULT_PORT));
+		final String serverAddr = new String((String)parser.getOptionValue(serverAddrOp, DEFAULT_SERVER));
+		final int serverPort = new Integer((Integer)parser.getOptionValue(serverPortOp, DEFAULT_PORT));
 
 		//store whether or not the gui should be displayed (false by default)
 
@@ -162,9 +159,9 @@ public class LadderClient {
 	}
 
 	/**
-	 * A throwaway class that encapsulates the command line arguments for 
+	 * A throwaway class that encapsulates the command line arguments for
 	 * World.  configLocation stores the file location where the world should
-	 * look for its LadderConfiguration file, and gui is a boolean flag 
+	 * look for its LadderConfiguration file, and gui is a boolean flag
 	 * indicating whether or not graphics should be displayed.
 	 */
 	public static class Arguments
@@ -172,7 +169,7 @@ public class LadderClient {
 		public final String serverAddr;
 		public final int serverPort;
 
-		public Arguments(String serverAddr, int serverPort){
+		public Arguments(final String serverAddr, final int serverPort){
 			this.serverAddr = serverAddr;
 			this.serverPort = serverPort;
 		}
@@ -181,7 +178,7 @@ public class LadderClient {
 	/**
 	 * Exits the program with usage instructions.
 	 */
-	public static void exit(String exitMessage) {
+	public static void exit(final String exitMessage) {
 		logger.error(
 				exitMessage + "\n\n"
 				+"Usage: SpacewarSim [-h] [-g] [-c /path/to/configfile] \n\n"
