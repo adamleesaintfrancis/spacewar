@@ -115,8 +115,6 @@
 
   <target name="hello" depends="jar-spacewar">
     <javac srcdir="examples/hello" classpath="${dist}/spacewar.jar" />
-           
-    
 	<java classname="edu.ou.mlfw.World"
 	      fork="true" 
 	      dir="examples/hello">
@@ -128,35 +126,31 @@
 	</java>
   </target>
 	
-	<target name="random" depends="jar-spacewar">
-	    <javac srcdir="examples/random" classpath="${dist}/spacewar.jar" />
-	           
-	    
-		<java classname="edu.ou.mlfw.World"
-		      fork="true" 
-		      dir="examples/random">
-		  <arg value="-g" />
-		  <classpath>
-		  	<pathelement location="${dist}/spacewar.jar"/>
-		    <pathelement path="examples/random"/>
-		  </classpath>
-		</java>
-	  </target>
+  <target name="random" depends="jar-spacewar">
+    <javac srcdir="examples/random" classpath="${dist}/spacewar.jar" />
+	<java classname="edu.ou.mlfw.World"
+		  fork="true" 
+		  dir="examples/random">
+      <arg value="-g" />
+	  <classpath>
+		<pathelement location="${dist}/spacewar.jar"/>
+		<pathelement path="examples/random"/>
+	  </classpath>
+	</java>
+  </target>
 	
-	<target name="project 1" depends="jar-spacewar">
-	    <javac srcdir="examples/project1" classpath="${dist}/spacewar.jar" />
-	           
-	    
-		<java classname="edu.ou.mlfw.World"
-		      fork="true" 
-		      dir="examples/project1">
-		  <arg value="-g" />
-		  <classpath>
-		  	<pathelement location="${dist}/spacewar.jar"/>
-		    <pathelement path="examples/project1"/>
-		  </classpath>
-		</java>
-	  </target>
+  <target name="project 1" depends="jar-spacewar">
+	<javac srcdir="examples/project1" classpath="${dist}/spacewar.jar" />
+	<java classname="edu.ou.mlfw.World"
+	      fork="true" 
+	      dir="examples/project1">
+	  <arg value="-g" />
+	  <classpath>
+	  	<pathelement location="${dist}/spacewar.jar"/>
+	    <pathelement path="examples/project1"/>
+	  </classpath>
+	</java>
+  </target>
 
 <!-- 
 
