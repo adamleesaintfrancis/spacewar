@@ -1,5 +1,5 @@
 package edu.ou.mlfw.exceptions;
 
-public class UnboundAgentException extends Exception {
+public class UnboundClientException extends Exception {
 	private static final long serialVersionUID = 1L;
 }

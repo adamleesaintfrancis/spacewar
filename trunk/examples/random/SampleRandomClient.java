@@ -19,7 +19,7 @@ import edu.ou.utils.Vector2D;
  * SampleRandomClient is a simple high level agent 
  * (based on HighLevelRandomClient) that chooses a random
  * location (not in an obstacle) and moves to that location using the custom
- * built high level actions and environment.
+ * built high level actions.
  */
 public class SampleRandomClient extends AbstractShipClient implements Drawer {
 

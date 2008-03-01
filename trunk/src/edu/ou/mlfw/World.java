@@ -43,9 +43,9 @@ public class World {
 	/**
 	 * Initialize the simulator, initialize each client, and bind each
 	 * controllable to its client. Throws an exception if either a controllable
-	 * is initialized without a matching client, or an agent is initialized
-	 * without a matching controllable. If a controllable/agent pair is given
-	 * but neither the controllable or agent are initialized, the pair entry
+	 * is initialized without a matching client, or a client is initialized
+	 * without a matching controllable. If a controllable/client pair is given
+	 * but neither the controllable or client are initialized, the pair entry
 	 * will simply be ignored.
 	 *
 	 * This also initializes the gui if the graphical option is specified.
@@ -53,12 +53,12 @@ public class World {
 	 * @throws IllegalAccessException
 	 * @throws InstantiationException
 	 * @throws NameCollisionException
-	 * @throws UnboundAgentException
+	 * @throws UnboundClientException
 	 * @throws UnboundControllableException
 	 */
 	public World(final WorldConfig worldconfig)
 		throws InstantiationException, IllegalAccessException,
-			NameCollisionException, UnboundAgentException,
+			NameCollisionException, UnboundClientException,
 			UnboundControllableException, ClassNotFoundException,
 			FileNotFoundException, IOException
 	{
@@ -87,7 +87,7 @@ public class World {
 			final String controllableName = mapping.getControllableName();
 			if (!controllables.contains(controllableName)) {
 				logger.debug(controllableName);
-				throw new UnboundAgentException();
+				throw new UnboundClientException();
 			}
 			final ClientInitializer clientinit
 				= ClientInitializer.fromXMLFile(
@@ -116,21 +116,18 @@ public class World {
 	 * The basic run loop. While the simulator reports that it is running, we
 	 * drive the simulation with two phases per loop. In the first phase, we
 	 * iterate over each controllable, find the client associated with that
-	 * controllable, pass the simulator state to the client's environment to
-	 * prepare it for the client's agent, and pull out the controllable's legal
-	 * actions and pass them to the client's environment to prepare them for the
-	 * client's agent. Once we have the state and legal actions ready for the
-	 * agent, we pass these to the agent's startAction() method. From this call,
-	 * we receive an action, which we pass through the environment's
-	 * getControllableAction before setting the Controllable's action.
+	 * controllable, pass the simulator state to the client, and pull out the
+	 * controllable's legal actions and pass them to the client. Once we have
+	 * the state and legal actions ready for the client, we pass these to the
+	 * client's startAction() method. From this call, we receive an action,
+	 * which we use to set the Controllable's action.
 	 *
 	 * Once all the controllables have an action, we advance the simulator.
-	 * TODO: Should time be passed in here? Would this be the best way to handle
-	 * synchronizing simulator time with gui framerate?
+	 * TODO: Should time be passed in here? Would this be the best way to
+	 * handle synchronizing simulator time with gui framerate?
 	 *
 	 * After the simulator has advanced, we pull out the new state, and pass
-	 * that state to each client's environment and then to each client's
-	 * endAction() method.
+	 * that state to each client's endAction() method.
 	 *
 	 * Finally, if the gui is enabled, we draw the game state.
 	 */
@@ -147,7 +144,7 @@ public class World {
 		if(gui instanceof Shadow2DCanvas) {
 			((Shadow2DCanvas)gui).setClientShadowSource(shadowsource);
 		}
-		// a set to hold any key listeners that any human agents might
+		// a set to hold any key listeners that any human clients might
 		// define these are only added if running in gui mode.
 		final Set<KeyListener> keylisteners = new HashSet<KeyListener>();
 		keylisteners.add( new KeyListener() {
@@ -220,7 +217,7 @@ public class World {
 	/**
 	 * Advance the simulator a single step.
 	 */
-	private void step(final boolean updateAgents) {
+	private void step(final boolean updateClients) {
 		State state = simulator.getState();
 		startActions(state);
 		simulator.advance();

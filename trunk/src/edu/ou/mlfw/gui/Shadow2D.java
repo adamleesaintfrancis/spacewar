@@ -6,7 +6,7 @@ import java.util.*;
 import edu.ou.utils.Vector2D;
 
 /**
- * Shadow2D provides a way for agents, environments, or whatever else to draw
+ * Shadow2D provides a way for clients or whatever else to draw
  * on a Shadow2DCanvas.  The main consideration for a Shadow2D is that the
  * Shadow2DCanvas be able to find its current "real" position as well as
  * set its current "draw" position.  A Shadow2D also needs to specify the width
