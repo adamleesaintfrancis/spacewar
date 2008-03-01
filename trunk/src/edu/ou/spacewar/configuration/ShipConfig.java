@@ -13,65 +13,65 @@ public class ShipConfig {
     public final float positionX, positionY;    //if autoPlacement is false, specify the position
     public final float velocityX, velocityY;    //if autoPlacement is false, specify the velocity
     public final float orientedX, orientedY;    //if autoplacement is false, specify the orientation
-    public final boolean clientRecord;           //the clientRecord to load.
+    public final boolean agentRecord;           //the agentRecord to load.
     public String knowledgeFile;          //the knowledge file to load??todo:should this be here?
-    public final boolean isControllable;        // is the ship a controllable object?
-
-    public ShipConfig(final String name,
-                           final float posX, final float posY,
-                           final float velX, final float velY,
-                           final float oriX, final float oriY,
-                           final String client, final boolean clientRecord,
-                           final boolean isControllable)
+    public final boolean isControllable;        // is the ship a controllable object? 
+    
+    public ShipConfig(String name,
+                           float posX, float posY,
+                           float velX, float velY,
+                           float oriX, float oriY,
+                           String agent, boolean agentRecord, 
+                           boolean isControllable) 
     {
-        this(name, null, posX, posY, velX, velY, oriX, oriY, client, clientRecord, isControllable);
+        this(name, null, posX, posY, velX, velY, oriX, oriY, agent, agentRecord, isControllable);
     }
 
-    public ShipConfig(final String name, final String client, final boolean clientRecord,
-    		final boolean isControllable)
+    public ShipConfig(String name, String agent, boolean agentRecord, 
+    		boolean isControllable) 
     {
-        this(name, null, client, clientRecord, isControllable);
+        this(name, null, agent, agentRecord, isControllable);
     }
 
-    public ShipConfig(final String name, final String team, final String client,
-    						final boolean clientRecord,
-    						final boolean isControllable)
+    public ShipConfig(String name, String team, String agent, 
+    						boolean agentRecord, 
+    						boolean isControllable) 
     {
-
-        this(name, team, -1, -1, -1, -1, -1, -1, client, clientRecord, isControllable);
+    	
+        this(name, team, -1, -1, -1, -1, -1, -1, agent, agentRecord, isControllable);
     }
 
-    public ShipConfig(final String name, final boolean clientRecord, final boolean isControllable){
-    	this(name, null, -1, -1, -1, -1, -1, -1, null, clientRecord, isControllable);
+    public ShipConfig(String name, boolean agentRecord, boolean isControllable){
+    	this(name, null, -1, -1, -1, -1, -1, -1, null, agentRecord, isControllable);
     }
-
-    ShipConfig(final String name, final String team,
-    						final float posX, final float posY,
-                            final float velX, final float velY,
-                            final float oriX, final float oriY,
-                            final String client, final boolean clientRecord,
-                            final boolean isControllable)
+    
+    ShipConfig(String name, String team,
+    						float posX, float posY,
+                            float velX, float velY,
+                            float oriX, float oriY,
+                            String agent, boolean agentRecord, 
+                            boolean isControllable) 
     {
         this.name = name;
         this.team = team;
-        positionX = posX;
-        positionY = posY;
-        velocityX = velX;
-        velocityY = velY;
-        orientedX = oriX;
-        orientedY = oriY;
-        this.clientRecord = clientRecord;
+        this.positionX = posX;
+        this.positionY = posY;
+        this.velocityX = velX;
+        this.velocityY = velY;
+        this.orientedX = oriX;
+        this.orientedY = oriY;
+        this.agentRecord = agentRecord;
         this.isControllable = isControllable;
-
-        if((positionX <= 0.0f) || (positionY <= 0.0f)){
-        	autoPlace = true;
+        
+        if(this.positionX <= 0.0f || this.positionY <= 0.0f){
+        	this.autoPlace = true;
         }
         else{
-        	autoPlace = false;
+        	this.autoPlace = false;
         }
-
-        logger.debug(autoPlace);
+        
+        logger.debug(this.autoPlace);
     }
 
-
+    
 }
