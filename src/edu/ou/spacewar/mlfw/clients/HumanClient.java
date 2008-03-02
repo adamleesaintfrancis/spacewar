@@ -5,7 +5,6 @@ import java.io.File;
 
 import edu.ou.mlfw.InteractiveClient;
 import edu.ou.spacewar.ImmutableSpacewarState;
-import edu.ou.spacewar.controllables.ControllableShip;
 import edu.ou.spacewar.objects.ShipCommand;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
 
@@ -76,18 +75,15 @@ public class HumanClient extends AbstractShipClient
 
 	@Override
 	public ShipCommand startAction( final ImmutableSpacewarState state,
-								    final ControllableShip controllable )
+								    final ImmutableShip controllable )
 	{
-		final ImmutableShip s = controllable.getState();
-		if (!s.isAlive()) {
-			//System.out.println("Dead ship!");
-		}
+
 		return ShipCommand.fromByte(shipCommandAsByte);
 	}
 
 	//do nothing methods
 	@Override
-	public void endAction(final ImmutableSpacewarState s, final ControllableShip c) {}
+	public void endAction(final ImmutableSpacewarState s, final ImmutableShip c) {}
 	public void initialize(final File config) {}
 	public void loadData(final File data) {}
 	public void shutdown() {}
