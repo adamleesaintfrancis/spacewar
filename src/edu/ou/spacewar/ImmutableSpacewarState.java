@@ -17,6 +17,7 @@ public class ImmutableSpacewarState implements State {
     private final ImmutableShip[] ships;
     private final ImmutableObstacle[] obstacles;
     private final ImmutableBullet[] bullets;
+    private final ImmutableMine[] mines;
     private final ImmutableBeacon[] beacons;
     private final ImmutableBase[] bases;
     private final ImmutableFlag[] flags;
@@ -51,6 +52,14 @@ public class ImmutableSpacewarState implements State {
             blltstmp.add(new ImmutableBullet(element));
         }
         bullets = blltstmp.toArray(new ImmutableBullet[blltstmp.size()]);
+
+        //get all the mines
+        final Mine[] swgmines = swg.getLive(Mine.class);
+        final LinkedList<ImmutableMine> minestmp = new LinkedList<ImmutableMine>();
+        for (final Mine element : swgmines) {
+            minestmp.add(new ImmutableMine(element));
+        }
+        mines = minestmp.toArray(new ImmutableMine[minestmp.size()]);
 
         //get all the beacons
         final Beacon[] swgbcns = swg.getLive(Beacon.class);
@@ -126,6 +135,19 @@ public class ImmutableSpacewarState implements State {
     public final ImmutableBullet[] getBullets() {
         final ImmutableBullet[] out = new ImmutableBullet[bullets.length];
         System.arraycopy(bullets, 0, out, 0, bullets.length);
+        return out;
+    }
+
+    /**
+     * Return all mines in the game.  Each mine is returned in an
+     * immutable wrapper class.  This only captures active mines!  Be
+     * sure to check the getId() and getShipId() for each mine!
+     *
+     * @return An array containing the game's mines.
+     */
+    public final ImmutableMine[] getMines() {
+        final ImmutableMine[] out = new ImmutableMine[mines.length];
+        System.arraycopy(mines, 0, out, 0, mines.length);
         return out;
     }
 
