@@ -1,8 +1,7 @@
 package edu.ou.spacewar.objects.immutables;
 
 import edu.ou.mlfw.State;
-import edu.ou.spacewar.objects.Ship;
-import edu.ou.spacewar.objects.ShipCommand;
+import edu.ou.spacewar.objects.*;
 
 /**
  * ImmutableShip acts as an immutable wrapper around a Ship.
@@ -16,6 +15,8 @@ public class ImmutableShip extends ImmutableObject2D implements State {
     private final String team;
     private final int energy;
     private final int ammo;
+    private final int mines;
+    private final boolean shieldUp;
     private final int beacons;
     private final int kills;
     private final int deaths;
@@ -25,25 +26,27 @@ public class ImmutableShip extends ImmutableObject2D implements State {
     private final String flagTeam;
     private final ShipCommand command;
 
-    public ImmutableShip(Ship ship) {
+    public ImmutableShip(final Ship ship) {
         super(ship);
-        this.id = ship.getId();
-        this.name = ship.getName();
-        this.team = ship.getTeam();
-        this.energy = ship.getEnergy();
-        this.ammo = ship.getAmmo();
-        this.beacons = ship.getBeacons();
-        this.kills = ship.getKills();
-        this.deaths = ship.getDeaths();
-        this.hits = ship.getHits();
-        this.flags = ship.getFlags();
-        this.hasFlag = ship.hasFlag();
+        id = ship.getId();
+        name = ship.getName();
+        team = ship.getTeam();
+        energy = ship.getEnergy();
+        ammo = ship.getAmmo();
+        mines = ship.getMines();
+        shieldUp = ship.shieldUp();
+        beacons = ship.getBeacons();
+        kills = ship.getKills();
+        deaths = ship.getDeaths();
+        hits = ship.getHits();
+        flags = ship.getFlags();
+        hasFlag = ship.hasFlag();
         if(hasFlag) {
-            this.flagTeam = ship.getFlag().getTeam();
+            flagTeam = ship.getFlag().getTeam();
         } else {
-            this.flagTeam = null;
+            flagTeam = null;
         }
-        this.command = ship.getActiveCommand();
+        command = ship.getActiveCommand();
     }
 
     /**
@@ -89,6 +92,24 @@ public class ImmutableShip extends ImmutableObject2D implements State {
      */
     public final int getAmmo() {
         return ammo;
+    }
+
+    /**
+     * Get the ship's current mines.
+     *
+     * @return The ship's mines.
+     */
+    public final int getMines() {
+        return mines;
+    }
+
+    /**
+     * Get the ship's current shield state.
+     *
+     * @return The ship's shield state.
+     */
+    public final boolean isShieldUp() {
+        return shieldUp;
     }
 
     /**
@@ -169,7 +190,8 @@ public class ImmutableShip extends ImmutableObject2D implements State {
      *
      * @return Ship.SHIP_MASS
      */
-    public final float getMass() {
+    @Override
+	public final float getMass() {
         return Ship.SHIP_MASS;
     }
 
@@ -178,7 +200,8 @@ public class ImmutableShip extends ImmutableObject2D implements State {
      *
      * @return Ship.SHIP_RADIUS
      */
-    public final float getRadius() {
+    @Override
+	public final float getRadius() {
         return Ship.SHIP_RADIUS;
     }
 }

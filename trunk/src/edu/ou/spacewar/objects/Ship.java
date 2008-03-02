@@ -24,6 +24,7 @@ public class Ship extends Object2D implements SWControllable
     public static final int MAX_ENERGY = 5000;
     public static final int FIRE_COST = 100;
     public static final int MINE_COST = 250;
+    public static final int SHIELD_COST = 250;
     public static final int THRUST_COST = 25;
     public static final int TURN_COST = 1;
     public static final int SHOT_COST = 500;
@@ -34,6 +35,7 @@ public class Ship extends Object2D implements SWControllable
     public static final int MAX_MINES = 5;
     public static final float FIRE_DELAY = 1f / 4f;
     public static final float MINE_DELAY = 1f / 2f;
+    public static final float SHIELD_DELAY = 1f / 2f;
     public static final float THRUST_ACCELERATION = 80;
     public static final float TURN_SPEED = (float) (150 * Math.PI / 180);
 
@@ -48,7 +50,7 @@ public class Ship extends Object2D implements SWControllable
     private int energy, beacons, kills, deaths, hits, flags, shots;
     private long cpuTime;
     private ShipCommand activeCommand;
-    private float fireDelay, mineDelay;
+    private float fireDelay, mineDelay, shieldDelay;
     private Flag flag;
 
     private String team;
@@ -196,6 +198,9 @@ public class Ship extends Object2D implements SWControllable
     }
 
     public final void takeDamage(final Vector2D deltaVelocity) {
+    	if(shieldDelay > 0) {  //shield prevents damage
+    		return;
+    	}
         final float magnitude = (float) Math.pow( deltaVelocity.getMagnitude(),
         									COLLISION_RATE );
         this.takeDamage((int) Math.ceil(magnitude / 10 / SHIP_MASS));
@@ -301,6 +306,14 @@ public class Ship extends Object2D implements SWControllable
         if (mineDelay > 0) {
         	mineDelay -= timestep;
         }
+        if (shieldDelay > 0) {
+        	shieldDelay -= timestep;
+        }
+
+        if (activeCommand.shield && (shieldDelay <= 0)) {
+        	this.takeDamage(SHIELD_COST);
+        	shieldDelay = SHIELD_DELAY;
+        }
 
         if (activeCommand.fire && !bulletClip.isEmpty() && (fireDelay <= 0)) {
             fireDelay = FIRE_DELAY;
@@ -345,6 +358,10 @@ public class Ship extends Object2D implements SWControllable
 
 	public Mine getMine(final int i) {
 		return mines[i];
+	}
+
+	public boolean shieldUp() {
+		return shieldDelay > 0;
 	}
 
 	/**
