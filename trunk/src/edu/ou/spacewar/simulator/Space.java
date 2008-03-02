@@ -39,6 +39,11 @@ public abstract class Space
 	//Track how many times advanceTime() has been called.
 	private int stepcount = 0;
 
+	public Space(final float width, final float height, final float timeStep)
+	{
+		this(width, height, timeStep, null);
+	}
+
 	/**
 	 * Create a new Space object.
 	 *
@@ -148,7 +153,7 @@ public abstract class Space
 			final float buffer) {
 		for (final Object2D o : objects) {
 			if ((o != null) && o.isAlive()) {
-				final Vector2D dist = this.findShortestDistance(position, o.position);
+				final Vector2D dist = this.findShortestDistance(position, o.getPosition());
 				if (dist.getMagnitude() < radius + buffer + o.getRadius()) {
 					return false;
 				}
@@ -226,7 +231,7 @@ public abstract class Space
 					}
 
 					final Vector2D distance = distanceCache.fastGetDistance(i, j);
-					final Vector2D velocity = o1.velocity.subtract(o2.velocity);
+					final Vector2D velocity = o1.getVelocity().subtract(o2.getVelocity());
 
 					final float ddotv = distance.dot(velocity);
 
@@ -235,7 +240,7 @@ public abstract class Space
 					}
 
 					final float vdotv = velocity.dot(velocity);
-					float determinate = o1.radius + o2.radius;
+					float determinate = o1.getRadius() + o2.getRadius();
 					determinate = distance.dot(distance) - determinate
 							* determinate;
 					determinate = ddotv * ddotv - vdotv * determinate;
@@ -272,26 +277,26 @@ public abstract class Space
 					continue;
 				}
 
-				o1.position = o1.position.add(o1.velocity.multiply(advanceTo));
+				o1.setPosition(o1.getPosition().add(o1.getVelocity().multiply(advanceTo)));
 
 				// fix positions after potential wrap around
-				while (o1.position.getX() < 0) {
-					o1.position = new Vector2D(o1.position.getX() + width,
-							o1.position.getY());
+				while (o1.getPosition().getX() < 0) {
+					o1.setPosition( new Vector2D(o1.getPosition().getX() + width,
+							o1.getPosition().getY()));
 				}
-				while (o1.position.getY() < 0) {
-					o1.position = new Vector2D(o1.position.getX(), o1.position
+				while (o1.getPosition().getY() < 0) {
+					o1.setPosition( new Vector2D(o1.getPosition().getX(), o1.getPosition()
 							.getY()
-							+ height);
+							+ height));
 				}
-				while (o1.position.getX() >= width) {
-					o1.position = new Vector2D(o1.position.getX() - width,
-							o1.position.getY());
+				while (o1.getPosition().getX() >= width) {
+					o1.setPosition( new Vector2D(o1.getPosition().getX() - width,
+							o1.getPosition().getY()));
 				}
-				while (o1.position.getY() >= height) {
-					o1.position = new Vector2D(o1.position.getX(), o1.position
+				while (o1.getPosition().getY() >= height) {
+					o1.setPosition( new Vector2D(o1.getPosition().getX(), o1.getPosition()
 							.getY()
-							- height);
+							- height));
 				}
 			}
 
@@ -432,40 +437,45 @@ public abstract class Space
 	public void handleCollision(final Vector2D normal,
 								final Object2D object1, final Object2D object2)
 	{
-		Space.collide(1, normal, object1, object2);
+		object1.dispatch(normal, object2);
 	}
 
-	public static void collide(final float coefficientOfRestitution, final Vector2D normal,
-			final Object2D object1, final Object2D object2) {
-		final float o1v = normal.dot(object1.velocity);
-		final float o2v = normal.dot(object2.velocity);
+	public static void collide( final float coeffRestitution,
+								final Vector2D normal,
+								final Object2D obj1,
+								final Object2D obj2)
+	{
+		final float o1v = normal.dot(obj1.getVelocity());
+		final float o2v = normal.dot(obj2.getVelocity());
 
 		final Vector2D o1vx = normal.multiply(o1v);
 		final Vector2D o2vx = normal.multiply(o2v);
 
-		final Vector2D o1vxf = o2vx.multiply(
-				(1 + coefficientOfRestitution) * object2.mass).add(
-				o1vx.multiply(object1.mass - coefficientOfRestitution
-						* object2.mass)).divide(object1.mass + object2.mass);
-		final Vector2D o2vxf = o1vxf.add(o1vx.multiply(coefficientOfRestitution))
-				.subtract(o2vx.multiply(coefficientOfRestitution));
+		final Vector2D o1vxf
+			= o2vx.multiply((1 + coeffRestitution) * obj2.getMass())
+			      .add(o1vx.multiply(  obj1.getMass()
+								     - coeffRestitution * obj2.getMass()))
+				  .divide(obj1.getMass() + obj2.getMass());
+		final Vector2D o2vxf
+			= o1vxf.add(o1vx.multiply(coeffRestitution))
+				   .subtract(o2vx.multiply(coeffRestitution));
 
-		final Vector2D o1vy = object1.velocity.subtract(o1vx);
-		final Vector2D o2vy = object2.velocity.subtract(o2vx);
+		final Vector2D o1vy = obj1.getVelocity().subtract(o1vx);
+		final Vector2D o2vy = obj2.getVelocity().subtract(o2vx);
 
-		final Vector2D o1vyf = o1vy.multiply(object1.mass).add(
-				o2vy.multiply((1 - coefficientOfRestitution) * object2.mass))
-				.divide(
-						object1.mass + (1 - coefficientOfRestitution)
-								* object2.mass);
-		final Vector2D o2vyf = o2vy.multiply(object2.mass).add(
-				o1vy.multiply((1 - coefficientOfRestitution) * object1.mass))
-				.divide(
-						object2.mass + (1 - coefficientOfRestitution)
-								* object1.mass);
+		final Vector2D o1vyf
+			= o1vy.multiply(obj1.getMass())
+				  .add(o2vy.multiply((1 - coeffRestitution) * obj2.getMass()))
+				  .divide(  obj1.getMass()
+						  + (1 - coeffRestitution) * obj2.getMass());
+		final Vector2D o2vyf
+			= o2vy.multiply(obj2.getMass())
+			      .add(o1vy.multiply((1 - coeffRestitution) * obj1.getMass()))
+				  .divide(  obj2.getMass()
+						  + (1 - coeffRestitution) * obj1.getMass());
 
-		object1.velocity = o1vyf.add(o1vxf);
-		object2.velocity = o2vyf.add(o2vxf);
+		obj1.setVelocity(o1vyf.add(o1vxf));
+		obj2.setVelocity(o2vyf.add(o2vxf));
 	}
 
 	/**
@@ -568,7 +578,7 @@ public abstract class Space
 					}
 
 					final Vector2D distance
-						= Space.this.findShortestDistance(o1.position, o2.position);
+						= Space.this.findShortestDistance(o1.getPosition(), o2.getPosition());
 					o1.spaceIndex = i; o2.spaceIndex =j;
 					distances[i][j] = distance;
 					distances[j][i] = distance.negate();

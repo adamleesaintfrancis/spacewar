@@ -12,7 +12,7 @@ import edu.ou.spacewar.controllables.*;
 import edu.ou.spacewar.exceptions.NoOpenPositionException;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
 import edu.ou.spacewar.objects.shadows.ShipShadow;
-import edu.ou.spacewar.simulator.Object2D;
+import edu.ou.spacewar.simulator.*;
 import edu.ou.utils.Vector2D;
 
 public class Ship extends Object2D implements SWControllable
@@ -23,43 +23,58 @@ public class Ship extends Object2D implements SWControllable
 
     public static final int MAX_ENERGY = 5000;
     public static final int FIRE_COST = 100;
+    public static final int MINE_COST = 250;
     public static final int THRUST_COST = 25;
     public static final int TURN_COST = 1;
     public static final int SHOT_COST = 500;
     public static final int FLAG_COST = 100;
     public static final float COLLISION_RATE = 2.0f;
 
-    public static final int MAX_AMMO = 10;
-    public static final float FIRE_DELAY = 1f / 4;
+    public static final int MAX_BULLETS = 10;
+    public static final int MAX_MINES = 5;
+    public static final float FIRE_DELAY = 1f / 4f;
+    public static final float MINE_DELAY = 1f / 2f;
     public static final float THRUST_ACCELERATION = 80;
     public static final float TURN_SPEED = (float) (150 * Math.PI / 180);
 
     private final boolean isControllable;
 
+    private final Bullet[] bullets;
+    private final Stack<Bullet> bulletClip;
+    private final Mine[] mines;
+    private final Stack<Mine> mineClip;
+
     private ControllableShip controllable;
-    protected Bullet[] bullets;
     private int energy, beacons, kills, deaths, hits, flags, shots;
     private long cpuTime;
     private ShipCommand activeCommand;
-    private float fireDelay;
+    private float fireDelay, mineDelay;
     private Flag flag;
-    private final Stack<Bullet> clip;
+
     private String team;
 
     public Ship(final SpacewarGame space, final boolean isControllable) {
         super(space, SHIP_RADIUS, SHIP_MASS);
 
         this.isControllable = isControllable;
-        bullets = new Bullet[MAX_AMMO];
-        clip = new Stack<Bullet>();
-        for (int i = 0; i < MAX_AMMO; i++) {
+
+        bullets = new Bullet[MAX_BULLETS];
+        bulletClip = new Stack<Bullet>();
+        for (int i = 0; i < MAX_BULLETS; i++) {
             bullets[i] = new Bullet(this);
             bullets[i].setAlive(false);
-            clip.push(bullets[i]);
+            bulletClip.push(bullets[i]);
+        }
+
+        mines = new Mine[MAX_MINES];
+        mineClip = new Stack<Mine>();
+        for (int i = 0; i < MAX_MINES; i++) {
+            mines[i] = new Mine(this);
+            mines[i].setAlive(false);
+            mineClip.push(mines[i]);
         }
 
         this.reset();
-
         setAlive(true);
     }
 
@@ -83,13 +98,14 @@ public class Ship extends Object2D implements SWControllable
         flag = null;
         activeCommand = ShipCommand.DoNothing;
         fireDelay = 0;
+        mineDelay = 0;
     }
 
     private void findNewPosition() {
         while(true) {
             try {
-                final Random rand = ((SpacewarGame)space).getRandom();
-                setPosition( space.findOpenPosition(getRadius(),
+                final Random rand = ((SpacewarGame)getSpace()).getRandom();
+                setPosition( getSpace().findOpenPosition(getRadius(),
                 		     SpacewarGame.BUFFER_DIST, rand,
                 		     SpacewarGame.ATTEMPTS ));
                 break;
@@ -126,7 +142,11 @@ public class Ship extends Object2D implements SWControllable
     }
 
     public final int getAmmo() {
-        return clip.size();
+        return bulletClip.size();
+    }
+
+    public final int getMines() {
+    	return mineClip.size();
     }
 
     public final int getBeacons() {
@@ -186,9 +206,9 @@ public class Ship extends Object2D implements SWControllable
         if (energy <= 0) {
             final float delay = 3.0f + (2.0f * deaths);
             if (delay > 10.0f) {
-            	((SpacewarGame)space).queueForRespawn(this, 10.0f);
+            	((SpacewarGame)getSpace()).queueForRespawn(this, 10.0f);
             } else {
-            	((SpacewarGame)space).queueForRespawn(this, delay);
+            	((SpacewarGame)getSpace()).queueForRespawn(this, delay);
             }
             if(flag != null) {
                 flag.setPosition(getPosition());
@@ -234,7 +254,14 @@ public class Ship extends Object2D implements SWControllable
     public final void reload(final Bullet bullet) {
         if ((bullet.getShip() == this)) {
             bullet.setAlive(false);
-            clip.push(bullet);
+            bulletClip.push(bullet);
+        }
+    }
+
+    public final void reload(final Mine mine) {
+        if ((mine.getShip() == this)) {
+            mine.setAlive(false);
+            mineClip.push(mine);
         }
     }
 
@@ -254,47 +281,72 @@ public class Ship extends Object2D implements SWControllable
     	}
 
         if (activeCommand.thrust) {
-            velocity =
-            	velocity.add(
-            		orientation.multiply(THRUST_ACCELERATION * timestep));
+            setVelocity(
+            	getVelocity().add(
+            		getOrientation().multiply(THRUST_ACCELERATION * timestep)));
             this.takeDamage(THRUST_COST);
         }
 
         if (activeCommand.left) {
-            orientation = orientation.rotate(-TURN_SPEED * timestep);
+            setOrientation(getOrientation().rotate(-TURN_SPEED * timestep));
             this.takeDamage(TURN_COST);
         } else if (activeCommand.right) {
-            orientation = orientation.rotate(TURN_SPEED * timestep);
+            setOrientation(getOrientation().rotate(TURN_SPEED * timestep));
             this.takeDamage(TURN_COST);
         }
 
         if (fireDelay > 0) {
 			fireDelay -= timestep;
 		}
+        if (mineDelay > 0) {
+        	mineDelay -= timestep;
+        }
 
-        if (activeCommand.fire && !clip.isEmpty() && (fireDelay <= 0)) {
+        if (activeCommand.fire && !bulletClip.isEmpty() && (fireDelay <= 0)) {
             fireDelay = FIRE_DELAY;
             this.takeDamage(FIRE_COST);
 
-            if (!clip.isEmpty()) {
-                final Bullet bullet = clip.pop();
+            if (!bulletClip.isEmpty()) {
+                final Bullet bullet = bulletClip.pop();
                 shots++;
-                bullet.setOrientation(orientation);
+                bullet.setOrientation(getOrientation());
                 bullet.setPosition(
-                	position.add(
-                		orientation.multiply(SHIP_RADIUS -
+                	getPosition().add(
+                		getOrientation().multiply(SHIP_RADIUS +
                 								  Bullet.BULLET_RADIUS)));
                 bullet.setVelocity(
-                	velocity.add(
-                        orientation.multiply(Bullet.BULLET_VELOCITY)));
+                	getVelocity().add(
+                        getOrientation().multiply(Bullet.BULLET_VELOCITY)));
                 bullet.setLifetime(Bullet.BULLET_LIFETIME);
                 bullet.setAlive(true);
             }
+        }
+
+        if (activeCommand.mine && !mineClip.isEmpty() && (mineDelay <= 0)) {
+            mineDelay = MINE_DELAY;
+            this.takeDamage(MINE_COST);
+
+            if (!mineClip.isEmpty()) {
+            	System.out.println("Getting mine from clip");
+                final Mine mine = mineClip.pop();
+                shots++;
+                mine.setOrientation(getOrientation());
+                mine.setPosition(
+                	getPosition().subtract(
+                		getVelocity().unit().multiply(SHIP_RADIUS + Mine.MINE_RADIUS)));
+                mine.setLifetime(Mine.MINE_LIFETIME);
+                mine.setAlive(true);
+            }
+            System.out.println("Done laying mine");
         }
     }
 
 	public Bullet getBullet(final int i) {
 		return bullets[i];
+	}
+
+	public Mine getMine(final int i) {
+		return mines[i];
 	}
 
 	/**
@@ -321,5 +373,100 @@ public class Ship extends Object2D implements SWControllable
 				                                 new ImmutableShip(this),
 				                                 stats);
 		return controllable;
+	}
+
+
+	//COLLISION HANDLING BELOW
+
+	@Override
+	public void collide(final Vector2D normal, final Base base) {
+		if(getTeam() == base.getTeam()) {
+            setEnergy(Ship.MAX_ENERGY);
+            if(getFlag() != null) {
+                incrementFlags();
+                getFlag().placeFlag();
+                setFlag(null);
+            }
+        }
+        Space.collide(0.75f, normal, base, this);
+        base.setVelocity(Vector2D.ZERO_VECTOR);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Beacon beacon) {
+		beacon.collect();
+        incrementBeacons();
+        setEnergy(Ship.MAX_ENERGY);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Bullet bullet) {
+		takeShot();
+
+        if(!isAlive()) {
+            bullet.getShip().incrementKills();
+        }
+        bullet.getShip().incrementHits();
+        bullet.getShip().reload(bullet);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Flag flag) {
+		if((getTeam() != flag.getTeam()) && (getFlag() == null)) {
+			setFlag(flag);
+	        setEnergy(Ship.MAX_ENERGY);
+	        setAlive(false);
+	    } else if (getTeam() == flag.getTeam()) {
+	        takeDamage(Ship.FLAG_COST);
+	        flag.placeFlag();
+	    } else {
+	    	Space.collide(0.75f, normal, flag, this);
+	    }
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Mine mine) {
+		takeShot();
+
+        if(!isAlive()) {
+            mine.getShip().incrementKills();
+        }
+        mine.getShip().incrementHits();
+        mine.getShip().reload(mine);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Obstacle obstacle) {
+        final Vector2D initVelocityShip = getVelocity();
+        final Vector2D initVelocityObst = obstacle.getVelocity();
+        Space.collide(0.75f, normal, this, obstacle);
+        obstacle.setVelocity(initVelocityObst);
+        final Vector2D deltaV = getVelocity().subtract(initVelocityShip);
+        takeDamage(deltaV);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Ship other) {
+		System.out.println("Dispatched correctly");
+		final Vector2D initialVelocity1 = getVelocity();
+        final Vector2D initialVelocity2 = other.getVelocity();
+        Space.collide(0.75f, normal, other, this);
+        final Vector2D deltaV1 = getVelocity().subtract(initialVelocity1);
+        final Vector2D deltaV2 = other.getVelocity().subtract(initialVelocity2);
+        takeDamage(deltaV1);
+        other.takeDamage(deltaV2);
+
+        if(isAlive()) {
+            if(!other.isAlive()) {
+                incrementKills();
+            }
+        } else if(other.isAlive()) {
+        	other.incrementKills();
+        }
+	}
+
+	@Override
+	public void dispatch(final Vector2D normal, final Object2D other) {
+		other.collide(normal, this);
 	}
 }
