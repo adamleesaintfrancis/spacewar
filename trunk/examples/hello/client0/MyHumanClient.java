@@ -23,7 +23,7 @@ public class MyHumanClient extends HumanClient
 	}
 	
 	public ShipCommand startAction( final ImmutableSpacewarState state, 
-								    final ControllableShip controllable ) 
+								    final ImmutableShip controllable ) 
 	{
 		actionCounter++;
 		if(actionCounter % 10 == 0) {

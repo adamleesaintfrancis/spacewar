@@ -6,6 +6,7 @@ import java.util.*;
 import edu.ou.spacewar.ImmutableSpacewarState;
 import edu.ou.spacewar.controllables.ControllableShip;
 import edu.ou.spacewar.objects.ShipCommand;
+import edu.ou.spacewar.objects.immutables.ImmutableShip;
 import edu.ou.spacewar.mlfw.clients.*;
 
 import org.apache.log4j.*;
@@ -23,7 +24,7 @@ public class MyRandomClient extends RandomClient {
 	}
 	
 	public ShipCommand startAction( final ImmutableSpacewarState state,
-							        final ControllableShip controllable ) 
+							        final ImmutableShip controllable ) 
 	{
 		actionCounter++;
 		if(actionCounter % 10 == 0) {
