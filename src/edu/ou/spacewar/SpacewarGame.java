@@ -59,7 +59,7 @@ public final class SpacewarGame extends Space {
 	public SpacewarGame(final long seed, final float width,	final float height,
 						final float timeLimit, final float timeStep)
 	{
-		super(width, height, timeStep, new SpacewarCollisionHandler());
+		super(width, height, timeStep);
 
 		this.seed = seed;
 		rand = new Random(seed);
@@ -170,10 +170,22 @@ public final class SpacewarGame extends Space {
 				bulletlist = new ArrayList<Bullet>();
 				objectlookup.put(Bullet.class, bulletlist);
 			}
-			for(int i=0; i<Ship.MAX_AMMO; i++) {
+			for(int i=0; i<Ship.MAX_BULLETS; i++) {
 				final Bullet bullet = ship.getBullet(i);
 				bulletlist.add(bullet);
 				objects.add(bullet);
+			}
+
+			List<Mine> minelist
+				= (List<Mine>)objectlookup.get(Mine.class);
+			if(minelist == null) {
+				minelist = new ArrayList<Mine>();
+				objectlookup.put(Mine.class, minelist);
+			}
+			for(int i=0; i<Ship.MAX_MINES; i++) {
+				final Mine mine = ship.getMine(i);
+				minelist.add(mine);
+				objects.add(mine);
 			}
 		}
 	}
@@ -256,22 +268,21 @@ public final class SpacewarGame extends Space {
 	 * Makes sure the game is initialized before calling super.advanceTime(timestep).
 	 * @param timestep
 	 */
-	 @Override
+	@Override
 	public final void advanceTime() {
-		 if(!initialized) {
-			 initialize();
-		 }
-		 if( isRunning() ) {
-			 while(!respawnQ.isEmpty() && (respawnQ.peek().t <= getTimestamp())) {
-				 final Object2D respawn = respawnQ.poll().obj;
-				 respawn.reset();
-			 }
-			 //do teams first
-			 for(final Team t: teams) {
-				 t.advanceTime(timeStep);
-			 }
-			 super.advanceTime();
-
-		 }
-	 }
+		if(!initialized) {
+			initialize();
+		}
+		if( isRunning() ) {
+			while(!respawnQ.isEmpty() && (respawnQ.peek().t <= getTimestamp())) {
+				final Object2D respawn = respawnQ.poll().obj;
+				respawn.reset();
+			}
+			//do teams first
+			for(final Team t: teams) {
+				t.advanceTime(timeStep);
+			}
+			super.advanceTime();
+		}
+	}
 }

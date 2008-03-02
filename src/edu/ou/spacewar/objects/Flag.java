@@ -65,4 +65,44 @@ public class Flag extends Object2D {
 	public void reset() {
         placeFlag();
     }
+
+	@Override
+	public void collide(final Vector2D normal, final Base base) {
+		Space.collide(0.75f, normal, base, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Beacon beacon) {
+		beacon.collect();
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Bullet bullet) {
+		bullet.getShip().reload(bullet);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Flag flag) {
+		Space.collide(0.75f, normal, flag, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Mine mine) {
+		mine.collide(normal, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Obstacle obstacle) {
+		obstacle.collide(normal, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Ship ship) {
+		ship.collide(normal, this);
+	}
+
+	@Override
+	public void dispatch(final Vector2D normal, final Object2D other) {
+		other.collide(normal, this);
+	}
 }

@@ -6,7 +6,7 @@ import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.SpacewarGame;
 import edu.ou.spacewar.exceptions.NoOpenPositionException;
 import edu.ou.spacewar.objects.shadows.BeaconShadow;
-import edu.ou.spacewar.simulator.Object2D;
+import edu.ou.spacewar.simulator.*;
 import edu.ou.utils.Vector2D;
 
 /**
@@ -31,14 +31,14 @@ public class Beacon extends Object2D {
 
     public void collect() {
         setAlive(false);
-        ((SpacewarGame)space).queueForRespawn(this, 3.0f);
+        ((SpacewarGame)getSpace()).queueForRespawn(this, 3.0f);
     }
 
     private void findNewPosition() {
         while(true) {
             try {
-                final Random rand = ((SpacewarGame)space).getRandom();
-                setPosition(space.findOpenPosition(getRadius(), SpacewarGame.BUFFER_DIST, rand, SpacewarGame.ATTEMPTS));
+                final Random rand = ((SpacewarGame)getSpace()).getRandom();
+                setPosition(getSpace().findOpenPosition(getRadius(), SpacewarGame.BUFFER_DIST, rand, SpacewarGame.ATTEMPTS));
                 break;
             } catch(final NoOpenPositionException e) {
                 e.printStackTrace();
@@ -63,4 +63,44 @@ public class Beacon extends Object2D {
 	public void resetStats() {
         //do nothing
     }
+
+	@Override
+	public void collide(final Vector2D normal, final Base base) {
+		Space.collide(0.75f, normal, base, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Beacon beacon) {
+		Space.collide(0.75f, normal, beacon, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Bullet bullet) {
+		bullet.collide(normal, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Flag flag) {
+		flag.collide(normal, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Mine mine) {
+		mine.collide(normal, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Obstacle obstacle) {
+		obstacle.collide(normal, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Ship ship) {
+		ship.collide(normal, this);
+	}
+
+	@Override
+	public void dispatch(final Vector2D normal, final Object2D other) {
+		other.collide(normal, this);
+	}
 }

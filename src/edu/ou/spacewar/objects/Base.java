@@ -3,6 +3,7 @@ package edu.ou.spacewar.objects;
 import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.objects.shadows.BaseShadow;
 import edu.ou.spacewar.simulator.*;
+import edu.ou.utils.Vector2D;
 
 /**
  * Created by IntelliJ IDEA.
@@ -43,4 +44,44 @@ public class Base extends Object2D {
 	public void resetStats() {
         //do nothing
     }
+
+	@Override
+	public void collide(final Vector2D normal, final Base base) {
+		Space.collide(0.75f, normal, base, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Beacon beacon) {
+		beacon.collide(normal, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Bullet bullet) {
+		bullet.collide(normal, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Flag flag) {
+		flag.collide(normal, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Mine mine) {
+		mine.collide(normal, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Obstacle obstacle) {
+		obstacle.collide(normal, this);
+	}
+
+	@Override
+	public void collide(final Vector2D normal, final Ship ship) {
+		ship.collide(normal, this);
+	}
+
+	@Override
+	public void dispatch(final Vector2D normal, final Object2D other) {
+		other.collide(normal, this);
+	}
 }

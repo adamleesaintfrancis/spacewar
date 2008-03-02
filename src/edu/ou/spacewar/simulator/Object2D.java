@@ -1,6 +1,7 @@
 package edu.ou.spacewar.simulator;
 
 import edu.ou.mlfw.gui.Shadow2D;
+import edu.ou.spacewar.objects.*;
 import edu.ou.utils.Vector2D;
 
 public abstract class Object2D {
@@ -13,18 +14,18 @@ public abstract class Object2D {
 
     private final int id;
 
-    protected final Space space;
+    private final Space space;
 
-    protected float radius, mass;
+    private float radius, mass;
 
-    protected Vector2D position = Vector2D.ZERO_VECTOR;
-    protected Vector2D startposition = Vector2D.ZERO_VECTOR;
+    private Vector2D position = Vector2D.ZERO_VECTOR;
+    private Vector2D startposition = Vector2D.ZERO_VECTOR;
 
-    protected Vector2D velocity = Vector2D.ZERO_VECTOR;
-    protected Vector2D startvelocity = Vector2D.ZERO_VECTOR;
+    private Vector2D velocity = Vector2D.ZERO_VECTOR;
+    private Vector2D startvelocity = Vector2D.ZERO_VECTOR;
 
-    protected Vector2D orientation = Vector2D.X_UNIT_VECTOR;
-    protected Vector2D startorientation = Vector2D.X_UNIT_VECTOR;
+    private Vector2D orientation = Vector2D.X_UNIT_VECTOR;
+    private Vector2D startorientation = Vector2D.X_UNIT_VECTOR;
 
     //spaceIndex is used by Space to speed up physics calculations, and is
     //package private.  This field is never modified or used in this class.
@@ -157,4 +158,33 @@ public abstract class Object2D {
         position = startposition;
         velocity = startvelocity;
     }
+
+    /**
+     * Collision handling is such a pain, thanks to Java's crappy dispatch
+     * mechanism.  Rather than one class with lots of isinstance calls handling
+     * the dispatching, with the possibility of just forgetting a pairing,
+     * we'll be a little clever and use what little elegance and compile-time
+     * safety may be available for this problem.  When a collision occurs,
+     * dispatch will be called first.  dispatch must be implemented simply as:
+     *
+     * 	other.collide(normal, this);
+     *
+     * for all subclasses.  This will dispatch to the correct collide() method.
+     * collide() should handle all details of the collision.  Adding new object
+     * types means adding the abstract signature for colliding with that object
+     * here, which means the compiler will catch not having any collision
+     * handling code for an object pair.
+     *
+     * For the sake of convention, a class should implement collide for all
+     * classes that come before it alphabetically, and delegate for all classes
+     * that come after it alphabetically.
+     */
+    public abstract void dispatch(final Vector2D normal, final Object2D other);
+    public abstract void collide(final Vector2D normal, Base base);
+    public abstract void collide(final Vector2D normal, Beacon beacon);
+    public abstract void collide(final Vector2D normal, Bullet bullet);
+    public abstract void collide(final Vector2D normal, Flag flag);
+    public abstract void collide(final Vector2D normal, Mine mine);
+    public abstract void collide(final Vector2D normal, Obstacle obstacle);
+    public abstract void collide(final Vector2D normal, Ship ship);
 }
