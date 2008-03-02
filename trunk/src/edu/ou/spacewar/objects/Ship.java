@@ -327,7 +327,6 @@ public class Ship extends Object2D implements SWControllable
             this.takeDamage(MINE_COST);
 
             if (!mineClip.isEmpty()) {
-            	System.out.println("Getting mine from clip");
                 final Mine mine = mineClip.pop();
                 shots++;
                 mine.setOrientation(getOrientation());
@@ -337,7 +336,6 @@ public class Ship extends Object2D implements SWControllable
                 mine.setLifetime(Mine.MINE_LIFETIME);
                 mine.setAlive(true);
             }
-            System.out.println("Done laying mine");
         }
     }
 
@@ -447,7 +445,6 @@ public class Ship extends Object2D implements SWControllable
 
 	@Override
 	public void collide(final Vector2D normal, final Ship other) {
-		System.out.println("Dispatched correctly");
 		final Vector2D initialVelocity1 = getVelocity();
         final Vector2D initialVelocity2 = other.getVelocity();
         Space.collide(0.75f, normal, other, this);
