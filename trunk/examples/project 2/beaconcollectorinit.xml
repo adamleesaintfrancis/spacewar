@@ -1,0 +1,5 @@
+<ClientInitializer>
+  <clientClass>edu.ou.spacewar.mlfw.clients.BeaconCollector</clientClass>
+  <!--<data>./knowledge.txt</data>-->
+  <displayName>BeaconCollector</displayName>
+</ClientInitializer>
