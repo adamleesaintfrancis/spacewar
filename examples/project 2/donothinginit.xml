@@ -1,0 +1,5 @@
+<ClientInitializer>
+  <clientClass>edu.ou.spacewar.mlfw.clients.DoNothingClient</clientClass>
+  <!--<data>./knowledge.txt</data>-->
+  <displayName>DoNothing</displayName>
+</ClientInitializer>
