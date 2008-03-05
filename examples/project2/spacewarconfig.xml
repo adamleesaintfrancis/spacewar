@@ -2,7 +2,7 @@
   <seed>0</seed>
   <width>800.0</width>
   <height>600.0</height>
-  <timeLimit>30.0</timeLimit>
+  <timeLimit>300.0</timeLimit>
   <ships>
     <ShipConfig>
       <name>BeaconCollector</name>
