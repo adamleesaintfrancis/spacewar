@@ -36,7 +36,8 @@
       <positionX>40</positionX>
       <positionY>100</positionY>
       <velocityX>2</velocityX>
-      <velocityY>2</velocityY>      
+      <velocityY>2</velocityY>
+      <destructible>true</destructible>        
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod02</name>
@@ -45,6 +46,7 @@
       <positionY>600</positionY>
       <velocityX>-2</velocityX>
       <velocityY>-2</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod03</name>
@@ -53,6 +55,7 @@
       <positionY>400</positionY>
       <velocityX>-2</velocityX>
       <velocityY>2</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod04</name>
@@ -61,6 +64,7 @@
       <positionY>100</positionY>
       <velocityX>15</velocityX>
       <velocityY>-15</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod05</name>
@@ -69,6 +73,7 @@
       <positionY>400</positionY>
       <velocityX>20</velocityX>
       <velocityY>4</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod06</name>
@@ -77,6 +82,7 @@
       <positionY>500</positionY>
       <velocityX>7</velocityX>
       <velocityY>-2</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod07</name>
@@ -85,6 +91,7 @@
       <positionY>400</positionY>
       <velocityX>2</velocityX>
       <velocityY>0.0</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod08</name>
@@ -93,6 +100,7 @@
       <positionY>300</positionY>
       <velocityX>15</velocityX>
       <velocityY>-15</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod09</name>
@@ -101,6 +109,7 @@
       <positionY>300</positionY>
       <velocityX>20</velocityX>
       <velocityY>16</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod10</name>
@@ -109,6 +118,7 @@
       <positionY>550</positionY>
       <velocityX>7</velocityX>
       <velocityY>-30</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod11</name>
@@ -117,6 +127,7 @@
       <positionY>650</positionY>
       <velocityX>16</velocityX>
       <velocityY>12</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod12</name>
@@ -125,6 +136,7 @@
       <positionY>450</positionY>
       <velocityX>20</velocityX>
       <velocityY>-15</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod13</name>
@@ -133,6 +145,7 @@
       <positionY>300</positionY>
       <velocityX>20</velocityX>
       <velocityY>15</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod14</name>
@@ -141,6 +154,7 @@
       <positionY>100</positionY>
       <velocityX>7</velocityX>
       <velocityY>-8</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
     <ObstacleConfig>
       <name>Asteriod15</name>
@@ -149,6 +163,7 @@
       <positionY>700</positionY>
       <velocityX>10</velocityX>
       <velocityY>0.0</velocityY>
+      <destructible>true</destructible>  
     </ObstacleConfig>
   </obstacles>
   <beacons>
