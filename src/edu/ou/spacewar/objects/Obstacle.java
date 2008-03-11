@@ -61,7 +61,7 @@ public class Obstacle extends Object2D {
 
         energy -= SHOT_DAMAGE;
         if (energy <= 0) {
-            if( getRadius() > 10.0) {
+            if( getRadius() >= 25.0) {
             	final float newradius = getRadius() / 2.333f;
             	final float rotation = 0.333f * (float)Math.PI;
             	final float newmag = getVelocity().getMagnitude() * 1.5f;
