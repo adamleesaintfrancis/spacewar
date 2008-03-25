@@ -1,0 +1,27 @@
+<LadderConfiguration>
+  <simulatorClass>edu.ou.spacewar.SpacewarSimulator</simulatorClass>
+  <simulatorConfig>spacewarconfig.xml</simulatorConfig>
+  <outputHTML>ladder.html</outputHTML>
+  <maxVariableClientsPerGame>3</maxVariableClientsPerGame>
+  <numMatchRepeats>1</numMatchRepeats>
+  <variableClientMappings>
+    <ClientMappingEntry>
+      <controllableName>YourName</controllableName>
+      <clientInitializerFile>clientinit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+  </variableClientMappings>
+  <staticClientMappings>
+    <ClientMappingEntry>
+      <controllableName>BeaconCollector</controllableName>
+      <clientInitializerFile>beaconcollectorinit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Random</controllableName>
+      <clientInitializerFile>randominit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>DoNothing</controllableName>
+      <clientInitializerFile>donothinginit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+  </staticClientMappings>
+</LadderConfiguration>
