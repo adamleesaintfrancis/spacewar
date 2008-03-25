@@ -3,7 +3,7 @@
   <simulatorConfig>spacewarconfig.xml</simulatorConfig>
   <outputHTML>ladder.html</outputHTML>
   <maxVariableClientsPerGame>3</maxVariableClientsPerGame>
-  <numMatchRepeats>1</numMatchRepeats>
+  <numMatchRepeats>10</numMatchRepeats>
   <variableClientMappings>
     <ClientMappingEntry>
       <controllableName>YourName</controllableName>
