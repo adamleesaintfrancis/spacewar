@@ -189,42 +189,6 @@
 	  </classpath>
 	</java>
   </target>
-<!-- 
-
-  <target name="ladder-run" depends="separated">
-    <jar jarfile="${dist}/ladder.jar">
-      <manifest>
-        <attribute name="Main-class" value="edu.ou.mlfw.Ladder" />
-        <attribute name="Class-path"
-                   value="lib/utils.jar lib/spacewar.jar lib/mlfw.jar lib/xpp3.jar lib/xstream.jar lib/jargs.jar lib/log4j-1.2.14.jar lib/useragent.jar ." />
-      </manifest>
-    </jar>
-    <java jar="${dist}/ladder.jar" fork="true" dir="${dist}">
-      <jvmarg value="-Djava.awt.headless=true" />
-      <jvmarg value="-Xmx512M" />
-    </java>
-  </target>
-
-  <target name="gui" depends="separated">
-    <java jar="${dist}/main.jar" fork="true" dir="${dist}">
-      <arg value="-g" />
-      <jvmarg value="-Xmx512M" />
-    </java>
-  </target>
-
-  <target name="ladder-gui" depends="separated">
-    <jar jarfile="${dist}/ladder.jar">
-      <manifest>
-        <attribute name="Main-class" value="edu.ou.mlfw.Ladder" />
-        <attribute name="Class-path"
-                   value="lib/utils.jar lib/spacewar.jar lib/mlfw.jar lib/xpp3.jar lib/xstream.jar lib/jargs.jar lib/log4j-1.2.14.jar lib/useragent.jar ." />
-      </manifest>
-    </jar>
-    <java jar="${dist}/ladder.jar" fork="true" dir="${dist}">
-      <arg value="-g" />
-      <jvmarg value="-Xmx512M" />
-    </java>
-  </target>-->
 
   <target name="doc" depends="init">
     <javadoc destdir="{docs}/api"
