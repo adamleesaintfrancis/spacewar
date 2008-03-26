@@ -3,6 +3,7 @@
  */
 package edu.ou.mlfw.ladder;
 
+import java.util.HashSet;
 import java.util.Iterator;
 
 import edu.ou.mlfw.config.ClientMapping;
@@ -41,13 +42,26 @@ class MappingsGenerator implements Iterable<ClientMapping[]>
 			}
 
 			public ClientMapping[] next() {
+				HashSet<String> seen = new HashSet<String>();
 				int allMappingsIndex = 0;
 				for(final int clientIndex : comboGen.getNext()) {
-					final ClientMapping clientMapping
-						= variableClientMappings[clientIndex];
+					ClientMapping clientMapping	= variableClientMappings[clientIndex];
+					
+					if (seen.contains(clientMapping.getControllableName())) {
+						int append = 1;
+						ClientMapping temp;
+						do {
+							temp = new ClientMapping(clientMapping.getControllableName() + " " + append, clientMapping.getClientInitializerFile());
+							append++;
+						} while (seen.contains(temp.getControllableName()));
+						
+						clientMapping = temp;
+					}
 
 					allClientMappings[allMappingsIndex++] = clientMapping;
 
+					seen.add(clientMapping.getControllableName());
+					
 					LadderServer.logger.info(
 							clientMapping.getControllableName() + ": "
 							+ clientMapping.getClientInitializerFile());
