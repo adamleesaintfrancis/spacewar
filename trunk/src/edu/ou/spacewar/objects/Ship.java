@@ -325,12 +325,10 @@ public class Ship extends Object2D implements SWControllable
                 final Vector2D newposition
                 	= getPosition().add(
                 		getOrientation().multiply(
-                				SHIP_RADIUS + Bullet.BULLET_RADIUS));
+                				SHIP_RADIUS + Bullet.BULLET_RADIUS + 0.2f));
                 final Object2D intheway
                 	= getSpace().getObjectAtPosition(newposition, Bullet.BULLET_RADIUS, 0.0f);
-                if((intheway == null) || (intheway == this)) {
-                	//TODO:  If intheway == this, and another object is still
-                	//too close, tunneling will still occur.
+                if(intheway == null) {
                 	bullet.setOrientation(getOrientation());
                 	bullet.setPosition(newposition);
                 	bullet.setVelocity(
