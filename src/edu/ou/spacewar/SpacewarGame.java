@@ -160,7 +160,7 @@ public final class SpacewarGame extends Space {
 			objectlookup.put(obj.getClass(), objlist);
 		}
 		objlist.add(obj);
-		objects.add(obj);
+		addObject(obj);
 
 		if(obj instanceof Ship) {
 			final Ship ship = (Ship)obj;
@@ -173,7 +173,7 @@ public final class SpacewarGame extends Space {
 			for(int i=0; i<Ship.MAX_BULLETS; i++) {
 				final Bullet bullet = ship.getBullet(i);
 				bulletlist.add(bullet);
-				objects.add(bullet);
+				addObject(bullet);
 			}
 
 			List<Mine> minelist
@@ -185,7 +185,7 @@ public final class SpacewarGame extends Space {
 			for(int i=0; i<Ship.MAX_MINES; i++) {
 				final Mine mine = ship.getMine(i);
 				minelist.add(mine);
-				objects.add(mine);
+				addObject(mine);
 			}
 		}
 	}
@@ -195,7 +195,7 @@ public final class SpacewarGame extends Space {
 			public Iterator<Shadow2D> iterator() {
 				return new Iterator<Shadow2D>() {
 					private final Iterator<Object2D> baseiter
-						= objects.iterator();
+						= SpacewarGame.this.iterator();
 					private Shadow2D nextshadow = null;
 					public boolean hasNext() {
 						if(nextshadow != null) {
@@ -226,7 +226,7 @@ public final class SpacewarGame extends Space {
 	public void initialize() {
 		assert(!initialized);
 		rand.setSeed(seed);
-		for(final Object2D obj : objects) {
+		for(final Object2D obj : this) {
 			if(obj != null) {
 				obj.initialize();
 			}
@@ -241,7 +241,7 @@ public final class SpacewarGame extends Space {
 	public void reset(final long seed) {
 		assert(initialized);
 		rand.setSeed(seed);
-		for(final Object2D obj : objects) {
+		for(final Object2D obj : this) {
 			if(obj != null) {
 				obj.reset();
 			}
@@ -249,7 +249,7 @@ public final class SpacewarGame extends Space {
 	}
 
 	public void resetStats() {
-		for (final Object2D obj : objects) {
+		for (final Object2D obj : this) {
 			if (obj != null) {
 				obj.resetStats();
 			}

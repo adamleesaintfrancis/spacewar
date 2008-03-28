@@ -28,7 +28,13 @@ public abstract class Space
 	//The main object storage array. This is marked protected because we want
 	//to farm out to a subclass the responsibility for handling the details of
 	//storing and accessing different kinds of objects.
-	protected final List<Object2D> objects;
+	private final List<Object2D> objects;
+
+	//Queue for storing Objects that should be added to the object list.
+	//This is used to allow any consumer class to add an object at any time,
+	//without having to worry about concurrent modification exceptions thrown
+	//based on Space's lifecycle.
+	private final Queue<Object2D> objectsToAdd;
 
 	//How many seconds elapse each simulation step.
 	protected final float timeStep;
@@ -70,10 +76,12 @@ public abstract class Space
 		halfHeight = height / 2;
 
 		objects = new ArrayList<Object2D>();
+		objectsToAdd = new LinkedList<Object2D>();
 		distanceCache = new DistanceCache();
 	}
 
 	public Iterator<Object2D> iterator() {
+		consumeAddedObjects();
 		return objects.iterator();
 	}
 
@@ -91,6 +99,15 @@ public abstract class Space
 
 	public final float getHeight() {
 		return height;
+	}
+
+	private void consumeAddedObjects() {
+		objects.addAll(objectsToAdd);
+		objectsToAdd.clear();
+	}
+
+	public void addObject(final Object2D obj) {
+		objectsToAdd.add(obj);
 	}
 
 	public final Object2D[] getLiveObjects() {
@@ -149,18 +166,28 @@ public abstract class Space
 		throw new NoOpenPositionException();
 	}
 
-	public boolean isOpenAtPosition(final Vector2D position, final float radius,
-			final float buffer) {
+	public boolean isOpenAtPosition(final Vector2D position,
+									final float radius,
+									final float buffer)
+	{
+		return getObjectAtPosition(position, radius, buffer) == null;
+	}
+
+	public Object2D getObjectAtPosition(final Vector2D position,
+										final float radius,
+										final float buffer)
+	{
 		for (final Object2D o : objects) {
 			if ((o != null) && o.isAlive()) {
-				final Vector2D dist = this.findShortestDistance(position, o.getPosition());
+				final Vector2D dist
+					= this.findShortestDistance(position, o.getPosition());
 				if (dist.getMagnitude() < radius + buffer + o.getRadius()) {
-					return false;
+					return o;
 				}
 			}
 		}
 
-		return true;
+		return null;
 	}
 
 	/**
@@ -202,6 +229,7 @@ public abstract class Space
 		stepcount++;
 
 		// let all the objects update themselves
+		consumeAddedObjects();
 		for (final Object2D o : objects) {
 			if ((o != null) && o.alive) {
 				//we hope that nobody updates themselves badly (i.e. setting
@@ -209,6 +237,7 @@ public abstract class Space
 				o.advanceTime(timeStep);
 			}
 		}
+		consumeAddedObjects();
 
 		float tempTimeStep = timeStep;
 		// find and update with collisions

@@ -322,16 +322,30 @@ public class Ship extends Object2D implements SWControllable
             if (!bulletClip.isEmpty()) {
                 final Bullet bullet = bulletClip.pop();
                 shots++;
-                bullet.setOrientation(getOrientation());
-                bullet.setPosition(
-                	getPosition().add(
-                		getOrientation().multiply(SHIP_RADIUS +
-                								  Bullet.BULLET_RADIUS)));
-                bullet.setVelocity(
-                	getVelocity().add(
-                        getOrientation().multiply(Bullet.BULLET_VELOCITY)));
-                bullet.setLifetime(Bullet.BULLET_LIFETIME);
-                bullet.setAlive(true);
+                final Vector2D newposition
+                	= getPosition().add(
+                		getOrientation().multiply(
+                				SHIP_RADIUS + Bullet.BULLET_RADIUS));
+                final Object2D intheway
+                	= getSpace().getObjectAtPosition(newposition, Bullet.BULLET_RADIUS, 0.0f);
+                if((intheway == null) || (intheway == this)) {
+                	//TODO:  If intheway == this, and another object is still
+                	//too close, tunneling will still occur.
+                	bullet.setOrientation(getOrientation());
+                	bullet.setPosition(newposition);
+                	bullet.setVelocity(
+                			getVelocity().add(
+                					getOrientation().multiply(Bullet.BULLET_VELOCITY)));
+                	bullet.setLifetime(Bullet.BULLET_LIFETIME);
+                	bullet.setAlive(true);
+                }
+                else {
+                	//TODO: right now, relying on the fact bullets always
+                	//disappear on collisions.  This might not be safe in
+                	//the future.
+                	getSpace().getCollisionHandler().handleCollision(
+                			Vector2D.ZERO_VECTOR, bullet, intheway);
+                }
             }
         }
 
