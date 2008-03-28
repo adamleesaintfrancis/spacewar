@@ -342,6 +342,7 @@ public abstract class Space
 				tempTimeStep = -1;
 			}
 		}
+		consumeAddedObjects();
 	}
 
 	/**
