@@ -192,8 +192,17 @@ public class Ship extends Object2D implements SWControllable
         return new ShipShadow(this);
     }
 
+    public final void takeMine() {
+    	if(shieldDelay > 0) {  //shield prevents damage
+    		return;
+    	}
+        this.takeDamage(MINE_COST);
+    }
 
     public final void takeShot() {
+    	if(shieldDelay > 0) {  //shield prevents damage
+    		return;
+    	}
         this.takeDamage(SHOT_COST);
     }
 
@@ -206,7 +215,7 @@ public class Ship extends Object2D implements SWControllable
         this.takeDamage((int) Math.ceil(magnitude / 10 / SHIP_MASS));
     }
 
-    public final void takeDamage(final int damage) {
+    private final void takeDamage(final int damage) {
         energy -= damage;
         if (energy <= 0) {
             final float delay = 3.0f + (2.0f * deaths);
@@ -349,7 +358,7 @@ public class Ship extends Object2D implements SWControllable
 
         if (activeCommand.mine && !mineClip.isEmpty() && (mineDelay <= 0)) {
             mineDelay = MINE_DELAY;
-            this.takeDamage(MINE_COST);
+            takeMine();
 
             if (!mineClip.isEmpty()) {
                 final Mine mine = mineClip.pop();
