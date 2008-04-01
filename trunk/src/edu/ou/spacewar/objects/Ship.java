@@ -101,6 +101,7 @@ public class Ship extends Object2D implements SWControllable
         activeCommand = ShipCommand.DoNothing;
         fireDelay = 0;
         mineDelay = 0;
+        shieldDelay = 0;
     }
 
     private void findNewPosition() {
