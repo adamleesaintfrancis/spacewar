@@ -171,6 +171,7 @@ public class World {
 			javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
 					final Viewer viewer = new Viewer(gui);
+					viewer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					for (final KeyListener kl : keylisteners) {
 						viewer.addKeyListener(kl);
 					}
