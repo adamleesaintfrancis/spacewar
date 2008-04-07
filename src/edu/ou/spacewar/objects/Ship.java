@@ -38,6 +38,7 @@ public class Ship extends Object2D implements SWControllable
     public static final float SHIELD_DELAY = 1f / 2f;
     public static final float THRUST_ACCELERATION = 80;
     public static final float TURN_SPEED = (float) (150 * Math.PI / 180);
+    public static final int SHIELD_CAPACITY = 5000;
 
     private final boolean isControllable;
 
@@ -50,7 +51,7 @@ public class Ship extends Object2D implements SWControllable
     private int energy, beacons, kills, deaths, hits, flags, shots;
     private long cpuTime;
     private ShipCommand activeCommand;
-    private float fireDelay, mineDelay, shieldDelay;
+    private float fireDelay, mineDelay, shieldDelay, shieldDamage;
     private Flag flag;
 
     private String team;
@@ -102,6 +103,7 @@ public class Ship extends Object2D implements SWControllable
         fireDelay = 0;
         mineDelay = 0;
         shieldDelay = 0;
+        shieldDamage = 0;
     }
 
     private void findNewPosition() {
@@ -208,12 +210,16 @@ public class Ship extends Object2D implements SWControllable
     }
 
     public final void takeDamage(final Vector2D deltaVelocity) {
-    	if(shieldDelay > 0) {  //shield prevents damage
-    		return;
-    	}
         final float magnitude = (float) Math.pow( deltaVelocity.getMagnitude(),
         									COLLISION_RATE );
-        this.takeDamage((int) Math.ceil(magnitude / 10 / SHIP_MASS));
+        int damage = (int) Math.ceil(magnitude / 10 / SHIP_MASS);
+        
+    	if(shieldDelay > 0 && shieldDamage < SHIELD_CAPACITY) {  //shield prevents damage
+            shieldDamage += damage;
+            return;
+    	}
+        
+        this.takeDamage(damage);
     }
 
     private final void takeDamage(final int damage) {
@@ -323,6 +329,7 @@ public class Ship extends Object2D implements SWControllable
         if (activeCommand.shield && (shieldDelay <= 0)) {
         	this.takeDamage(SHIELD_COST);
         	shieldDelay = SHIELD_DELAY;
+        	shieldDamage = 0;
         }
 
         if (activeCommand.fire && !bulletClip.isEmpty() && (fireDelay <= 0)) {
