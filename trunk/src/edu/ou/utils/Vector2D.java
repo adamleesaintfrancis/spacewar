@@ -9,14 +9,13 @@ import java.util.Random;
 public final class Vector2D implements Comparable<Vector2D>, Cloneable {
     private final float x;
     private final float y;
-    private final float magnitude;
 
     public static final Vector2D ZERO_VECTOR = new Vector2D();
     public static final Vector2D X_UNIT_VECTOR = new Vector2D(1, 0);
     public static final Vector2D X_NEG_UNIT_VECTOR = new Vector2D(-1, 0);
     public static final Vector2D Y_UNIT_VECTOR = new Vector2D(0, 1);
     public static final Vector2D Y_NEG_UNIT_VECTOR = new Vector2D(0, -1);
-    
+
     public static final float HALFPI = 0.5f * (float)Math.PI;
     public static final float THREEHALFPI = 1.5f * (float)Math.PI;
     public static final float TWOPI = 2.0f * (float)Math.PI;
@@ -26,21 +25,19 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param x
      * @param y
      */
-    public Vector2D(float x, float y) {
+    public Vector2D(final float x, final float y) {
         this.x = x;
         this.y = y;
-        this.magnitude = (float)Math.hypot(x, y);
     }
 
     /**
      * Create a new vector from an old one;
      */
-    public Vector2D(Vector2D b){
-    	this.x = b.x;
-    	this.y = b.y;
-    	this.magnitude = b.magnitude;
+    public Vector2D(final Vector2D b){
+    	x = b.x;
+    	y = b.y;
     }
-    
+
     /**
      * Create the zero vector
      */
@@ -54,7 +51,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param magnitude
      * @return A new Vector2D
      */
-    public static Vector2D fromAngle(float angle, float magnitude) {
+    public static Vector2D fromAngle(final float angle, final float magnitude) {
         return new Vector2D((float) Math.cos(angle) * magnitude, (float) Math.sin(angle) * magnitude);
     }
 
@@ -64,16 +61,16 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param maxMagnitude
      * @return A new random Vector2D
      */
-    public static Vector2D getRandom(Random rand, float maxMagnitude) {
-        float max = maxMagnitude * maxMagnitude;
+    public static Vector2D getRandom(final Random rand, final float maxMagnitude) {
+        final float max = maxMagnitude * maxMagnitude;
 
-        float x2 = rand.nextFloat() * max;
-        float y2 = rand.nextFloat() * (max - x2);
+        final float x2 = rand.nextFloat() * max;
+        final float y2 = rand.nextFloat() * (max - x2);
 
-        float x = rand.nextBoolean() ? (float)Math.sqrt(x2) : -(float)Math.sqrt(x2);
-        float y = rand.nextBoolean() ? (float)Math.sqrt(y2) : -(float)Math.sqrt(y2);
+        final float x = rand.nextBoolean() ? (float)Math.sqrt(x2) : -(float)Math.sqrt(x2);
+        final float y = rand.nextBoolean() ? (float)Math.sqrt(y2) : -(float)Math.sqrt(y2);
 
-        assert(! (maxMagnitude - Math.hypot(x, y) < -0.01));
+        assert(! (maxMagnitude - Math.sqrt(x*x + y*y) < -0.01));
 
         return new Vector2D(x, y);
     }
@@ -99,7 +96,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @return The magnitude of the vector.
      */
     public final float getMagnitude() {
-        return magnitude;
+    	return (float)Math.sqrt(x*x + y*y);
     }
 
     /**
@@ -118,11 +115,11 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param v A given vector.
      * @return The angle between the two vectors in radians.
      */
-    public final float angleBetween(Vector2D v) {
+    public final float angleBetween(final Vector2D v) {
         float num, den, angle;
 
         num = (x * v.x + y * v.y);
-        den = (this.getMagnitude() * v.getMagnitude());
+        den = (getMagnitude() * v.getMagnitude());
 
         if(den == 0 ) {
             return 0;
@@ -138,7 +135,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
 
         angle = (float) Math.acos(num / den);
 
-        return (this.cross(v) >= 0) ? angle : -angle;
+        return (cross(v) >= 0) ? angle : -angle;
     }
 
     /**
@@ -146,6 +143,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @return A unit vector with the same orientation as this vector.
      */
     public final Vector2D unit() {
+    	final float magnitude = getMagnitude();
         if (magnitude == 0)
             return X_UNIT_VECTOR;
 
@@ -165,7 +163,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param v Vector to add
      * @return The sum of the vectors.
      */
-    public final Vector2D add(Vector2D v) {
+    public final Vector2D add(final Vector2D v) {
         return new Vector2D(x + v.x, y + v.y);
     }
 
@@ -174,7 +172,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param v
      * @return The vector resulting from subtracting the other vector from this vector.
      */
-    public final Vector2D subtract(Vector2D v) {
+    public final Vector2D subtract(final Vector2D v) {
         return new Vector2D(x - v.x, y - v.y);
     }
 
@@ -183,7 +181,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param f
      * @return The scaled vector.
      */
-    public final Vector2D multiply(float f) {
+    public final Vector2D multiply(final float f) {
         return new Vector2D(x * f, y * f);
     }
 
@@ -192,7 +190,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param f
      * @return The scaled vector
      */
-    public final Vector2D divide(float f) {
+    public final Vector2D divide(final float f) {
         return new Vector2D(x / f, y / f);
     }
 
@@ -201,7 +199,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param v
      * @return The dot product
      */
-    public final float dot(Vector2D v) {
+    public final float dot(final Vector2D v) {
         return x * v.x + y * v.y;
     }
 
@@ -210,7 +208,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param v
      * @return The cross product.
      */
-    public final float cross(Vector2D v) {
+    public final float cross(final Vector2D v) {
         return x * v.y - y * v.x;
     }
 
@@ -220,7 +218,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param sin
      * @return The rotated vector.
      */
-    public final Vector2D fastRotate(float cos, float sin) {
+    public final Vector2D fastRotate(final float cos, final float sin) {
         return new Vector2D(x * cos - y * sin, x * sin + y * cos);
     }
 
@@ -232,7 +230,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param sin
      * @return The subtracted and rotated vector.
      */
-    public final Vector2D subtractAndRotate(Vector2D v, float cos, float sin) {
+    public final Vector2D subtractAndRotate(final Vector2D v, final float cos, final float sin) {
         final float x2 = x - v.x, y2 = y - v.y;
         return new Vector2D(x2 * cos - y2 * sin, x2 * sin + y2 * cos);
     }
@@ -242,9 +240,9 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param f
      * @return the rotated vector
      */
-    public final Vector2D rotate(float f) {
-        float cos = (float) Math.cos(f);
-        float sin = (float) Math.sin(f);
+    public final Vector2D rotate(final float f) {
+        final float cos = (float) Math.cos(f);
+        final float sin = (float) Math.sin(f);
         return new Vector2D(x * cos - y * sin, x * sin + y * cos);
     }
 
@@ -254,8 +252,8 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param v
      * @return The projection result vector.
      */
-    public final Vector2D project(Vector2D v) {
-        return this.multiply(this.dot(v) / (this.dot(this)));
+    public final Vector2D project(final Vector2D v) {
+        return multiply(dot(v) / (dot(this)));
     }
 
     /**
@@ -263,8 +261,8 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param v
      * @return True if the components match, false otherwise.
      */
-    public final boolean equals(Vector2D v) {
-        return x == v.x && this.y == v.y;
+    public final boolean equals(final Vector2D v) {
+        return x == v.x && y == v.y;
     }
 
     /**
@@ -272,17 +270,18 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
      * @param other
      * @return -1 if this is smaller than, 0 if equal, 1 if this is greater than
      */
-    public int compareTo(Vector2D other) {
-        return ((Float)this.magnitude).compareTo(other.magnitude);
+    public int compareTo(final Vector2D other) {
+        return ((Float)getMagnitude()).compareTo(other.getMagnitude());
     }
 
-    public String toString() {
-        String str = x + " " + y;
+    @Override
+	public String toString() {
+        final String str = x + " " + y;
         return str;
     }
 
-    public static void main(String[] args) {
-        Random rand = new Random(1);
+    public static void main(final String[] args) {
+        final Random rand = new Random(1);
         Vector2D test1 = new Vector2D(1, 0);
         Vector2D test2 = new Vector2D(0, 1);
 
@@ -305,7 +304,7 @@ public final class Vector2D implements Comparable<Vector2D>, Cloneable {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
