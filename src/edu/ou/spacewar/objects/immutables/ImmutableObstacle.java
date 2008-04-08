@@ -10,11 +10,14 @@ import edu.ou.spacewar.objects.Obstacle;
 public class ImmutableObstacle extends ImmutableObject2D {
     public final int id;
     public final float radius;
+    public boolean isDestructible, isMovable;
 
     public ImmutableObstacle(Obstacle obs) {
         super(obs);
         this.id = obs.getId();
         this.radius = obs.getRadius();
+        this.isDestructible = obs.isDestructible();
+        this.isMovable = obs.isMovable();
     }
 
     /**
@@ -43,4 +46,22 @@ public class ImmutableObstacle extends ImmutableObject2D {
     public final float getMass() {
         return Obstacle.OBSTACLE_MASS;
     }
+    
+    /**
+     * Find out if the obstacle is destructible or not
+     * @return the boolean destructible bit
+     */
+    public final boolean isDestructible() {
+    	return isDestructible;
+    }
+    
+    /**
+     * Find out if this obstacle can move or not
+     * @return the boolean movable bit
+     */
+    public final boolean isMovable() {
+    	return isMovable;
+    }
+    }
+    
 }
