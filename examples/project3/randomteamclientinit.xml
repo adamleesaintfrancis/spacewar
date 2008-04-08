@@ -1,0 +1,6 @@
+<ClientInitializer>
+  <clientClass>edu.ou.spacewar.mlfw.clients.RandomTeamClient</clientClass>
+  <!--<configuration>../../src/your4x4/initializationFile.xml</configuration>-->
+  <!--<data>../../src/your4x4/knowledge.txt.gz</data>-->
+  <displayName>RandomTeam</displayName>
+</ClientInitializer>
