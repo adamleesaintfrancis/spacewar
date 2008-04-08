@@ -20,6 +20,7 @@ public class Obstacle extends Object2D {
     public static final int SHOT_DAMAGE = 100;
 
     private final boolean isDestructible;
+    private final boolean isMovable;
     private int energy = OBSTACLE_ENERGY;
 
     public Obstacle(final Space space) {
@@ -33,6 +34,13 @@ public class Obstacle extends Object2D {
     public Obstacle(final Space space, final float radius, final boolean isDestructible) {
     	super(space, radius, OBSTACLE_MASS);
     	this.isDestructible = isDestructible;
+    	this.isMovable = true;
+    }
+    
+    public Obstacle(final Space space, final float radius, final boolean isDestructible, final boolean immovable) {
+    	super(space, radius, OBSTACLE_MASS);
+    	this.isDestructible = isDestructible;
+    	this.isMovable = !immovable;
     }
 
     @Override
@@ -47,11 +55,18 @@ public class Obstacle extends Object2D {
 
     @Override
 	protected void advanceTime(final float timestep) {
-        //do nothing...
+        // if the obstacle is not movable, make sure its velocity stays at zero
+    	if (!isMovable()) {
+    		this.setVelocity(Vector2D.ZERO_VECTOR);
+    	}
     }
 
     public boolean isDestructible() {
     	return isDestructible;
+    }
+    
+    public boolean isMovable() {
+    	return isMovable;
     }
 
     public final void takeDamage() {
