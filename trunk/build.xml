@@ -189,6 +189,32 @@
 	  </classpath>
 	</java>
   </target>
+	
+  <target name="project 3" depends="jar-spacewar">
+  	<javac srcdir="examples/project3" classpath="${dist}/spacewar.jar" />
+  	<java classname="edu.ou.mlfw.World"
+  	      fork="true" 
+  	      dir="examples/project3">
+  	  <arg value="-g" />
+  	  <classpath>
+  	  	<pathelement location="${dist}/spacewar.jar"/>
+  	    <pathelement path="examples/project2"/>
+  	  </classpath>
+  	</java>
+  </target>
+
+  <target name="project 3 ladder" depends="jar-spacewar">
+  	<javac srcdir="examples/project3" classpath="${dist}/spacewar.jar" />
+  	<java classname="edu.ou.mlfw.ladder.Ladder"
+  	      fork="true" 
+  	      dir="examples/project3">
+  	  <classpath>
+  	  	<pathelement location="${dist}/spacewar.jar"/>
+  	    <pathelement path="examples/project2"/>
+  	  </classpath>
+  	</java>
+  </target>
+
 
   <target name="doc" depends="init">
     <javadoc destdir="{docs}/api"
