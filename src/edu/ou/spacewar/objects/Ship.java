@@ -326,7 +326,7 @@ public class Ship extends Object2D implements SWControllable
         	shieldDelay -= timestep;
         }
 
-        if (activeCommand.shield && (shieldDelay <= 0)) {
+        if (activeCommand.shield && (shieldDelay <= 0) && !hasFlag()) {
         	this.takeDamage(SHIELD_COST);
         	shieldDelay = SHIELD_DELAY;
         	shieldDamage = 0;
