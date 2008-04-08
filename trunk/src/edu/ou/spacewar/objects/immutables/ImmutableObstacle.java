@@ -62,6 +62,5 @@ public class ImmutableObstacle extends ImmutableObject2D {
     public final boolean isMovable() {
     	return isMovable;
     }
-    }
     
 }
