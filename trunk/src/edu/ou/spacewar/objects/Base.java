@@ -37,7 +37,8 @@ public class Base extends Object2D {
 
     @Override
 	protected void advanceTime(final float timestep) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        // bases should not move (and they can if obstacles move around)
+		this.setVelocity(Vector2D.ZERO_VECTOR);
     }
 
     @Override
