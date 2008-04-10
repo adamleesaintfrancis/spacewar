@@ -28,6 +28,7 @@ public class Ship extends Object2D implements SWControllable
     public static final int THRUST_COST = 25;
     public static final int TURN_COST = 1;
     public static final int SHOT_COST = 500;
+    public static final int MINE_DAMAGE = 1000;
     public static final int FLAG_COST = 100;
     public static final float COLLISION_RATE = 2.0f;
 
@@ -207,6 +208,13 @@ public class Ship extends Object2D implements SWControllable
     		return;
     	}
         this.takeDamage(SHOT_COST);
+    }
+    
+    public final void hitMine() {
+    	if (shieldDelay > 0) {
+    		return;
+    	}
+    	this.takeDamage(MINE_DAMAGE);
     }
 
     public final void takeDamage(final Vector2D deltaVelocity) {
@@ -470,7 +478,7 @@ public class Ship extends Object2D implements SWControllable
 
 	@Override
 	public void collide(final Vector2D normal, final Mine mine) {
-		takeShot();
+		hitMine();
 
         if(!isAlive()) {
             mine.getShip().incrementKills();
