@@ -1,18 +1,21 @@
 package edu.ou.spacewar.objects;
 
 
-import java.util.*;
+import java.util.Random;
+import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
 import edu.ou.mlfw.Action;
 import edu.ou.mlfw.gui.Shadow2D;
 import edu.ou.spacewar.SpacewarGame;
-import edu.ou.spacewar.controllables.*;
+import edu.ou.spacewar.controllables.ControllableShip;
+import edu.ou.spacewar.controllables.SWControllable;
 import edu.ou.spacewar.exceptions.NoOpenPositionException;
 import edu.ou.spacewar.objects.immutables.ImmutableShip;
 import edu.ou.spacewar.objects.shadows.ShipShadow;
-import edu.ou.spacewar.simulator.*;
+import edu.ou.spacewar.simulator.Object2D;
+import edu.ou.spacewar.simulator.Space;
 import edu.ou.utils.Vector2D;
 
 public class Ship extends Object2D implements SWControllable
@@ -220,13 +223,13 @@ public class Ship extends Object2D implements SWControllable
     public final void takeDamage(final Vector2D deltaVelocity) {
         final float magnitude = (float) Math.pow( deltaVelocity.getMagnitude(),
         									COLLISION_RATE );
-        int damage = (int) Math.ceil(magnitude / 10 / SHIP_MASS);
-        
+        final int damage = (int) Math.ceil(magnitude / 10 / SHIP_MASS);
+
     	if(shieldDelay > 0 && shieldDamage < SHIELD_CAPACITY) {  //shield prevents damage
             shieldDamage += damage;
             return;
     	}
-        
+
         this.takeDamage(damage);
     }
 
@@ -467,7 +470,7 @@ public class Ship extends Object2D implements SWControllable
 		if((getTeam() != flag.getTeam()) && (getFlag() == null)) {
 			setFlag(flag);
 	        setEnergy(Ship.MAX_ENERGY);
-	        setAlive(false);
+	        flag.setAlive(false);
 	    } else if (getTeam() == flag.getTeam()) {
 	        takeDamage(Ship.FLAG_COST);
 	        flag.placeFlag();
