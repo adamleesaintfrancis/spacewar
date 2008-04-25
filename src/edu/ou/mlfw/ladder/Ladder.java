@@ -25,6 +25,8 @@ public class Ladder {
 	private static boolean gui = false;
 	private List<Record> records;
 	private int gameCnt = 0;
+	
+	private ArrayList<String> gameResults = new ArrayList<String>();
 
 	public Ladder(final LadderConfig ladderconfig){
 		this.ladderconfig = ladderconfig;
@@ -104,8 +106,15 @@ public class Ladder {
 					out.write(r.toHTML());
 					out.write("\n");
 				}
+				
 				out.write((((ArrayList<Record>) records).get(0)).getHTMLFooter());
 				out.write("\n");
+				out.write("<h2>Game Results</h2>");
+				out.write("<ol>");
+				for (String g : gameResults) {
+					out.write("<li>" + g + "</li>");
+				}
+				out.write("</ol>");
 			}
 			out.close();
 		}
@@ -121,6 +130,11 @@ public class Ladder {
 			logger.debug(newRecords);
 			if(newRecords.size() > 0){
 				newRecords.get(0).setWinner();
+				String s = newRecords.get(0).getDisplayName() + " defeated ";
+				for (int other = 1; other < newRecords.size(); other++) {
+					s += newRecords.get(other).getDisplayName() + (other != newRecords.size() - 1 ? ", " : "");
+				}
+				gameResults.add(s);
 			}
 			logger.debug(newRecords.get(0).getWins());
 			if(records == null){
