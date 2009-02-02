@@ -152,7 +152,19 @@
 	</java>
   </target>
 	
-  <target name="project 2" depends="jar-spacewar">
+  <target name="project1Ladder" depends="jar-spacewar">
+		<javac srcdir="examples/project2" classpath="${dist}/spacewar.jar" />
+		<java classname="edu.ou.mlfw.ladder.Ladder"
+		      fork="true" 
+		      dir="examples/project2">
+		  <classpath>
+		  	<pathelement location="${dist}/spacewar.jar"/>
+		    <pathelement path="examples/project2"/>
+		  </classpath>
+		</java>
+	  </target>
+	
+	<target name="project 2" depends="jar-spacewar">
 	<javac srcdir="examples/project2" classpath="${dist}/spacewar.jar" />
 	<java classname="edu.ou.mlfw.World"
 	      fork="true" 
