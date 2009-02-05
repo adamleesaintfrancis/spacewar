@@ -1,12 +1,11 @@
 <ClientInitializer>
   <environmentEntry>
-    <environmentClass>edu.ou.spacewar.mlfw.environments.HighLevelEnvironment</environmentClass>
-    <configuration>env1.xml</configuration>
+    <environmentClass>nonpublish.environments.MyEnvironment</environmentClass>
+    <configuration/>
   </environmentEntry>
   <agentEntry>
-    <agentClass>edu.ou.spacewar.mlfw.agents.HighLevelRandomAgent</agentClass>
-    <configuration>agent1.xml</configuration>
-    <knowledge>knowledge.txt</knowledge>
+    <agentClass>nonpublish.agents.RandomGeneticAgent</agentClass>
+    <configuration/>
   </agentEntry>
-  <displayName>Random1</displayName>
+  <displayName>RandomGeneticAgent</displayName>
 </ClientInitializer>

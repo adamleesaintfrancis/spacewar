@@ -156,10 +156,10 @@
 		<javac srcdir="examples/project2" classpath="${dist}/spacewar.jar" />
 		<java classname="edu.ou.mlfw.ladder.Ladder"
 		      fork="true" 
-		      dir="examples/project2">
+		      dir="examples/project1">
 		  <classpath>
 		  	<pathelement location="${dist}/spacewar.jar"/>
-		    <pathelement path="examples/project2"/>
+		    <pathelement path="examples/project1"/>
 		  </classpath>
 		</java>
 	  </target>
