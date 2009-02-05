@@ -153,7 +153,7 @@
   </target>
 	
   <target name="project1Ladder" depends="jar-spacewar">
-		<javac srcdir="examples/project2" classpath="${dist}/spacewar.jar" />
+		<javac srcdir="examples/project1" classpath="${dist}/spacewar.jar" />
 		<java classname="edu.ou.mlfw.ladder.Ladder"
 		      fork="true" 
 		      dir="examples/project1">
