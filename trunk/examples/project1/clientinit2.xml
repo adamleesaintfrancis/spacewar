@@ -5,5 +5,5 @@
   -->
   <clientClass>edu.ou.spacewar.mlfw.clients.DoNothingClient</clientClass>
   <!--<data>./knowledge.txt</data>-->
-  <displayName>YourName</displayName>
+  <displayName>Player2</displayName>
 </ClientInitializer>
