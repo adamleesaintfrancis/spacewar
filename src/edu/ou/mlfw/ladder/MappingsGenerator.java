@@ -64,14 +64,12 @@ class MappingsGenerator implements Iterable<ClientMapping[]>
 					final String name = clientMapping.getControllableName();
 					Integer num_seen = seen.get(name);
 					if(num_seen == null) {
-						num_seen = 0;
+						num_seen = 1;
 					}
 					seen.put(name, num_seen + 1);
-					if (num_seen > 0) {
-						clientMapping = new ClientMapping(
-								name + " " + num_seen,
+					clientMapping = new ClientMapping(
+								name + "" + num_seen,
 								clientMapping.getClientInitializerFile());
-					}
 					//end
 
 					allClientMappings[allMappingsIndex++] = clientMapping;
