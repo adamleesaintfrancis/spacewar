@@ -68,7 +68,10 @@ public class Ladder {
 					world = new World(worldconfig);
 				}
 				catch(Exception e) {
-					throw new RuntimeException(e);
+					logger.warn("An unexpected exception occurred; "+
+							"continuing with the next match.", e);
+					// throw new RuntimeException(e);
+					continue;
 				}
 				try {
 					if(gui){
