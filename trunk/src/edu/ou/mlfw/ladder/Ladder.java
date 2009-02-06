@@ -2,15 +2,25 @@ package edu.ou.mlfw.ladder;
 
 import jargs.gnu.CmdLineParser;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 
-import edu.ou.mlfw.*;
-import edu.ou.mlfw.config.*;
+import edu.ou.mlfw.Record;
+import edu.ou.mlfw.Simulator;
+import edu.ou.mlfw.World;
+import edu.ou.mlfw.config.ClientMapping;
+import edu.ou.mlfw.config.WorldConfig;
 
 public class Ladder {
 
@@ -25,7 +35,7 @@ public class Ladder {
 	private static boolean gui = false;
 	private List<Record> records;
 	private int gameCnt = 0;
-	
+
 	private ArrayList<String> gameResults = new ArrayList<String>();
 
 	public Ladder(final LadderConfig ladderconfig){
@@ -41,10 +51,8 @@ public class Ladder {
 			final StringBuilder logEntry
 				= new StringBuilder("Starting match using mappings: \n");
 			for( final ClientMapping mapping : mappings ) {
-				logEntry.append(mapping.getControllableName());
-				logEntry.append(": ");
-				logEntry.append(mapping.getClientInitializerFile());
-				logEntry.append("\n");
+				logEntry.append("    " + mapping.getControllableName() + ":  "
+								+ mapping.getClientInitializerFile() + "\n");
 			}
 			logger.info( logEntry );
 
@@ -55,33 +63,36 @@ public class Ladder {
 					= new WorldConfig(simulatorClass, simulatorConfig, mappings);
 				List<Record> recordTemp = null;
 				final long gameStartTime = new Date().getTime();
+				World world = null;
 				try{
-					final World world = new World(worldconfig);
+					world = new World(worldconfig);
+				}
+				catch(Exception e) {
+					throw new RuntimeException(e);
+				}
+				try {
 					if(gui){
 						world.runGUI();
 					}
 					else{
 						world.run();
 					}
-					recordTemp = world.getRecords();
-				}
-				catch(final java.lang.ClassNotFoundException e) {
-					e.printStackTrace();
-					logger.error("A client required a class that could not be found");
-				}
-				catch(final NullPointerException e) {
-					e.printStackTrace();
-					logger.error("A client had a null pointer exception");
 				}
 				catch(final Exception e) {
-					e.printStackTrace();
+					logger.warn("An unexpected exception occurred; "+
+							 	"continuing with the next match.", e);
 				}
+				recordTemp = world.getRecords();
 				float gameTimeElapsed = (new Date().getTime() - gameStartTime);
 				gameTimeElapsed /= 60000.0f;
 				logger.info("Game " + gameCnt + " took " + gameTimeElapsed + " minutes.\n");
 				addRecords(recordTemp);
 			}
 		}
+	}
+
+	public File getReportLocation() {
+		return outputHTML;
 	}
 
 	public void writeHTML(){
@@ -106,7 +117,7 @@ public class Ladder {
 					out.write(r.toHTML());
 					out.write("\n");
 				}
-				
+
 				out.write((((ArrayList<Record>) records).get(0)).getHTMLFooter());
 				out.write("\n");
 				out.write("<h2>Game Results</h2>");
@@ -166,25 +177,29 @@ public class Ladder {
 		}
 	}
 
-	public static void main(final String[] args){
+	public static void main(final String[] args) throws Exception {
 		final Arguments arguments = parseArgs(args);
-		logger.info("Loading ladder configuration...\n");
+
+		logger.info("Loading ladder configuration from "
+					+ arguments.configLocation);
+		LadderConfig ladderconfig = null;
 		try {
-			final LadderConfig ladderconfig = (LadderConfig)fromXML(
-				LadderConfig.getXStream(),
-				arguments.configLocation);
-			logger.debug("Done\n");
-			logger.info("Initializing Ladder: \n");
-			final Ladder ladder = new Ladder(ladderconfig);
-			logger.debug("Ladder initialized\n");
-			logger.info("Starting ladder\n");
-			ladder.run();
-			ladder.writeHTML();
-			logger.info("Ladder completed successfully\n");
-		} catch(final Exception e) {
-			e.printStackTrace();
-			exit("Error instantiating Ladder");
+			ladderconfig = (LadderConfig)fromXML( 	LadderConfig.getXStream(),
+													arguments.configLocation);
+		} catch (FileNotFoundException e1) {
+			logger.error(	"Could not load ladder configuration: "
+							+ e1.getLocalizedMessage());
+			System.exit(1);
 		}
+
+		logger.info("Initializing ladder");
+		final Ladder ladder = new Ladder(ladderconfig);
+		logger.info("Starting ladder");
+		ladder.run();
+		logger.info("Ladder complete; writing report to "
+					+ ladder.getReportLocation());
+		ladder.writeHTML();
+		logger.info("Report written");
 	}
 
 	/**

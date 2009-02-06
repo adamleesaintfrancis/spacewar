@@ -3,18 +3,37 @@ package edu.ou.mlfw;
 import jargs.gnu.CmdLineParser;
 import jargs.gnu.CmdLineParser.Option;
 
-import java.awt.event.*;
-import java.io.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import javax.swing.*;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
-import edu.ou.mlfw.config.*;
-import edu.ou.mlfw.exceptions.*;
-import edu.ou.mlfw.gui.*;
+import edu.ou.mlfw.config.ClientInitializer;
+import edu.ou.mlfw.config.ClientMapping;
+import edu.ou.mlfw.config.WorldConfig;
+import edu.ou.mlfw.exceptions.NameCollisionException;
+import edu.ou.mlfw.exceptions.OverboundControllableException;
+import edu.ou.mlfw.exceptions.UnboundClientException;
+import edu.ou.mlfw.exceptions.UnboundControllableException;
+import edu.ou.mlfw.gui.ClientShadowSource;
+import edu.ou.mlfw.gui.Drawer;
+import edu.ou.mlfw.gui.Shadow2DCanvas;
+import edu.ou.mlfw.gui.Viewer;
 
 /**
  * World is where a Simulator, that simulator's Controllables, and a set of
@@ -58,9 +77,9 @@ public class World {
 	 */
 	public World(final WorldConfig worldconfig)
 		throws InstantiationException, IllegalAccessException,
-			NameCollisionException, UnboundClientException,
-			UnboundControllableException, ClassNotFoundException,
-			FileNotFoundException, IOException
+			NameCollisionException, OverboundControllableException,
+			UnboundClientException, UnboundControllableException,
+			ClassNotFoundException, FileNotFoundException, IOException
 	{
 		logger.debug("Instantiating Simulator object...\n");
 		final Simulator simulator
@@ -86,8 +105,16 @@ public class World {
 		{
 			final String controllableName = mapping.getControllableName();
 			if (!controllables.contains(controllableName)) {
-				logger.debug(controllableName);
+				logger.error("Could not find controllable named \""
+							+ controllableName +
+							"\"");
 				throw new UnboundClientException();
+			}
+			if(mappings.containsKey(controllableName)) {
+				logger.error("Multiple clients for controllable named \""
+							+ controllableName +
+							"\"");
+				throw new OverboundControllableException();
 			}
 			final ClientInitializer clientinit
 				= ClientInitializer.fromXMLFile(
@@ -105,6 +132,12 @@ public class World {
 		logger.debug("Clients Initialized\n");
 
 		if (!controllables.isEmpty()) {
+			StringBuilder names = new StringBuilder();
+			for(final String c : controllables) {
+				names.append("    " + c + "\n");
+			}
+			logger.error("No client found for controllables: \n"
+						 + names.toString());
 			throw new UnboundControllableException();
 		}
 

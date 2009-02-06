@@ -3,13 +3,19 @@
  */
 package edu.ou.mlfw.ladder;
 
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import edu.ou.mlfw.config.ClientMapping;
 
 class MappingsGenerator implements Iterable<ClientMapping[]>
 {
+	private static final Logger logger
+		= Logger.getLogger(MappingsGenerator.class);
+
 	//Lazily generate ClientMappings arrays from a config
 	private final ClientMapping[] variableClientMappings;
 	private final int clientsPerGame;
@@ -42,29 +48,37 @@ class MappingsGenerator implements Iterable<ClientMapping[]>
 			}
 
 			public ClientMapping[] next() {
-				HashSet<String> seen = new HashSet<String>();
+				final Map<String, Integer> seen = new HashMap<String, Integer>();
 				int allMappingsIndex = 0;
 				for(final int clientIndex : comboGen.getNext()) {
-					ClientMapping clientMapping	= variableClientMappings[clientIndex];
-					
-					if (seen.contains(clientMapping.getControllableName())) {
-						int append = 1;
-						ClientMapping temp;
-						do {
-							temp = new ClientMapping(clientMapping.getControllableName() + " " + append, clientMapping.getClientInitializerFile());
-							append++;
-						} while (seen.contains(temp.getControllableName()));
-						
-						clientMapping = temp;
+					ClientMapping clientMapping
+						= variableClientMappings[clientIndex];
+
+					//TODO:  The World always expects clients to map to
+					//controllables with specific names; by changing the
+					//name here, we're instituting a convention that the
+					//simulator config will name controllables by appending
+					//numbers to the end of a base name, while the ladder
+					//config will just use the base name to indicate that the
+					//clients should be drawn arbitrarily to fill those slots.
+					final String name = clientMapping.getControllableName();
+					Integer num_seen = seen.get(name);
+					if(num_seen == null) {
+						num_seen = 0;
 					}
+					seen.put(name, num_seen + 1);
+					if (num_seen > 0) {
+						clientMapping = new ClientMapping(
+								name + " " + num_seen,
+								clientMapping.getClientInitializerFile());
+					}
+					//end
 
 					allClientMappings[allMappingsIndex++] = clientMapping;
 
-					seen.add(clientMapping.getControllableName());
-					
-					LadderServer.logger.info(
+					logger.info(
 							clientMapping.getControllableName() + ": "
-							+ clientMapping.getClientInitializerFile());
+							+ clientMapping.getClientInitializerFile().getAbsoluteFile());
 				}
 
 				return allClientMappings;
