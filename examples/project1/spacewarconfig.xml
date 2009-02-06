@@ -23,7 +23,19 @@
       <isControllable>true</isControllable>
     </ShipConfig>
     <ShipConfig>
-      <name>YourName</name>
+      <name>Player1</name>
+      <autoPlace>true</autoPlace>
+      <agentRecord>true</agentRecord>
+      <isControllable>true</isControllable>
+    </ShipConfig>
+    <ShipConfig>
+      <name>Player2</name>
+      <autoPlace>true</autoPlace>
+      <agentRecord>true</agentRecord>
+      <isControllable>true</isControllable>
+    </ShipConfig>
+    <ShipConfig>
+      <name>Player3</name>
       <autoPlace>true</autoPlace>
       <agentRecord>true</agentRecord>
       <isControllable>true</isControllable>

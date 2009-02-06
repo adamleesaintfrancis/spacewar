@@ -18,7 +18,7 @@
     </ClientMappingEntry>
     <ClientMappingEntry>
       <controllableName>YourName</controllableName>
-      <clientInitializerFile>clientinit.xml</clientInitializerFile>
+      <clientInitializerFile>clientinit1.xml</clientInitializerFile>
     </ClientMappingEntry>
   </mappingInformation>
 </WorldConfiguration>

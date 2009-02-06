@@ -3,11 +3,23 @@
   <simulatorConfig>spacewarconfig.xml</simulatorConfig>
   <outputHTML>ladder.html</outputHTML>
   <maxVariableClientsPerGame>3</maxVariableClientsPerGame>
-  <numMatchRepeats>10</numMatchRepeats>
+  <numMatchRepeats>3</numMatchRepeats>
   <variableClientMappings>
     <ClientMappingEntry>
-      <controllableName>YourName</controllableName>
-      <clientInitializerFile>clientinit.xml</clientInitializerFile>
+      <controllableName>Player</controllableName>
+      <clientInitializerFile>clientinit1.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Player</controllableName>
+      <clientInitializerFile>clientinit2.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Player</controllableName>
+      <clientInitializerFile>clientinit3.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Player</controllableName>
+      <clientInitializerFile>clientinit4.xml</clientInitializerFile>
     </ClientMappingEntry>
   </variableClientMappings>
   <staticClientMappings>
