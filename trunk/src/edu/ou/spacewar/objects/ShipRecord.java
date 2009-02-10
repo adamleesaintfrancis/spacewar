@@ -1,12 +1,14 @@
 package edu.ou.spacewar.objects;
 
 import edu.ou.mlfw.Record;
+
+import java.io.Console;
 import java.lang.ClassCastException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
-public class ShipRecord extends Record {
+public class ShipRecord extends Record {	
 	private float avgBeacons;
 	private float avgKills;
 	private float avgHits;
@@ -368,13 +370,26 @@ public class ShipRecord extends Record {
 	public int compareTo(Record o){		
 		if(o instanceof ShipRecord){
 			ShipRecord s = (ShipRecord) o;
+			
+			//System.out.print("hit the compareTo");
+			
 			switch(sortMethod){
 			case 1:
 			{
+				//System.out.println("hit case 1");
+				
 				return killsThenDeathSortMethod(s);
+			}
+			case 2:
+			{
+				//System.out.println("hit case 2");
+				
+				return killsPlusBeaconsDividedByDeathsSortMethod(s);
 			}
 			default:
 			{
+				//System.out.println("hit case default");
+				
 				return beaconThenDeathSortMethod(s);
 			}
 			}
@@ -422,7 +437,40 @@ public class ShipRecord extends Record {
 				return 0;
 			}
 		}		
-	}	
+	}
+	
+	private float winScore()
+	{
+		switch(sortMethod){
+			case 2:
+			{
+				return ((this.avgKills + this.avgBeacons) / (this.avgDeaths));
+			}
+			default:
+			{
+				return 0f;
+			}
+		}
+	}
+	
+	private int killsPlusBeaconsDividedByDeathsSortMethod(ShipRecord s){
+		float thisScore = this.winScore();
+		float otherScore = s.winScore();
+		
+		if(thisScore < otherScore) return 1;
+		else if (thisScore > otherScore) return -1;
+		else 
+		{
+			if(this.avgBeacons < s.avgBeacons) return 1;
+			else if (this.avgBeacons > s.avgBeacons) return -1;
+			else
+			{
+				if(this.avgKills < s.avgKills) return 1;
+				else if (this.avgKills > s.avgKills) return -1;
+				else return 0;
+			}	
+		}
+	}
 
 	public int getTotalGames(){
 		return totalGames;

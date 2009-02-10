@@ -187,7 +187,10 @@ public class LadderServer {
 			exit("Error opening output file");
 		}
 		try{
-			Record.setSortMethod(1);
+			Record.setSortMethod(2);
+			
+			//logger.info("ok, we're in the logger...");
+			
 			Collections.sort(records);
 			for(int i = 0; i < records.size(); i++){
 				records.get(i).setRank(i+1);
