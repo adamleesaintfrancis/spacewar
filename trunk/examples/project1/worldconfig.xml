@@ -1,7 +1,7 @@
 <WorldConfiguration>
 
   <simulatorClass>edu.ou.spacewar.SpacewarSimulator</simulatorClass>
-  <simulatorConfig>spacewarconfig.xml</simulatorConfig>
+  <simulatorConfig>spacewarconfig1.xml</simulatorConfig>
 
   <mappingInformation>
     <ClientMappingEntry>
@@ -17,7 +17,7 @@
       <clientInitializerFile>donothinginit.xml</clientInitializerFile>
     </ClientMappingEntry>
     <ClientMappingEntry>
-      <controllableName>YourName</controllableName>
+      <controllableName>Player1</controllableName>
       <clientInitializerFile>clientinit1.xml</clientInitializerFile>
     </ClientMappingEntry>
   </mappingInformation>
