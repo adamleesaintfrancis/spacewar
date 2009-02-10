@@ -2,7 +2,7 @@ package edu.ou.spacewar.objects;
 
 import edu.ou.mlfw.Record;
 
-import java.io.Console;
+//import java.io.Console;
 import java.lang.ClassCastException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
