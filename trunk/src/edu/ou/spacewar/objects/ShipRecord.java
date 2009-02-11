@@ -373,26 +373,26 @@ public class ShipRecord extends Record {
 			
 			//System.out.print("hit the compareTo");
 			
-//			switch(sortMethod){
-//			case 1:
-//			{
-//				//System.out.println("hit case 1");
-//				
-//				return killsThenDeathSortMethod(s);
-//			}
-//			case 2:
-//			{
-//				//System.out.println("hit case 2");
+			switch(sortMethod){
+			case 1:
+			{
+				//System.out.println("hit case 1");
+				
+				return killsThenDeathSortMethod(s);
+			}
+			case 2:
+			{
+				//System.out.println("hit case 2");
 				
 				return killsPlusBeaconsDividedByDeathsSortMethod(s);
-//			}
-//			default:
-//			{
-//				//System.out.println("hit case default");
-//				
-//				return beaconThenDeathSortMethod(s);
-//			}
-//			}
+			}
+			default:
+			{
+				//System.out.println("hit case default");
+				
+				return beaconThenDeathSortMethod(s);
+			}
+			}
 		}
 		else{
 			throw new ClassCastException("Bad cast");
@@ -441,16 +441,16 @@ public class ShipRecord extends Record {
 	
 	private float winScore()
 	{
-//		switch(sortMethod){
-//			case 2:
-//			{
-				return ((this.avgKills + this.avgBeacons) / (this.avgDeaths));
-//			}
-//			default:
-//			{
-//				return 0f;
-//			}
-//		}
+		switch(sortMethod){
+			case 2:
+			{
+				return 2*(this.avgKills + this.avgBeacons) - (this.avgDeaths);
+			}
+			default:
+			{
+				return 0f;
+			}
+		}
 	}
 	
 	private int killsPlusBeaconsDividedByDeathsSortMethod(ShipRecord s){
