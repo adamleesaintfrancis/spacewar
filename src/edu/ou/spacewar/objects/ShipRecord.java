@@ -444,7 +444,7 @@ public class ShipRecord extends Record {
 		switch(sortMethod){
 			case 2:
 			{
-				return 2*(this.avgKills + this.avgBeacons) - (this.avgDeaths);
+				return 2 * this.avgKills + 4 * this.avgBeacons + this.avgHits - 2 * this.avgDeaths;
 			}
 			default:
 			{
