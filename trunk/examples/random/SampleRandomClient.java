@@ -108,6 +108,44 @@ public class SampleRandomClient extends AbstractShipClient implements Drawer {
 		}
 		return true;
 	}
+	
+	/**
+	 * Checks to see if the line that starts in position 1 and ends in position 2 passes through any obstacles
+	 * @param position1
+	 * @param position2
+	 * @param state
+	 * @return
+	 */
+	private boolean isFreeLine(Vector2D position1, Vector2D position2, ImmutableSpacewarState state) {
+		// get a vector from location 1 to location 2
+		Vector2D line = state.findShortestDistance(position1, position2);
+
+		for (ImmutableObstacle obstacle: state.getObstacles()) {
+			// now find the distance to the obstacle (vector pointing from location 1 to the obstacle)
+			Vector2D obstacleVec = state.findShortestDistance(position1, obstacle.getPosition());
+
+			// project the obstacle down to the line
+			Vector2D projectedLoc = line.project(obstacleVec);
+
+			double innerProduct = projectedLoc.dot(line);
+			if (innerProduct >= 0) {
+				if (Math.abs(projectedLoc.getX()) <= Math.abs(line.getX()) &&
+						Math.abs(projectedLoc.getY()) <= Math.abs(line.getY())) {
+					// now find the vector from the obstacle to the line
+					Vector2D worldCoordsProjection = projectedLoc.add(position1);
+					Vector2D obstacleToLine = state.findShortestDistance(worldCoordsProjection,
+							obstacle.getPosition());
+
+					// if it the distance is less than the obstacle radius, they intersect
+					if (obstacleToLine.getMagnitude() < (obstacle.getRadius() + fudge_factor)) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
 
 	/**
 	 * The agent receives the current state. This agent then
