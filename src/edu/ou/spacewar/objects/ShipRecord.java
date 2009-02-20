@@ -126,6 +126,34 @@ public class ShipRecord extends Record {
 	public static String getHTMLHeader_s(){
 		String out = null;
 		switch(sortMethod){
+		case 2:
+		{
+			out = new String("<title> Spacewar Ladder </title>\n"+
+					"<body>\n" +
+					"<h1> Spacewar Ladder </h1>\n" +
+					"<table border=2>\n" +
+					"<tr>" +
+					"<th>Display Name</th>" +
+					"<th>Rank</th>" +
+					"<th>Score</th>" + 
+					"<th>Number of Games</th>" +
+					"<th>Average Beacons</th>" +
+					"<th>Total Beacons</th>" +
+					"<th>Average Deaths</th>" +
+					"<th>Total Deaths</th>" +
+					"<th>Average Kills</th>" +
+					"<th>Total Kills</th>" +
+					"<th>Average Hits</th>" +
+					"<th>Total Hits</th>" +
+					"<th>Average Shots Fired</th>" +
+					"<th>Total Shots Fired</th>" +
+					"<th>Average Flags</th>" +
+					"<th>Total Flags</th>" +
+					"<th>Average CPU Time</th>" +
+					"<th>Total CPU Time</th>" +
+			"</tr>");
+			break;
+		}
 		case 1:
 		{
 			out = new String("<title> Spacewar Ladder </title>\n"+
@@ -208,6 +236,28 @@ public class ShipRecord extends Record {
 	public String toCSV() {
 		String out = null;
 		switch(sortMethod){
+		case 2:
+		{
+			out = new String(displayName + "," +
+					Integer.toString(rank) + "," +
+					Float.toString(winScore()) + "," +
+					Integer.toString(totalGames) + "," +
+					Float.toString(avgBeacons)+ "," +
+					Integer.toString(totalBeacons) + "," +
+					Float.toString(avgDeaths)+ "," +
+					Integer.toString(totalDeaths) + "," +
+					Float.toString(avgKills)+ "," +
+					Integer.toString(totalKills) + "," +
+					Float.toString(avgHits)+ "," +
+					Integer.toString(totalHits) + "," +
+					Float.toString(avgShotsFired)+ "," +
+					Integer.toString(totalShotsFired) + "," +
+					Float.toString(avgFlags)+ "," +
+					Integer.toString(totalFlags) + "," +
+					Float.toString(avgCPUTime)+ "," +
+					Long.toString(totalCPUTime) + ",");
+			break;
+		}
 		case 1:
 		{
 			out = new String(displayName + "," +
@@ -257,6 +307,30 @@ public class ShipRecord extends Record {
 	public String toHTML() {
 		String out = null;
 		switch(sortMethod){
+		case 2:
+		{
+			out = new String("<tr>" +
+					"<td>" + displayName + "</td>" +
+					"<td>" + Integer.toString(rank) + "</td>" +
+					"<td>" + Float.toString(winScore()) + "</td>" +
+					"<td>" + Integer.toString(totalGames) + "</td>" +
+					"<td>" + Float.toString(avgBeacons)+ "</td>" +
+					"<td>" + Integer.toString(totalBeacons) + "</td>" +
+					"<td>" + Float.toString(avgDeaths)+ "</td>" +
+					"<td>" + Integer.toString(totalDeaths) + "</td>" +
+					"<td>" + Float.toString(avgKills)+ "</td>" +
+					"<td>" + Integer.toString(totalKills) + "</td>" +
+					"<td>" + Float.toString(avgHits)+ "</td>" +
+					"<td>" + Integer.toString(totalHits) + "</td>" +
+					"<td>" + Float.toString(avgShotsFired)+ "</td>" +
+					"<td>" + Integer.toString(totalShotsFired) + "</td>" +
+					"<td>" + Float.toString(avgFlags)+ "</td>" +
+					"<td>" + Integer.toString(totalFlags) + "</td>" +
+					"<td>" + Float.toString(avgCPUTime)+ "</td>" +
+					"<td>" + Long.toString(totalCPUTime) + "</td>" +
+			"</tr>");
+			break;
+		}
 		case 1:
 		{
 			out = new String("<tr>" +
