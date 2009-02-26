@@ -156,6 +156,7 @@
 		<javac srcdir="examples/project1" classpath="${dist}/spacewar.jar" />
 		<java classname="edu.ou.mlfw.ladder.Ladder"
 		      fork="true" 
+			  maxmemory="1024m"
 		      dir="examples/project1">
 		  <classpath>
 		  	<pathelement location="${dist}/spacewar.jar"/>
