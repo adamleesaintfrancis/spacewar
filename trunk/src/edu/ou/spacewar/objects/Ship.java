@@ -24,7 +24,9 @@ public class Ship extends Object2D implements SWControllable
     public static final float SHIP_RADIUS = 10;
     public static final float SHIP_MASS = 10;
 
-    public static final int MAX_ENERGY = 5000;
+    //public static final int MAX_ENERGY = 5000;
+    public static final int MAX_ENERGY = Integer.MAX_VALUE;
+    public static final int INITIAL_ENERGY = 5000;
     public static final int FIRE_COST = 100;
     public static final int MINE_COST = 250;
     public static final int SHIELD_COST = 250;
@@ -101,7 +103,7 @@ public class Ship extends Object2D implements SWControllable
         super.reset();
 
         findNewPosition();
-        energy = MAX_ENERGY;
+        energy = INITIAL_ENERGY;
         flag = null;
         activeCommand = ShipCommand.DoNothing;
         fireDelay = 0;
@@ -451,7 +453,8 @@ public class Ship extends Object2D implements SWControllable
 	public void collide(final Vector2D normal, final Beacon beacon) {
 		beacon.collect();
         incrementBeacons();
-        setEnergy(Ship.MAX_ENERGY);
+        //setEnergy(Ship.MAX_ENERGY);
+        setEnergy(this.energy + Beacon.BEACON_ENERGY_BOOST);
 	}
 
 	@Override
