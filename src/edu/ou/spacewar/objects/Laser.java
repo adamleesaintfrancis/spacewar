@@ -1,26 +1,28 @@
 package edu.ou.spacewar.objects;
 
-import java.awt.Color;
-
 import edu.ou.mlfw.gui.Shadow2D;
+import edu.ou.spacewar.SpacewarGame;
 import edu.ou.spacewar.objects.shadows.LaserShadow;
 import edu.ou.spacewar.simulator.Object2D;
 import edu.ou.utils.Vector2D;
 
 public class Laser extends Object2D {
-    public static final float LASER_RADIUS = 20;
+    public static final float LASER_RADIUS = 10;
     public static final float LASER_MASS = 100;
-    public static final int   LASER_LIFETIME = 20;
+    public static final int   LASER_LIFETIME = 3;
+    public static final float LASER_VELOCITY = 275f;
 
     private final Ship ship;
+    private SpacewarGame space;
 
     private float lifetime;
 
 
-    public Laser(final Ship ship) {
+    public Laser(final Ship ship, SpacewarGame space) {
         super(ship.getSpace(), LASER_RADIUS, LASER_MASS);
 
         this.ship = ship;
+        this.space = space;
         alive = false;
     }
 
@@ -34,11 +36,15 @@ public class Laser extends Object2D {
 
     @Override
 	public Shadow2D getShadow() {
-        return new LaserShadow(this);
+    	Vector2D endPosition = getPosition().add(getOrientation().multiply(Laser.LASER_RADIUS));
+        Vector2D lineVec = space.findShortestDistance(getPosition(), endPosition);
+    	
+        return new LaserShadow(this, lineVec, this.getPosition());
     }
 
 
     protected final void setLifetime(final float lifetime) {
+        System.out.println("lifetime is " + lifetime);
         this.lifetime = lifetime;
     }
 
@@ -67,46 +73,53 @@ public class Laser extends Object2D {
 
 	@Override
 	public void collide(final Vector2D normal, final Beacon beacon) {
+		System.out.println("Colliding with beacon");
 		getShip().reload(this);
 		beacon.collect();
 	}
 
 	@Override
 	public void collide(final Vector2D normal, final Bullet bullet) {
+		System.out.println("Colliding with bullet");
 		getShip().reload(this);
 		bullet.getShip().reload(bullet);
 	}
 
 	@Override
 	public void collide(final Vector2D normal, final Flag flag) {
+		System.out.println("Colliding with flag");
 		getShip().reload(this);
+	}
+
+	public void collide(final Vector2D normal, final Laser laser) {
+		System.out.println("Colliding with laser");
+		getShip().reload(this);
+		laser.getShip().reload(laser);
 	}
 
 	@Override
 	public void collide(final Vector2D normal, final Mine mine) {
+		System.out.println("Colliding with mine");
 		getShip().reload(this);
 		mine.getShip().reload(mine);
 	}
 
 	@Override
 	public void collide(final Vector2D normal, final Obstacle obstacle) {
-		obstacle.collide(normal, this);
-
+		System.out.println("Colliding with obstacle");
+		getShip().reload(this);
 	}
 
 	@Override
 	public void collide(final Vector2D normal, final Ship ship) {
+		System.out.println("Colliding with ship");
 		ship.collide(normal, this);
 	}
 
 	@Override
 	public void dispatch(final Vector2D normal, final Object2D other) {
+		System.out.println("Colliding with unknown" + other);
 		other.collide(normal, this);
 	}
 
-	@Override
-	public void collide(Vector2D normal, Laser laser) {
-		// TODO Auto-generated method stub
-		
-	}
 }

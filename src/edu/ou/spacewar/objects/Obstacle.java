@@ -137,6 +137,11 @@ public class Obstacle extends Object2D {
 	}
 
 	@Override
+	public void collide(final Vector2D normal, final Laser laser) {
+		laser.collide(normal, this);
+	}
+
+	@Override
 	public void collide(final Vector2D normal, final Mine mine) {
 		mine.getShip().reload(mine);
 		takeDamage();

@@ -37,6 +37,7 @@ public class Ship extends Object2D implements SWControllable
     public static final int MINE_DAMAGE = 1000;
     public static final int FLAG_COST = 100;
     public static final float COLLISION_RATE = 2.0f;
+    public static final int LASER_FREEZE_TIME = 2;
 
     public static final int MAX_BULLETS = 10;
     public static final int MAX_MINES = 5;
@@ -62,7 +63,7 @@ public class Ship extends Object2D implements SWControllable
     private int energy, beacons, kills, deaths, hits, flags, shots;
     private long cpuTime;
     private ShipCommand activeCommand;
-    private float fireDelay, mineDelay, shieldDelay, shieldDamage, laserDelay;
+    private float fireDelay, mineDelay, shieldDelay, shieldDamage, laserDelay, laserFrozenTime;
     private Flag flag;
 
     private String team;
@@ -91,7 +92,7 @@ public class Ship extends Object2D implements SWControllable
         lasers = new Laser[MAX_LASERS];
         laserClip = new Stack<Laser>();
         for (int i = 0; i < MAX_LASERS; i++) {
-            lasers[i] = new Laser(this);
+            lasers[i] = new Laser(this, space);
             lasers[i].setAlive(false);
             laserClip.push(lasers[i]);
         }
@@ -230,12 +231,13 @@ public class Ship extends Object2D implements SWControllable
         this.takeDamage(SHOT_COST);
     }
     
-    public final void takeLaser() {
-    	if(shieldDelay > 0) {  //shield prevents damage
-    		return;
-    	}
-        this.takeDamage(LASER_COST);
+    /**
+     * A laser keeps you from choosing anything other than do-nothing for LASER_FREEZE_TIME
+     */
+    public final void fireLaser() {
+    	this.takeDamage(LASER_COST);
     }
+
     
     public final void hitMine() {
     	if (shieldDelay > 0) {
@@ -336,6 +338,25 @@ public class Ship extends Object2D implements SWControllable
 	protected final void advanceTime(final float timestep) {
     	logger.trace(getName());
     	activeCommand = ShipCommand.DoNothing;
+        if (fireDelay > 0) {
+			fireDelay -= timestep;
+		}
+        if (mineDelay > 0) {
+        	mineDelay -= timestep;
+        }
+        if (shieldDelay > 0) {
+        	shieldDelay -= timestep;
+        }
+        if (laserDelay > 0) {
+        	laserDelay -= timestep;
+        }
+
+        if (laserFrozenTime > 0) {
+    		// the ship has been frozen by a laser so do Nothing
+    		laserFrozenTime -= timestep;
+    		return;
+    	}
+    	
     	if(controllable != null) {
     		final Action a = controllable.getAction();
     		if(a instanceof ShipCommand) {
@@ -358,18 +379,6 @@ public class Ship extends Object2D implements SWControllable
             this.takeDamage(TURN_COST);
         }
 
-        if (fireDelay > 0) {
-			fireDelay -= timestep;
-		}
-        if (mineDelay > 0) {
-        	mineDelay -= timestep;
-        }
-        if (shieldDelay > 0) {
-        	shieldDelay -= timestep;
-        }
-        if (laserDelay > 0) {
-        	laserDelay -= timestep;
-        }
 
         if (activeCommand.shield && (shieldDelay <= 0) && !hasFlag()) {
         	this.takeDamage(SHIELD_COST);
@@ -429,15 +438,17 @@ public class Ship extends Object2D implements SWControllable
         	System.out.println("choosing laser");
         	laserDelay = LASER_DELAY;
         	// take the cost of firing the laser
-        	takeLaser();
+        	fireLaser();
 
             if (!laserClip.isEmpty()) {
                 final Laser laser = laserClip.pop();
                 shots++;
+                
                 laser.setOrientation(getOrientation());
-                laser.setPosition(
-                	getPosition().subtract(
-                		getVelocity().unit().multiply(SHIP_RADIUS + Laser.LASER_RADIUS)));
+                
+                Vector2D newposition = getPosition().add(getOrientation().multiply(2.0f * SHIP_RADIUS + 0.2f));
+                laser.setPosition(newposition);
+                laser.setVelocity(getVelocity().add(getOrientation().multiply(Laser.LASER_VELOCITY)));
                 laser.setLifetime(Laser.LASER_LIFETIME);
                 laser.setAlive(true);
             }
@@ -459,6 +470,10 @@ public class Ship extends Object2D implements SWControllable
 
 	public boolean shieldUp() {
 		return shieldDelay > 0;
+	}
+	
+	public boolean isFrozen() {
+		return laserFrozenTime > 0;
 	}
 
 	/**
@@ -523,13 +538,6 @@ public class Ship extends Object2D implements SWControllable
         bullet.getShip().reload(bullet);
 	}
 
-	public void collide(final Vector2D normal, final Laser laser) {
-		takeLaser();
-
-        laser.getShip().incrementHits();
-        laser.getShip().reload(laser);
-	}
-
 	@Override
 	public void collide(final Vector2D normal, final Flag flag) {
 		if((getTeam() != flag.getTeam()) && (getFlag() == null)) {
@@ -542,6 +550,16 @@ public class Ship extends Object2D implements SWControllable
 	    } else {
 	    	Space.collide(0.75f, normal, flag, this);
 	    }
+	}
+
+	public void collide(final Vector2D normal, final Laser laser) {
+    	if(shieldDelay > 0) {  //shield prevents damage
+    		return;
+    	}
+    	
+		laserFrozenTime = LASER_FREEZE_TIME;
+        laser.getShip().incrementHits();
+        laser.getShip().reload(laser);
 	}
 
 	@Override

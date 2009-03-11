@@ -67,6 +67,11 @@ public class Base extends Object2D {
 	}
 
 	@Override
+	public void collide(final Vector2D normal, final Laser laser) {
+		laser.getShip().reload(laser);
+	}
+
+	@Override
 	public void collide(final Vector2D normal, final Mine mine) {
 		mine.collide(normal, this);
 	}
