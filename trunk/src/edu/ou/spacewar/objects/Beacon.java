@@ -88,6 +88,11 @@ public class Beacon extends Object2D {
 	}
 
 	@Override
+	public void collide(final Vector2D normal, final Laser laser) {
+		laser.collide(normal, this);
+	}
+	
+	@Override
 	public void collide(final Vector2D normal, final Mine mine) {
 		mine.collide(normal, this);
 	}
@@ -106,4 +111,5 @@ public class Beacon extends Object2D {
 	public void dispatch(final Vector2D normal, final Object2D other) {
 		other.collide(normal, this);
 	}
+
 }

@@ -187,7 +187,19 @@ public final class SpacewarGame extends Space {
 				minelist.add(mine);
 				addObject(mine);
 			}
-		}
+
+			List<Laser> laserlist
+			= (List<Laser>)objectlookup.get(Laser.class);
+			if(laserlist == null) {
+				laserlist = new ArrayList<Laser>();
+				objectlookup.put(Laser.class, laserlist);
+			}
+			for(int i=0; i<Ship.MAX_LASERS; i++) {
+				final Laser laser = ship.getLaser(i);
+				laserlist.add(laser);
+				addObject(laser);
+			}
+}
 	}
 
 	public Iterable<Shadow2D> getShadowIterable() {

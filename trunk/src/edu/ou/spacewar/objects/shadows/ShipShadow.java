@@ -103,6 +103,15 @@ public class ShipShadow extends Shadow2D {
             final float r = ship.getRadius();
         	g.drawOval((int)(x-2*r), (int)(y-2*r), (int)(r*4), (int)(r*4));
         }
+        
+        if (ship.isFrozen()) {
+        	// if it is frozen, put a green ring around it (like the shield but new color)
+           	g.setPaint(LaserShadow.LASER_COLOR);
+        	final float x = ship.getPosition().getX();
+            final float y = ship.getPosition().getY();
+            final float r = ship.getRadius();
+        	g.drawOval((int)(x-2*r), (int)(y-2*r), (int)(r*4), (int)(r*4));
+        }
 
 
         final Font font = new Font("Arial", Font.BOLD, 12);
