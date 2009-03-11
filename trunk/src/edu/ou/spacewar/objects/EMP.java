@@ -1,28 +1,25 @@
 package edu.ou.spacewar.objects;
 
 import edu.ou.mlfw.gui.Shadow2D;
-import edu.ou.spacewar.SpacewarGame;
-import edu.ou.spacewar.objects.shadows.LaserShadow;
+import edu.ou.spacewar.objects.shadows.EMPShadow;
 import edu.ou.spacewar.simulator.Object2D;
 import edu.ou.utils.Vector2D;
 
-public class Laser extends Object2D {
-    public static final float LASER_RADIUS = 10;
-    public static final float LASER_MASS = 100;
-    public static final int   LASER_LIFETIME = 3;
-    public static final float LASER_VELOCITY = 275f;
+public class EMP extends Object2D {
+    public static final float EMP_RADIUS = 5;
+    public static final float EMP_MASS = 100;
+    public static final int   EMP_LIFETIME = 3;
+    public static final float EMP_VELOCITY = 275f;
 
     private final Ship ship;
-    private SpacewarGame space;
 
     private float lifetime;
 
 
-    public Laser(final Ship ship, SpacewarGame space) {
-        super(ship.getSpace(), LASER_RADIUS, LASER_MASS);
+    public EMP(final Ship ship) {
+        super(ship.getSpace(), EMP_RADIUS, EMP_MASS);
 
         this.ship = ship;
-        this.space = space;
         alive = false;
     }
 
@@ -36,10 +33,7 @@ public class Laser extends Object2D {
 
     @Override
 	public Shadow2D getShadow() {
-    	Vector2D endPosition = getPosition().add(getOrientation().multiply(Laser.LASER_RADIUS));
-        Vector2D lineVec = space.findShortestDistance(getPosition(), endPosition);
-    	
-        return new LaserShadow(this, lineVec, this.getPosition());
+        return new EMPShadow(this);
     }
 
 
@@ -91,7 +85,7 @@ public class Laser extends Object2D {
 		getShip().reload(this);
 	}
 
-	public void collide(final Vector2D normal, final Laser laser) {
+	public void collide(final Vector2D normal, final EMP laser) {
 		System.out.println("Colliding with laser");
 		getShip().reload(this);
 		laser.getShip().reload(laser);
