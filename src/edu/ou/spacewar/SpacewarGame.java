@@ -188,14 +188,14 @@ public final class SpacewarGame extends Space {
 				addObject(mine);
 			}
 
-			List<Laser> laserlist
-			= (List<Laser>)objectlookup.get(Laser.class);
+			List<EMP> laserlist
+			= (List<EMP>)objectlookup.get(EMP.class);
 			if(laserlist == null) {
-				laserlist = new ArrayList<Laser>();
-				objectlookup.put(Laser.class, laserlist);
+				laserlist = new ArrayList<EMP>();
+				objectlookup.put(EMP.class, laserlist);
 			}
-			for(int i=0; i<Ship.MAX_LASERS; i++) {
-				final Laser laser = ship.getLaser(i);
+			for(int i=0; i<Ship.MAX_EMPS; i++) {
+				final EMP laser = ship.getLaser(i);
 				laserlist.add(laser);
 				addObject(laser);
 			}

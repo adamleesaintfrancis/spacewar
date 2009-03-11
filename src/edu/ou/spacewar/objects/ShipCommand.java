@@ -10,7 +10,7 @@ public enum ShipCommand implements Action {
     Fire(false, false, false, true, false, false, false),
     Mine(false, false, false, false, true, false, false),
     Shield(false, false, false, false, false, true, false),
-    Laser(false, false, false, false, false, false, true),
+    EMP(false, false, false, false, false, false, true),
 
     ThrustRight(true, false, true, false, false, false, false),
     ThrustLeft(true, true, false, false, false, false, false),
@@ -30,7 +30,7 @@ public enum ShipCommand implements Action {
     public static final byte FIRE_FLAG = 0x08;
     public static final byte MINE_FLAG = 0x10;
     public static final byte SHIELD_FLAG = 0x20;
-    public static final byte LASER_FLAG = 0x30;
+    public static final byte EMP_FLAG = 0x30;
 
     public static final int COMMANDS = values().length;
 
@@ -42,7 +42,7 @@ public enum ShipCommand implements Action {
         Fire,
         Mine,
         Shield,
-        Laser
+        EMP
     };
 
     private static final ShipCommand[] extendedCommands = {
@@ -115,7 +115,7 @@ public enum ShipCommand implements Action {
 			commandByte |= SHIELD_FLAG;
 		}
         if (laser) {
-			commandByte |= LASER_FLAG;
+			commandByte |= EMP_FLAG;
 		}
         this.commandByte = commandByte;
     }
@@ -134,8 +134,8 @@ public enum ShipCommand implements Action {
         	return Mine;
         case SHIELD_FLAG:
         	return Shield;
-        case LASER_FLAG:
-        	return Laser;
+        case EMP_FLAG:
+        	return EMP;
 
         case THRUST_FLAG | RIGHT_FLAG:
             return ThrustRight;
@@ -235,9 +235,9 @@ public enum ShipCommand implements Action {
 		}
 
         if (laser) {
-			return fromByte(toByte() | LASER_FLAG);
+			return fromByte(toByte() | EMP_FLAG);
 		} else {
-			return fromByte(toByte() & ~LASER_FLAG);
+			return fromByte(toByte() & ~EMP_FLAG);
 		}
     }
 

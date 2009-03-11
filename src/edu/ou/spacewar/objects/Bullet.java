@@ -82,7 +82,7 @@ public class Bullet extends Object2D {
 	}
 
 	@Override
-	public void collide(Vector2D normal, Laser laser) {
+	public void collide(Vector2D normal, EMP laser) {
 		laser.collide(normal, this);
 	}
 
