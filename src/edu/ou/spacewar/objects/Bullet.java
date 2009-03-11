@@ -100,4 +100,10 @@ public class Bullet extends Object2D {
 	public void dispatch(final Vector2D normal, final Object2D other) {
 		other.collide(normal, this);
 	}
+
+	@Override
+	public void collide(Vector2D normal, Laser laser) {
+		// TODO Auto-generated method stub
+		// for now, bullets and lasers don't collide
+	}
 }

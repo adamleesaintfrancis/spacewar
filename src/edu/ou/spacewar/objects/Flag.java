@@ -82,6 +82,11 @@ public class Flag extends Object2D {
 	}
 
 	@Override
+	public void collide(final Vector2D normal, final Laser laser) {
+		laser.getShip().reload(laser);
+	}
+
+	@Override
 	public void collide(final Vector2D normal, final Flag flag) {
 		Space.collide(0.75f, normal, flag, this);
 	}
