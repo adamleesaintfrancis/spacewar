@@ -20,6 +20,9 @@ public class Beacon extends Object2D {
     public static final float BEACON_RADIUS = 10;
     public static final float BEACON_MASS = 0;
 
+    // in the situation where energy is unlimited, a beacon just gives you a plus up rather than taking you to max 
+    public static final int BEACON_ENERGY_BOOST = 2500;
+
     public Beacon(final SpacewarGame space) {
         super(space, BEACON_RADIUS, BEACON_MASS);
     }
