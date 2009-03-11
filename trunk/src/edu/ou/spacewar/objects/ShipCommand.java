@@ -3,24 +3,25 @@ package edu.ou.spacewar.objects;
 import edu.ou.mlfw.Action;
 
 public enum ShipCommand implements Action {
-    DoNothing(false, false, false, false, false, false),
-    Thrust(true, false, false, false, false, false),
-    TurnLeft(false, true, false, false, false, false),
-    TurnRight(false, false, true, false, false, false),
-    Fire(false, false, false, true, false, false),
-    Mine(false, false, false, false, true, false),
-    Shield(false, false, false, false, false, true),
+    DoNothing(false, false, false, false, false, false, false),
+    Thrust(true, false, false, false, false, false, false),
+    TurnLeft(false, true, false, false, false, false, false),
+    TurnRight(false, false, true, false, false, false, false),
+    Fire(false, false, false, true, false, false, false),
+    Mine(false, false, false, false, true, false, false),
+    Shield(false, false, false, false, false, true, false),
+    Laser(false, false, false, false, false, false, true),
 
-    ThrustRight(true, false, true, false, false, false),
-    ThrustLeft(true, true, false, false, false, false),
-    ThrustFire(true, false, false, true, false, false),
-    ThrustMine(true, false, false, false, true, false),
-    ThrustShield(true, false, false, false, false, true),
+    ThrustRight(true, false, true, false, false, false, false),
+    ThrustLeft(true, true, false, false, false, false, false),
+    ThrustFire(true, false, false, true, false, false, false),
+    ThrustMine(true, false, false, false, true, false, false),
+    ThrustShield(true, false, false, false, false, true, false),
 
-    TurnLeftFire(false, true, false, true, false, false),
-    TurnRightFire(false, false, true, true, false, false),
-    ThrustRightFire(true, false, true, true, false, false),
-    ThrustLeftFire(true, true, false, true, false, false);
+    TurnLeftFire(false, true, false, true, false, false, false),
+    TurnRightFire(false, false, true, true, false, false, false),
+    ThrustRightFire(true, false, true, true, false, false, false),
+    ThrustLeftFire(true, true, false, true, false, false, false);
 
     public static final byte NOTHING_FLAG = 0x00;
     public static final byte THRUST_FLAG = 0x01;
@@ -29,6 +30,7 @@ public enum ShipCommand implements Action {
     public static final byte FIRE_FLAG = 0x08;
     public static final byte MINE_FLAG = 0x10;
     public static final byte SHIELD_FLAG = 0x20;
+    public static final byte LASER_FLAG = 0x30;
 
     public static final int COMMANDS = values().length;
 
@@ -39,7 +41,8 @@ public enum ShipCommand implements Action {
         TurnLeft,
         Fire,
         Mine,
-        Shield
+        Shield,
+        Laser
     };
 
     private static final ShipCommand[] extendedCommands = {
@@ -76,12 +79,13 @@ public enum ShipCommand implements Action {
     public final boolean fire;
     public final boolean mine;
     public final boolean shield;
+    public final boolean laser;
     public final byte commandByte;
 
     private ShipCommand( final boolean thrust,
     		             final boolean left, final boolean right,
     		             final boolean fire, final boolean mine,
-    		             final boolean shield )
+    		             final boolean shield, final boolean laser)
     {
         this.thrust = thrust;
         this.left = left;
@@ -89,6 +93,8 @@ public enum ShipCommand implements Action {
         this.fire = fire;
         this.mine = mine;
         this.shield = shield;
+        this.laser = laser;
+        
         byte commandByte = NOTHING_FLAG;
         if (thrust) {
 			commandByte |= THRUST_FLAG;
@@ -108,6 +114,9 @@ public enum ShipCommand implements Action {
         if (shield) {
 			commandByte |= SHIELD_FLAG;
 		}
+        if (laser) {
+			commandByte |= LASER_FLAG;
+		}
         this.commandByte = commandByte;
     }
 
@@ -125,6 +134,8 @@ public enum ShipCommand implements Action {
         	return Mine;
         case SHIELD_FLAG:
         	return Shield;
+        case LASER_FLAG:
+        	return Laser;
 
         case THRUST_FLAG | RIGHT_FLAG:
             return ThrustRight;
@@ -217,6 +228,19 @@ public enum ShipCommand implements Action {
 			return fromByte(toByte() & ~SHIELD_FLAG);
 		}
     }
+
+    public ShipCommand setLaser(final boolean laser) {
+        if (this.laser == laser) {
+			return this;
+		}
+
+        if (laser) {
+			return fromByte(toByte() | LASER_FLAG);
+		} else {
+			return fromByte(toByte() & ~LASER_FLAG);
+		}
+    }
+
 
     public byte toByte() {
         return commandByte;

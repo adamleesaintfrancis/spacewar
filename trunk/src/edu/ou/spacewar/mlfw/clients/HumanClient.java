@@ -43,6 +43,9 @@ public class HumanClient extends AbstractShipClient
             case KeyEvent.VK_S:
             	shipCommandAsByte &= ~ShipCommand.SHIELD_FLAG;
             	break;
+            case KeyEvent.VK_L:
+            	shipCommandAsByte &= ~ShipCommand.LASER_FLAG;
+            	break;
         }
     }
 
@@ -65,6 +68,9 @@ public class HumanClient extends AbstractShipClient
             	break;
             case KeyEvent.VK_S:
             	shipCommandAsByte |= ShipCommand.SHIELD_FLAG;
+            	break;
+            case KeyEvent.VK_L:
+            	shipCommandAsByte |= ShipCommand.LASER_FLAG;
             	break;
         }
     }

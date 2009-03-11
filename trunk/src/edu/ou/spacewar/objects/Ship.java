@@ -33,14 +33,17 @@ public class Ship extends Object2D implements SWControllable
     public static final int THRUST_COST = 25;
     public static final int TURN_COST = 1;
     public static final int SHOT_COST = 500;
+    public static final int LASER_COST = 300;
     public static final int MINE_DAMAGE = 1000;
     public static final int FLAG_COST = 100;
     public static final float COLLISION_RATE = 2.0f;
 
     public static final int MAX_BULLETS = 10;
     public static final int MAX_MINES = 5;
+    public static final int MAX_LASERS  = 1;
     public static final float FIRE_DELAY = 1f / 4f;
     public static final float MINE_DELAY = 1f / 2f;
+    public static final float LASER_DELAY = 1f / 2f;
     public static final float SHIELD_DELAY = 1f / 2f;
     public static final float THRUST_ACCELERATION = 80;
     public static final float TURN_SPEED = (float) (150 * Math.PI / 180);
@@ -52,12 +55,14 @@ public class Ship extends Object2D implements SWControllable
     private final Stack<Bullet> bulletClip;
     private final Mine[] mines;
     private final Stack<Mine> mineClip;
+    private final Stack<Laser> laserClip;
+    private final Laser[] lasers;
 
     private ControllableShip controllable;
     private int energy, beacons, kills, deaths, hits, flags, shots;
     private long cpuTime;
     private ShipCommand activeCommand;
-    private float fireDelay, mineDelay, shieldDelay, shieldDamage;
+    private float fireDelay, mineDelay, shieldDelay, shieldDamage, laserDelay;
     private Flag flag;
 
     private String team;
@@ -82,6 +87,15 @@ public class Ship extends Object2D implements SWControllable
             mines[i].setAlive(false);
             mineClip.push(mines[i]);
         }
+        
+        lasers = new Laser[MAX_LASERS];
+        laserClip = new Stack<Laser>();
+        for (int i = 0; i < MAX_LASERS; i++) {
+            lasers[i] = new Laser(this);
+            lasers[i].setAlive(false);
+            laserClip.push(lasers[i]);
+        }
+        
 
         this.reset();
         setAlive(true);
@@ -110,6 +124,7 @@ public class Ship extends Object2D implements SWControllable
         mineDelay = 0;
         shieldDelay = 0;
         shieldDamage = 0;
+        laserDelay = 0;
     }
 
     private void findNewPosition() {
@@ -215,6 +230,13 @@ public class Ship extends Object2D implements SWControllable
         this.takeDamage(SHOT_COST);
     }
     
+    public final void takeLaser() {
+    	if(shieldDelay > 0) {  //shield prevents damage
+    		return;
+    	}
+        this.takeDamage(LASER_COST);
+    }
+    
     public final void hitMine() {
     	if (shieldDelay > 0) {
     		return;
@@ -299,6 +321,13 @@ public class Ship extends Object2D implements SWControllable
         }
     }
 
+    public final void reload(final Laser laser) {
+        if ((laser.getShip() == this)) {
+            laser.setAlive(false);
+            laserClip.push(laser);
+        }
+    }
+
     public final void setFlag(final Flag flag) {
         this.flag = flag;
     }
@@ -337,6 +366,9 @@ public class Ship extends Object2D implements SWControllable
         }
         if (shieldDelay > 0) {
         	shieldDelay -= timestep;
+        }
+        if (laserDelay > 0) {
+        	laserDelay -= timestep;
         }
 
         if (activeCommand.shield && (shieldDelay <= 0) && !hasFlag()) {
@@ -392,6 +424,25 @@ public class Ship extends Object2D implements SWControllable
                 mine.setAlive(true);
             }
         }
+        
+        if (activeCommand.laser && !laserClip.isEmpty() && laserDelay <= 0) {
+        	System.out.println("choosing laser");
+        	laserDelay = LASER_DELAY;
+        	// take the cost of firing the laser
+        	takeLaser();
+
+            if (!laserClip.isEmpty()) {
+                final Laser laser = laserClip.pop();
+                shots++;
+                laser.setOrientation(getOrientation());
+                laser.setPosition(
+                	getPosition().subtract(
+                		getVelocity().unit().multiply(SHIP_RADIUS + Laser.LASER_RADIUS)));
+                laser.setLifetime(Laser.LASER_LIFETIME);
+                laser.setAlive(true);
+            }
+        
+        }
     }
 
 	public Bullet getBullet(final int i) {
@@ -400,6 +451,10 @@ public class Ship extends Object2D implements SWControllable
 
 	public Mine getMine(final int i) {
 		return mines[i];
+	}
+	
+	public Laser getLaser(final int i) {
+		return lasers[i];
 	}
 
 	public boolean shieldUp() {
@@ -466,6 +521,13 @@ public class Ship extends Object2D implements SWControllable
         }
         bullet.getShip().incrementHits();
         bullet.getShip().reload(bullet);
+	}
+
+	public void collide(final Vector2D normal, final Laser laser) {
+		takeLaser();
+
+        laser.getShip().incrementHits();
+        laser.getShip().reload(laser);
 	}
 
 	@Override
