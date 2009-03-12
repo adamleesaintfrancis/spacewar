@@ -2,7 +2,7 @@
   <simulatorClass>edu.ou.spacewar.SpacewarSimulator</simulatorClass>
   <simulatorConfig>spacewarconfig.xml</simulatorConfig>
   <outputHTML>ladder.html</outputHTML>
-  <maxVariableClientsPerGame>3</maxVariableClientsPerGame>
+  <maxVariableClientsPerGame>1</maxVariableClientsPerGame>
   <numMatchRepeats>10</numMatchRepeats>
   <variableClientMappings>
     <ClientMappingEntry>
