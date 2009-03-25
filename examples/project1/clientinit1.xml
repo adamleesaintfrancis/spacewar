@@ -3,7 +3,7 @@
     Replace the reference below to the DoNothing Agent with the reference to your agent.
     That is, it should say <clientClass>your4x4.MySpacewarAgent</clientClass> 
   -->
-  <clientClass>amy.MySpacewarAgent</clientClass>
+  <clientClass>your4x4.MySpacewarAgent</clientClass>
   <!--<data>./knowledge.txt</data>-->
   <displayName>YourName</displayName>
 </ClientInitializer>
