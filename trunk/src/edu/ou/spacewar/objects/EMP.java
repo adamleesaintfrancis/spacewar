@@ -67,52 +67,52 @@ public class EMP extends Object2D {
 
 	@Override
 	public void collide(final Vector2D normal, final Beacon beacon) {
-		System.out.println("Colliding with beacon");
+		//System.out.println("Colliding with beacon");
 		getShip().reload(this);
 		beacon.collect();
 	}
 
 	@Override
 	public void collide(final Vector2D normal, final Bullet bullet) {
-		System.out.println("Colliding with bullet");
+		//System.out.println("Colliding with bullet");
 		getShip().reload(this);
 		bullet.getShip().reload(bullet);
 	}
 
 	@Override
 	public void collide(final Vector2D normal, final Flag flag) {
-		System.out.println("Colliding with flag");
+		//System.out.println("Colliding with flag");
 		getShip().reload(this);
 	}
 
 	public void collide(final Vector2D normal, final EMP laser) {
-		System.out.println("Colliding with laser");
+		//System.out.println("Colliding with laser");
 		getShip().reload(this);
 		laser.getShip().reload(laser);
 	}
 
 	@Override
 	public void collide(final Vector2D normal, final Mine mine) {
-		System.out.println("Colliding with mine");
+		//System.out.println("Colliding with mine");
 		getShip().reload(this);
 		mine.getShip().reload(mine);
 	}
 
 	@Override
 	public void collide(final Vector2D normal, final Obstacle obstacle) {
-		System.out.println("Colliding with obstacle");
+		//System.out.println("Colliding with obstacle");
 		getShip().reload(this);
 	}
 
 	@Override
 	public void collide(final Vector2D normal, final Ship ship) {
-		System.out.println("Colliding with ship");
+		//System.out.println("Colliding with ship");
 		ship.collide(normal, this);
 	}
 
 	@Override
 	public void dispatch(final Vector2D normal, final Object2D other) {
-		System.out.println("Colliding with unknown" + other);
+		System.out.println("EMP dispatch method colliding with unknown " + other);
 		other.collide(normal, this);
 	}
 
