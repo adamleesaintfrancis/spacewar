@@ -3,6 +3,9 @@ package edu.ou.spacewar.simulator;
 import java.lang.reflect.Array;
 import java.util.*;
 
+import org.apache.log4j.Logger;
+
+import edu.ou.mlfw.World;
 import edu.ou.spacewar.exceptions.NoOpenPositionException;
 import edu.ou.spacewar.simulator.Space.DistanceCache.StaleCacheException;
 import edu.ou.utils.Tuple;
@@ -16,6 +19,8 @@ import edu.ou.utils.Vector2D;
 public abstract class Space
 	implements CollisionHandler, Iterable<Object2D>
 {
+	private static final Logger logger = Logger.getLogger(Space.class);
+	
 	//The width and height of the environment.  halfWidth and
 	//halfHeight are stored because they are used very frequently.
 	private final float width, halfWidth, height, halfHeight;
@@ -341,7 +346,11 @@ public abstract class Space
 						object2.getPosition());
 				Object2D lastCollided = collisionTracker.get(object1);
 				if(lastCollided != null && lastCollided.equals(object2)) {
-					throw new RuntimeException("Duplicate collision detected!");
+					logger.warn("Possible duplicate collision detected: " +
+								object1.getName() + " against " + 
+								object2.getName());
+					//TODO: Figure this one out.
+					//throw new RuntimeException("Duplicate collision detected!");
 				}
 				collisionTracker.put(object1, object2);
 				collisionHandler.handleCollision(distance.unit(), object1,
