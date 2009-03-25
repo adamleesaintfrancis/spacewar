@@ -5,5 +5,5 @@
   -->
   <clientClass>amy.MySpacewarAgent</clientClass>
   <!--<data>./knowledge.txt</data>-->
-  <displayName>Player1</displayName>
+  <displayName>YourName</displayName>
 </ClientInitializer>
