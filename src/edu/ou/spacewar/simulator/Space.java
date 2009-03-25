@@ -364,7 +364,7 @@ public abstract class Space
 			}
 		}
 		consumeAddedObjects();
-		//collisionTracker.clear();
+		collisionTracker.clear();
 	}
 
 	/**
