@@ -5,6 +5,7 @@ import java.util.*;
 
 import edu.ou.spacewar.exceptions.NoOpenPositionException;
 import edu.ou.spacewar.simulator.Space.DistanceCache.StaleCacheException;
+import edu.ou.utils.Tuple;
 import edu.ou.utils.Vector2D;
 
 /**
@@ -21,6 +22,10 @@ public abstract class Space
 
 	//Callbacks for when collisions are detected.
 	private final CollisionHandler collisionHandler;
+	
+	//Used to detect repeating collisions, to hopefully avoid infinite loops.
+	private final Map<Object2D, Object2D> collisionTracker 
+		= new HashMap<Object2D, Object2D>();
 
 	//Distances between objects are cached for faster lookup.
 	private final DistanceCache distanceCache;
@@ -228,8 +233,9 @@ public abstract class Space
 		timestamp += timeStep;
 		stepcount++;
 
-		// let all the objects update themselves
 		consumeAddedObjects();
+		
+		// let all the objects update themselves
 		for (final Object2D o : objects) {
 			if ((o != null) && o.alive) {
 				//we hope that nobody updates themselves badly (i.e. setting
@@ -237,6 +243,7 @@ public abstract class Space
 				o.advanceTime(timeStep);
 			}
 		}
+		
 		consumeAddedObjects();
 
 		float tempTimeStep = timeStep;
@@ -332,6 +339,11 @@ public abstract class Space
 			if (object1 != null) {
 				final Vector2D distance = this.findShortestDistance(object1.getPosition(),
 						object2.getPosition());
+				Object2D lastCollided = collisionTracker.get(object1);
+				if(lastCollided != null && lastCollided.equals(object2)) {
+					throw new RuntimeException("Duplicate collision detected!");
+				}
+				collisionTracker.put(object1, object2);
 				collisionHandler.handleCollision(distance.unit(), object1,
 						object2);
 			}
@@ -343,6 +355,7 @@ public abstract class Space
 			}
 		}
 		consumeAddedObjects();
+		collisionTracker.clear();
 	}
 
 	/**
