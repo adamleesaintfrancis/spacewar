@@ -347,8 +347,8 @@ public abstract class Space
 				Object2D lastCollided = collisionTracker.get(object1);
 				if(lastCollided != null && lastCollided.equals(object2)) {
 					logger.warn("Possible duplicate collision detected: " +
-								object1.getName() + " against " + 
-								object2.getName());
+								object1.getClass() + " named " + object1.getName() + " against " + 
+								object2.getClass() + " named " + object2.getName());
 					//TODO: Figure this one out.
 					//throw new RuntimeException("Duplicate collision detected!");
 				}
