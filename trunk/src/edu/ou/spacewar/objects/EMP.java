@@ -112,7 +112,7 @@ public class EMP extends Object2D {
 
 	@Override
 	public void dispatch(final Vector2D normal, final Object2D other) {
-		System.out.println("EMP dispatch method colliding with unknown " + other);
+		//System.out.println("EMP dispatch method colliding with unknown " + other);
 		other.collide(normal, this);
 	}
 
