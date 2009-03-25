@@ -184,7 +184,7 @@ public abstract class Object2D {
     public abstract void collide(final Vector2D normal, Beacon beacon);
     public abstract void collide(final Vector2D normal, Bullet bullet);
     public abstract void collide(final Vector2D normal, Flag flag);
-	public abstract void collide(final Vector2D normal, EMP laser);
+    public abstract void collide(final Vector2D normal, EMP laser);
     public abstract void collide(final Vector2D normal, Mine mine);
     public abstract void collide(final Vector2D normal, Obstacle obstacle);
     public abstract void collide(final Vector2D normal, Ship ship);
