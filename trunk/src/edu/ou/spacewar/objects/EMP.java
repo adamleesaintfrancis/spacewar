@@ -38,7 +38,7 @@ public class EMP extends Object2D {
 
 
     protected final void setLifetime(final float lifetime) {
-        System.out.println("lifetime is " + lifetime);
+        //System.out.println("lifetime is " + lifetime);
         this.lifetime = lifetime;
     }
 
