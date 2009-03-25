@@ -435,7 +435,7 @@ public class Ship extends Object2D implements SWControllable
         }
         
         if (activeCommand.laser && !empClip.isEmpty() && empDelay <= 0) {
-        	System.out.println("choosing laser");
+        	//System.out.println("choosing laser");
         	empDelay = EMP_DELAY;
         	// take the cost of firing the laser
         	fireLaser();
