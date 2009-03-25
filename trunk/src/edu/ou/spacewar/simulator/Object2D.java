@@ -165,19 +165,25 @@ public abstract class Object2D {
      * the dispatching, with the possibility of just forgetting a pairing,
      * we'll be a little clever and use what little elegance and compile-time
      * safety may be available for this problem.  When a collision occurs,
-     * dispatch will be called first.  dispatch must be implemented simply as:
+     * dispatch will be called first.  dispatch must be implemented as:
      *
      * 	other.collide(normal, this);
      *
      * for all subclasses.  This will dispatch to the correct collide() method.
-     * collide() should handle all details of the collision.  Adding new object
-     * types means adding the abstract signature for colliding with that object
-     * here, which means the compiler will catch not having any collision
-     * handling code for an object pair.
+     * Adding new object types means adding the abstract signature for 
+     * colliding with that object here, which means the compiler will catch not 
+     * having any collision handling code for an object pair.
      *
-     * For the sake of convention, a class should implement collide for all
-     * classes that come before it alphabetically, and delegate for all classes
-     * that come after it alphabetically.
+     * This still isn't perfect, though.  The programmer is still responsible
+     * for following a convention that the compiler can't enforce, to make sure
+     * that any particular collision code for a pair of objects is defined in 
+     * only one place. Arbitrarily, an Object2D subclass should implement 
+     * the actual collision code for all Object2D subclasses that come before 
+     * it alphabetically (and itself, of course).  For Object2D subclasses that 
+     * come after it alphabetically, it should just delegate to that other 
+     * object, again implemented as:
+     * 
+     *   other.collide(normal, this);
      */
     public abstract void dispatch(final Vector2D normal, final Object2D other);
     public abstract void collide(final Vector2D normal, Base base);
