@@ -26,7 +26,6 @@ import org.apache.log4j.Logger;
 import edu.ou.mlfw.config.ClientInitializer;
 import edu.ou.mlfw.config.ClientMapping;
 import edu.ou.mlfw.config.WorldConfig;
-import edu.ou.mlfw.exceptions.GameOverTimeLimitException;
 import edu.ou.mlfw.exceptions.NameCollisionException;
 import edu.ou.mlfw.exceptions.OverboundControllableException;
 import edu.ou.mlfw.exceptions.UnboundClientException;
@@ -35,9 +34,6 @@ import edu.ou.mlfw.gui.ClientShadowSource;
 import edu.ou.mlfw.gui.Drawer;
 import edu.ou.mlfw.gui.Shadow2DCanvas;
 import edu.ou.mlfw.gui.Viewer;
-import edu.ou.spacewar.exceptions.GameOverException;
-
-
 
 /**
  * World is where a Simulator, that simulator's Controllables, and a set of
@@ -51,16 +47,6 @@ import edu.ou.spacewar.exceptions.GameOverException;
  * user.
  */
 public class World {
-	
-	public class GameThread extends Thread
-	{
-		public boolean RanOverTime = false;
-		
-	}
-	
-	
-	
-	
 	private static final Logger logger = Logger.getLogger(World.class);
 
 	// By default, we want to look in the current working directory for this
@@ -178,14 +164,14 @@ public class World {
 	 *
 	 * Finally, if the gui is enabled, we draw the game state.
 	 */
-	public void run() throws GameOverTimeLimitException{
+	public void run() {
 		while (simulator.isRunning()) {
 			step(true);
 		}
 		shutdown();
 	}
 
-	public void runGUI() throws GameOverTimeLimitException{
+	public void runGUI() {
 		final JComponent gui = simulator.getGUI();
 		final ClientShadowSource shadowsource = new ClientShadowSource();
 		if(gui instanceof Shadow2DCanvas) {
@@ -215,8 +201,6 @@ public class World {
 		}
 
 		try {
-			//final boolean gameRanOverTime = false;
-			
 			javax.swing.SwingUtilities.invokeAndWait(new Runnable() {
 				public void run() {
 					final Viewer viewer = new Viewer(gui);
@@ -227,48 +211,20 @@ public class World {
 				}
 			});
 
-			GameThread currentGameThread = new GameThread() {
-				public void run() {
-					if(!paused) {
-						try {
+			while (simulator.isRunning()) {
+				SwingUtilities.invokeAndWait(new Runnable() {
+					public void run() {
+						if(!paused) {
 							World.this.step(true);
-						} catch (GameOverTimeLimitException e) {
-							RanOverTime = true;
-						}
-						shadowsource.update(mappings.values());
-						for (final Client c : mappings.values()) {
-							if (c instanceof Drawer) {
-								((Drawer)c).updateGraphics(gui.getGraphics());
+							shadowsource.update(mappings.values());
+							for (final Client c : mappings.values()) {
+								if (c instanceof Drawer) {
+									((Drawer)c).updateGraphics(gui.getGraphics());
+								}
 							}
 						}
 					}
-				}
-			};
-			
-			while (simulator.isRunning()) {
-				SwingUtilities.invokeAndWait( currentGameThread
-						
-//						new Runnable() {
-//					public void run() {
-//						if(!paused) {
-//							try {
-//								World.this.step(true);
-//							} catch (GameOverTimeLimitException e) {
-//								gameRanOverTime = true;
-//							}
-//							shadowsource.update(mappings.values());
-//							for (final Client c : mappings.values()) {
-//								if (c instanceof Drawer) {
-//									((Drawer)c).updateGraphics(gui.getGraphics());
-//								}
-//							}
-//						}
-//					}
-//				}
-						);
-				
-				if(currentGameThread.RanOverTime) throw new GameOverTimeLimitException();
-				
+				});
 				if(!paused) {
 					gui.repaint();
 				}
@@ -289,38 +245,18 @@ public class World {
 		} catch (final InvocationTargetException e) {
 			e.printStackTrace();
 		}
-		
 		shutdown();
 	}
 
 	/**
 	 * Advance the simulator a single step.
 	 */
-	private void step(final boolean updateClients) throws GameOverTimeLimitException{
-		
-		Thread gameThread = new Thread()
-		{
-			public void run()
-			{
-				edu.ou.mlfw.State state = simulator.getState();
-				startActions(state);
-				simulator.advance();
-				state = simulator.getState();
-				endActions(state);
-			}
-		};
-		
-//		State state = simulator.getState();
-//		startActions(state);
-//		simulator.advance();
-//		state = simulator.getState();
-//		endActions(state);
-		
-		try {
-			gameThread.join(5*60*1000);
-		} catch (InterruptedException e1) {
-			throw new GameOverTimeLimitException();
-		}
+	private void step(final boolean updateClients) {
+		State state = simulator.getState();
+		startActions(state);
+		simulator.advance();
+		state = simulator.getState();
+		endActions(state);
 	}
 
 	/**
