@@ -21,6 +21,7 @@ import edu.ou.mlfw.Simulator;
 import edu.ou.mlfw.World;
 import edu.ou.mlfw.config.ClientMapping;
 import edu.ou.mlfw.config.WorldConfig;
+import edu.ou.mlfw.exceptions.GameOverTimeLimitException;
 
 public class Ladder {
 
@@ -64,6 +65,9 @@ public class Ladder {
 				List<Record> recordTemp = null;
 				final long gameStartTime = new Date().getTime();
 				World world = null;
+				
+				boolean gameFailed = false;
+				
 				try{
 					world = new World(worldconfig);
 				}
@@ -82,13 +86,30 @@ public class Ladder {
 					}
 				}
 				catch(final Exception e) {
-					logger.warn("An unexpected exception occurred; "+
-							 	"continuing with the next match.", e);
+					
+					gameFailed  = true;
+					
+					if(e instanceof GameOverTimeLimitException)
+					{
+						logger.warn("Game timed out.  Continuing with next match.");
+					}
+					else{
+						logger.warn("An unexpected exception occurred; "+
+									"continuing with the next match.", e);
+					}
 				}
+				
 				recordTemp = world.getRecords();
 				float gameTimeElapsed = (new Date().getTime() - gameStartTime);
 				gameTimeElapsed /= 60000.0f;
 				logger.info("Game " + gameCnt + " took " + gameTimeElapsed + " minutes.\n");
+				
+				if(gameFailed)
+				{
+					addFailure(recordTemp);
+					
+				}
+				
 				addRecords(recordTemp);
 			}
 		}
@@ -136,6 +157,26 @@ public class Ladder {
 			e.printStackTrace();
 			exit("Error writing output");
 		}
+	}
+
+	private void addFailure(final List<Record> newRecords)
+	{
+		String s = "game FAILED when played by: ";
+		
+		for (int index = 0; index < newRecords.size(); index++)
+		{
+			if(index == 0){
+				s += newRecords.get(index).getDisplayName();	
+			}
+			else if (index == (newRecords.size()-1)){
+				s += (", and " + newRecords.get(index).getDisplayName());
+			}
+			else{
+				s += (", " + newRecords.get(index).getDisplayName());
+			} 
+		}
+	
+		gameResults.add(s);
 	}
 
 	private void addRecords(final List<Record> newRecords){
