@@ -1,3 +1,7 @@
+/**
+ * Edited by John Kaptain to include ImmutableEMP[] EMPs
+ */
+
 package edu.ou.spacewar;
 
 import java.util.LinkedList;
@@ -21,6 +25,7 @@ public class ImmutableSpacewarState implements State {
     private final ImmutableBeacon[] beacons;
     private final ImmutableBase[] bases;
     private final ImmutableFlag[] flags;
+    private final ImmutableEMP[] EMPs;
     private final float width, height;
     private final float timestamp;
     private final int stepcount;
@@ -53,6 +58,14 @@ public class ImmutableSpacewarState implements State {
         }
         bullets = blltstmp.toArray(new ImmutableBullet[blltstmp.size()]);
 
+      //get all the EMPs
+        final EMP[] swgemps = swg.getLive(EMP.class);
+        final LinkedList<ImmutableEMP> empstmp = new LinkedList<ImmutableEMP>();
+        for (final EMP element : swgemps) {
+            empstmp.add(new ImmutableEMP(element));
+        }
+        EMPs = empstmp.toArray(new ImmutableEMP[empstmp.size()]);
+        
         //get all the mines
         final Mine[] swgmines = swg.getLive(Mine.class);
         final LinkedList<ImmutableMine> minestmp = new LinkedList<ImmutableMine>();
@@ -138,6 +151,19 @@ public class ImmutableSpacewarState implements State {
         return out;
     }
 
+    /**
+     * Return all EMPs in the game.  Each emp is returned in an
+     * immutable wrapper class.  This only captures active emps!  Be
+     * sure to check the getId() and getShipId() for each emp!
+     *
+     * @return An array containing the game's emps.
+     */
+    public final ImmutableEMP[] getEMPs() {
+        final ImmutableEMP[] out = new ImmutableEMP[EMPs.length];
+        System.arraycopy(EMPs, 0, out, 0, EMPs.length);
+        return out;
+    }
+    
     /**
      * Return all mines in the game.  Each mine is returned in an
      * immutable wrapper class.  This only captures active mines!  Be
