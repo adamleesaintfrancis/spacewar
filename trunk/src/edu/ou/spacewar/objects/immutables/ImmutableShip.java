@@ -22,6 +22,7 @@ public class ImmutableShip extends ImmutableObject2D implements State {
     private final int deaths;
     private final int hits;
     private final int flags;
+    private final int shots;
     private final boolean hasFlag;
     private final String flagTeam;
     private final ShipCommand command;
@@ -41,6 +42,8 @@ public class ImmutableShip extends ImmutableObject2D implements State {
         hits = ship.getHits();
         flags = ship.getFlags();
         hasFlag = ship.hasFlag();
+        shots = ship.getShots();
+        
         if(hasFlag) {
             flagTeam = ship.getFlag().getTeam();
         } else {
@@ -128,6 +131,13 @@ public class ImmutableShip extends ImmutableObject2D implements State {
      */
     public final int getKills() {
         return kills;
+    }
+    
+    /**
+     * Get the ship's current number of shots fired
+     */
+    public final int getShots() {
+    	return shots;
     }
 
     /**
