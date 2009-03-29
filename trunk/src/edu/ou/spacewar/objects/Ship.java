@@ -126,6 +126,7 @@ public class Ship extends Object2D implements SWControllable
         shieldDelay = 0;
         shieldDamage = 0;
         empDelay = 0;
+        empFrozenTime = 0;
     }
 
     private void findNewPosition() {
