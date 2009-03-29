@@ -553,13 +553,12 @@ public class Ship extends Object2D implements SWControllable
 	}
 
 	public void collide(final Vector2D normal, final EMP laser) {
-    	if(shieldDelay > 0) {  //shield prevents damage
-    		return;
-    	}
-    	
-		empFrozenTime = LASER_FREEZE_TIME;
-        laser.getShip().incrementHits();
+        if(shieldDelay <= 0) {  //shield prevents damage
+            empFrozenTime = LASER_FREEZE_TIME;
+            laser.getShip().incrementHits();
+        }
         laser.getShip().reload(laser);
+
 	}
 
 	@Override
