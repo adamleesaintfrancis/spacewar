@@ -16,7 +16,7 @@ public class Base extends Object2D {
     public static final float BASE_RADIUS = 10;
     public static final float BASE_MASS = 100000;
     public static final int INITIAL_ENERGY = 5000;
-    public static final int ENERGY_HEALING_INCREMENT = 4;
+    public static final int ENERGY_HEALING_INCREMENT = 2;
     public static final int BULLET_DAMAGE = 100;
     
     private int energy; 
@@ -79,6 +79,7 @@ public class Base extends Object2D {
 	public void collide(final Vector2D normal, final Bullet bullet) {
 		if (energy >= 0) {
 			energy -= BULLET_DAMAGE;
+			energy = Math.max(energy, 0);
 		}
 		
 		bullet.collide(normal, this);
