@@ -40,7 +40,10 @@ public class BaseShadow extends Shadow2D {
         String team = base.getTeam();
         if(ShipShadow.teamcolors.containsKey(team)) {
         	Color c = ShipShadow.teamcolors.get(team);
-        	g.setColor(c);
+        	// change the base's transparency based upon the energy level
+        	int alpha =  (int) (((float) base.getEnergy() / base.INITIAL_ENERGY) * 255.0);
+        	Color tc = new Color(c.getRed(), c.getGreen(), c.getBlue(), alpha);
+        	g.setColor(tc);
             g.fill(shape);
         }
     }
