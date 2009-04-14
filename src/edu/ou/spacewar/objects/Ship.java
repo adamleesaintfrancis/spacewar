@@ -509,7 +509,9 @@ public class Ship extends Object2D implements SWControllable
 	@Override
 	public void collide(final Vector2D normal, final Base base) {
 		if(getTeam() == base.getTeam()) {
-            setEnergy(Ship.MAX_ENERGY);
+			// bases give you an energy boost that is relative to their energy level 
+			// but the max is INITIAL_ENERGY
+            setEnergy(Math.max(energy + base.getEnergy(), INITIAL_ENERGY));
             if(getFlag() != null) {
                 incrementFlags();
                 getFlag().placeFlag();
