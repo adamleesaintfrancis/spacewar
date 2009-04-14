@@ -16,7 +16,7 @@ public class Base extends Object2D {
     public static final float BASE_RADIUS = 10;
     public static final float BASE_MASS = 100000;
     public static final int INITIAL_ENERGY = 5000;
-    public static final int ENERGY_HEALING_INCREMENT = 1;
+    public static final int ENERGY_HEALING_INCREMENT = 4;
     public static final int BULLET_DAMAGE = 100;
     
     private int energy; 
