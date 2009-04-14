@@ -15,11 +15,17 @@ import edu.ou.utils.Vector2D;
 public class Base extends Object2D {
     public static final float BASE_RADIUS = 10;
     public static final float BASE_MASS = 100000;
+    public static final int INITIAL_ENERGY = 5000;
+    public static final int ENERGY_HEALING_INCREMENT = 1;
+    public static final int BULLET_DAMAGE = 100;
+    
+    private int energy; 
 
     String team;
 
     public Base(final Space space) {
         super(space, BASE_RADIUS, BASE_MASS);
+        energy = INITIAL_ENERGY;
     }
 
     public void setTeam(final String team) {
@@ -35,10 +41,23 @@ public class Base extends Object2D {
         return new BaseShadow(this);
     }
 
+    /**
+     * The bases can only heal to whatever their current energy level is
+     * @return
+     */
+    public int getEnergy() {
+    	return energy;
+    }
+    
     @Override
 	protected void advanceTime(final float timestep) {
         // bases should not move (and they can if obstacles move around)
 		this.setVelocity(Vector2D.ZERO_VECTOR);
+		
+		// bases should heal each time step if they have received any damage
+		if (energy < INITIAL_ENERGY) {
+			energy += ENERGY_HEALING_INCREMENT;
+		}
     }
 
     @Override
@@ -58,6 +77,10 @@ public class Base extends Object2D {
 
 	@Override
 	public void collide(final Vector2D normal, final Bullet bullet) {
+		if (energy >= 0) {
+			energy -= BULLET_DAMAGE;
+		}
+		
 		bullet.collide(normal, this);
 	}
 

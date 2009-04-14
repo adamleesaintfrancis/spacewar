@@ -12,11 +12,13 @@ import edu.ou.spacewar.objects.Base;
 public class ImmutableBase extends ImmutableObject2D {
     public final int id;
     public final String team;
+    public final int energy;
 
     public ImmutableBase(Base base) {
         super(base);
         this.id = base.getId();
         this.team = base.getTeam();
+        this.energy = base.getEnergy();
     }
 
     /**
@@ -26,6 +28,13 @@ public class ImmutableBase extends ImmutableObject2D {
      */
     public final int getId() {
         return id;
+    }
+    
+    /**
+     * Return the base's energy level
+     */
+    public final int getEnergy() {
+    	return energy;
     }
 
     /**
