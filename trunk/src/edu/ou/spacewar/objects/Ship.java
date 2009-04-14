@@ -511,7 +511,7 @@ public class Ship extends Object2D implements SWControllable
 		if(getTeam() == base.getTeam()) {
 			// bases give you an energy boost that is relative to their energy level 
 			// but the max is INITIAL_ENERGY
-            setEnergy(Math.max(energy + base.getEnergy(), INITIAL_ENERGY));
+            setEnergy(Math.max(energy, base.getEnergy()));
             if(getFlag() != null) {
                 incrementFlags();
                 getFlag().placeFlag();
