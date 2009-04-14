@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 import edu.ou.mlfw.gui.Shadow2D;
+import edu.ou.spacewar.gui.JSpacewarComponent;
 import edu.ou.spacewar.objects.Base;
 import edu.ou.utils.Vector2D;
 
@@ -46,6 +47,15 @@ public class BaseShadow extends Shadow2D {
         	g.setColor(tc);
             g.fill(shape);
         }
+
+        // show the energy level of the base
+        final Font font = new Font("Arial", Font.BOLD, 12);
+        g.setFont(font);
+
+        String number = Integer.toString(base.getEnergy());
+        g.setPaint(JSpacewarComponent.TEXT_COLOR);
+        g.drawString(number, base.getPosition().getX() + 12, base.getPosition().getY() + 12);
+        
     }
 
     public void cleanUp() {
