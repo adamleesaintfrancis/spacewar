@@ -6,7 +6,7 @@
 	configure your team.
  -->
 <ClientInitializer>
-  <clientClass>edu.ou.spacewar.mlfw.clients.HumanTeamClient</clientClass>
+  <clientClass>edu.ou.spacewar.mlfw.clients.RandomTeamClient</clientClass>
  <!-- <clientClass>your4x4.TeamClient</clientClass> -->
   <!--<configuration>../../src/your4x4/initializationFile.xml</configuration>-->
   <!--<data>../../src/your4x4/knowledge.txt.gz</data>-->
