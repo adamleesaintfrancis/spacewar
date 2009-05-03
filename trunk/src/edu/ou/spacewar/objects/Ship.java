@@ -545,7 +545,7 @@ public class Ship extends Object2D implements SWControllable
 	public void collide(final Vector2D normal, final Flag flag) {
 		if((getTeam() != flag.getTeam()) && (getFlag() == null)) {
 			setFlag(flag);
-	        setEnergy(Ship.INITIAL_ENERGY);
+	        setEnergy(Math.max(Ship.INITIAL_ENERGY, this.energy));
 	        flag.setAlive(false);
 	    } else if (getTeam() == flag.getTeam()) {
 	        takeDamage(Ship.FLAG_COST);
