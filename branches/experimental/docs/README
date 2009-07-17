@@ -1,0 +1,47 @@
+This file describes how to get started with Spacewar.
+
+I. PREREQUISITES
+
+In order to compile and run Spacewar, in addition to the code in this package, 
+you will need Java 1.5 or greater.  This is the only true requirement that you
+have to satisfy; any other needed software is included with this distribution.
+
+It is strongly recommended that you also have Ant.  If you aren't familiar with
+Ant, it is a software package designed to automate the process of building and
+running Java projects.  Spacewar uses Ant to provide a set of common build
+tasks.  While it is true that you don't need Ant to run the software, it is
+also true that you will need Ant if you want my help with any build-related
+problems you may encounter.  The remainder of this document also assumes that
+you are using Ant.  You can find more information about Ant, including
+installation instructions, at http://ant.apache.org/.
+
+It is also recommended that you use Eclipse.  It comes with support for Ant, so
+you won't have to set up Ant separately.  Of course, that isn't the only
+advantage of Eclipse: you also get syntax highlighting, code navigation,
+automatic formatting, on-the-fly compilation error and warning detection, and a
+fairly nice debugger.  If you aren't currently using it or another similarly
+featured IDE for your Java development, and you aren't an emacs/vi wizard, it
+is strongly recommended that you take this opportunity to learn Eclipse.  For
+more information, see http://www.eclipse.org/, though be warned that this is
+one of the more painful-to-use places on the internet.
+
+
+II.  HELLO, SPACEWAR
+
+The easiest way to get started with Spacewar is to cd into the top level of the
+distribution folder (where this README is located) and invoke the "hello" Ant
+target. 
+
+> ant hello
+
+If everything is working correctly, you should see some compilation messages
+scroll by, followed by a GUI window popping up with a basic Spacewar scenario
+ready to go.  You should be able to control the ship on the screen using the
+arrow keys to navigate and the space bar to shoot.  You should also see log
+messages occasionally printed out to the console, for instance, when your ship
+contacts one of the small green circles (called 'beacons' in
+Spacewar-speak). 
+
+TODO: More to come!
+
+

@@ -1,0 +1,11 @@
+<ClientInitializer>
+  <environmentEntry>
+    <environmentClass>nonpublish.environments.MyEnvironment</environmentClass>
+    <configuration/>
+  </environmentEntry>
+  <agentEntry>
+    <agentClass>nonpublish.agents.RandomGeneticAgent</agentClass>
+    <configuration/>
+  </agentEntry>
+  <displayName>RandomGeneticAgent</displayName>
+</ClientInitializer>

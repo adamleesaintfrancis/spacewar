@@ -1,0 +1,13 @@
+To make sure that you can properly compile and run Spacewar, open a command 
+line, make sure that your current working directory is the Spacewar project 
+root (where this file is located), and run the "hello" ant task:
+
+> ant hello
+
+(Note that the ">" character just indicates the command prompt; you shouldn't 
+type it.)
+
+If this doesn't work, your system isn't configured properly; you have some 
+setup work to do.  If this does work, great!  Either way, head on over to the 
+"docs" directory for more detailed information, including a setup guide, a
+concepts guide, and the generated javadocs for the project. 

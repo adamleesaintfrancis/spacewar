@@ -1,0 +1,14 @@
+<!-- 
+	To Do: Modify this file to reference your own code, rather than
+	RandomTeamClient.
+	
+	Optionally, include configuration files (in your own directory!) to
+	configure your team.
+ -->
+<ClientInitializer>
+  <clientClass>edu.ou.spacewar.mlfw.clients.RandomTeamClient</clientClass>
+ <!-- <clientClass>your4x4.TeamClient</clientClass> -->
+  <!--<configuration>../../src/your4x4/initializationFile.xml</configuration>-->
+  <!--<data>../../src/your4x4/knowledge.txt.gz</data>-->
+  <displayName>RandomTeam</displayName>
+</ClientInitializer>

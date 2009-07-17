@@ -1,0 +1,24 @@
+<WorldConfiguration>
+
+  <simulatorClass>edu.ou.spacewar.SpacewarSimulator</simulatorClass>
+  <simulatorConfig>spacewarconfig1.xml</simulatorConfig>
+
+  <mappingInformation>
+    <ClientMappingEntry>
+      <controllableName>BeaconCollector</controllableName>
+      <clientInitializerFile>beaconcollectorinit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Random</controllableName>
+      <clientInitializerFile>randominit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>DoNothing</controllableName>
+      <clientInitializerFile>donothinginit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Player1</controllableName>
+      <clientInitializerFile>clientinit1.xml</clientInitializerFile>
+    </ClientMappingEntry>
+  </mappingInformation>
+</WorldConfiguration>

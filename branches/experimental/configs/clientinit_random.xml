@@ -1,0 +1,12 @@
+<ClientInitializer>
+  <environmentEntry>
+    <environmentClass>edu.ou.spacewar.mlfw.environments.PassThroughEnvironment</environmentClass>
+    <configuration/>
+  </environmentEntry>
+  <agentEntry>
+    <agentClass>edu.ou.spacewar.mlfw.agents.RandomAgent</agentClass>
+    <configuration/>
+    <knowledge/>
+  </agentEntry>
+  <displayName>Random Agent</displayName>
+</ClientInitializer>

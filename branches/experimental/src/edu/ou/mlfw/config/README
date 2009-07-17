@@ -1,0 +1,14 @@
+The edu.ou.mlfw.config package contains the classes necessary for configuring
+how a World instance finds and initializes its component simulator and clients.
+
+At the top level is a WorldConfig.  A WorldConfig contains an entry indicating
+the class that implements the Simulator interface that should be loaded, and an 
+entry for a configuration file that can be used by that Simulator instance.  
+A WorldConfig also contains mappings between controllables and 
+ClientInitializers via a ClientMapping array.  The WorldConfiguration file 
+should be provided by the user.
+
+A ClientInitializer points to an implementation of the Client interface 
+and a file that can be passed to this implementation for configuration.
+The ClientInitializer file is provided by the client writer.
+

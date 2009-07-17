@@ -1,0 +1,5 @@
+<ClientInitializer>
+  <clientClass>client0.MyHumanClient</clientClass>
+  <!--<data>./knowledge.txt</data>-->
+  <displayName>My Human</displayName>
+</ClientInitializer>

@@ -1,0 +1,44 @@
+Machine Learning Framework
+
+Goals:
+1.)  Separation of clients and simulators to allow for independent development of each
+2.)  Runtime separation of clients and simulators to allow for multi-agent competition
+3.)  Simplified agent development focused on AI/ML issues (rather than simulaton details)
+4.)  Benchmarking for agent performance using simulator and agent-specific metrics
+5.)  GUI mode for human interaction and visual feedback during development
+6.)  Non-GUI mode for higher-throughput simulation 
+ 
+           World
+          /     \
+         /       \
+    Simulator     |
+        |         |
+        |         | 
+Controllable     Client
+
+A World object is the central broker for the machine learning framework.  
+At startup, it finds and loads a Simulator, extracts a set of Controllables 
+from that Simulator, and matches each Controllable with corresponding Client 
+and Record objects.  If graphics are enabled, the World is also responsible
+for asking the Simulator to provide the appropriate drawing code.  
+
+The World then transitions to driving the Simulator, using a simple loop that 
+requests a representation of the simulator state, distributes that state to 
+each client, asks each client for an action for its controllable in response
+to that state, and finally, asks the simulator to update the states of the 
+controllables and the state of the whole simulator based on those actions. 
+
+A Simulator is just an interface; the machine learning framework does not 
+enforce any kind of behavior other than that interface.  The intent, however,
+is that a Simulator be able to maintain state and provide controllables that
+can be handled by clients.   
+
+Controllables are also just interfaces.  The intent of a controllable is that
+it can provide a list of legal actions for any state, and can, in turn, have an
+action set by a client.
+
+Clients decide which actions a controllable should take at any given time.  
+
+
+
+

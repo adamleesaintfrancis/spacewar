@@ -1,0 +1,6 @@
+<ClientInitializer>
+  <clientClass>client1.MyRandomClient</clientClass>
+  <configuration/>
+  <data/>
+  <displayName>My Random Agent</displayName>
+</ClientInitializer>

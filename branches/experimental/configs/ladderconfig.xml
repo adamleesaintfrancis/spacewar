@@ -1,0 +1,22 @@
+<LadderConfiguration>
+  <simulatorInitializerFile>siminit.xml</simulatorInitializerFile>
+  <outputHTML>ladder.html</outputHTML>
+  <numVariableAgentsPerGame>1</numVariableAgentsPerGame>
+  <numMatchRepeats>1</numMatchRepeats>
+  <variableClientMappingInformation>
+    <ClientMappingEntry>
+      <controllableName>Player</controllableName>
+      <clientInitializerFile>newstyle_clientinit_bridge.xml</clientInitializerFile>
+    </ClientMappingEntry>
+  </variableClientMappingInformation>
+  <staticClientMappingInformation>
+    <ClientMappingEntry>
+      <controllableName>HLRandom</controllableName>
+      <clientInitializerFile>clientinit_hlrandom_wrapper.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Random</controllableName>
+      <clientInitializerFile>clientinit_random_wrapper.xml</clientInitializerFile>
+    </ClientMappingEntry>
+  </staticClientMappingInformation>
+</LadderConfiguration>

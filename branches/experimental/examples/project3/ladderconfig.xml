@@ -1,0 +1,19 @@
+<LadderConfiguration>
+  <simulatorClass>edu.ou.spacewar.SpacewarSimulator</simulatorClass>
+  <simulatorConfig>spacewarconfig.xml</simulatorConfig>
+  <outputHTML>ladder.html</outputHTML>
+  <maxVariableClientsPerGame>2</maxVariableClientsPerGame>
+  <numMatchRepeats>5</numMatchRepeats>
+  <variableClientMappings>
+    <ClientMappingEntry>
+      <controllableName>Team</controllableName>
+      <clientInitializerFile>../../src/your4x4/teamclientinit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+    <ClientMappingEntry>
+      <controllableName>Team</controllableName>
+      <clientInitializerFile>teamclientinit.xml</clientInitializerFile>
+    </ClientMappingEntry>
+  </variableClientMappings>
+  <staticClientMappings>
+  </staticClientMappings>
+</LadderConfiguration>
